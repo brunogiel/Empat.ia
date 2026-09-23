@@ -8,7 +8,7 @@ Central rule: no insight or principle without evidence.
 
 ## Material analyzed
 
-Main source: `interviews/index.md` + `interviews/evidence-ledger.md`.
+Main source: `interviews/index.md` + `_system/evidence-ledger.md`.
 
 | Interview ID | Profile | Date | Status in index | Evidence available | Notes |
 |---|---|---|---|---|---|
@@ -17,7 +17,7 @@ Main source: `interviews/index.md` + `interviews/evidence-ledger.md`.
 ## Synthesis process
 
 1. Review `interviews/index.md`.
-2. Review `interviews/evidence-ledger.md`.
+2. Review `_system/evidence-ledger.md`.
 3. Only work with interviews that have evidence extracted, or mark gaps.
 4. Sort by interviewee.
 5. Group evidence by themes.
@@ -78,7 +78,7 @@ Things that show up rarely but might be gold.
 
 ## Evidence table
 
-Bring evidence over from `interviews/evidence-ledger.md`.
+Bring evidence over from `_system/evidence-ledger.md`.
 
 | Evidence IDs | Fact / quote / observation | Pattern | Insight | Design Principle | HMW |
 |---|---|---|---|---|---|
@@ -128,7 +128,7 @@ HMWs should open up multiple solutions. If they already contain a solution, refr
 
 - [ ] Every insight has facts or quotes.
 - [ ] Quotes keep their source.
-- [ ] Insights cite IDs from `evidence-ledger.md`.
+- [ ] Insights cite IDs from `_system/evidence-ledger.md`.
 - [ ] Nothing was synthesized from material still sitting in `incoming/`.
 - [ ] There are both patterns and outliers.
 - [ ] Contradictions were not erased.

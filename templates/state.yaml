@@ -1,7 +1,11 @@
 method: design-empathy-ai
+version: 2
 project_name: ""
 created_at: ""
 updated_at: ""
+# Working language for every document in discovery/. Set at init (--lang).
+# The scaffolding is written in this language, not only the conversation.
+language: ""
 guide: guide
 current_step: start
 current_status: not_started
@@ -32,54 +36,63 @@ available_agents:
   - industry-expert
   - sme-owner
   - cab-driver
+# The editor is not a council agent and is never convened. It runs at every gate:
+# it distills, routes misplaced content and trims by the budgets in budgets.yaml.
+editor: on
 # Hard rule: a stage with a gate cannot be closed without updating 'status' to 'drafted',
 # 'validated' or 'advanced_with_assumptions'. The Guide cannot jump from one step to
 # another without touching this file and updating updated_at.
+# This file is the only place the project state lives. No other document repeats it.
 steps:
   start:
     status: not_started
-    output: discovery-document.md
+    output: challenge.md
     gate: true
   design_challenge:
     status: not_started
-    output: discovery-document.md
+    output: challenge.md
     gate: true
   market_research:
     status: not_started
-    output: market-research.md
+    output: _sources/market-research.md
     gate: true
   knowledge_base:
     status: not_started
-    output: knowledge-base.md
+    output: _sources/knowledge-base.md
     gate: true
   users_sample:
     status: not_started
-    output: users-and-sample.md
+    output: who-to-talk-to.md
     gate: true
   interview_guides:
     status: not_started
-    output: interview-guides.md
+    output: field-kit/guide.md + field-kit/cheatsheet.md + field-kit/modules.md
     gate: true
   recruitment:
     status: not_started
-    output: recruitment.md
+    output: recruiting.md
     gate: false
   field_checklist:
     status: not_started
-    output: field-checklist.md
+    output: field-kit/checklist.md
     gate: false
   guide_context:
     status: not_started
-    output: guide-context.md
+    output: field-kit/observation.md
     gate: false
   interview_capture:
     status: not_started
-    output: interviews/index.md + interviews/evidence-ledger.md
+    output: interviews/index.md + _system/evidence-ledger.md + findings.md
     gate: true
   synthesis:
     status: not_started
-    output: synthesis.md
+    output: principles.md
     gate: true
 interviews:
   target: 10
   done: 0
+  # Field signal. From step 07 on, if 'done' is still 0 and more than
+  # 'stale_after_days' have passed since created_at, the Guide says so before
+  # anything else and asks what is blocking the first interview.
+  # Preparation is not evidence. The method does not replace fieldwork.
+  stale_after_days: 7

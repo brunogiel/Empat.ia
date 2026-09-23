@@ -12,10 +12,10 @@ Create the working folder, understand what the user brings, and locate the matur
 
 ## Documents to touch
 
-- `discovery/discovery-document.md`
-- `discovery/state.yaml`
-- `discovery/decision-log.md`
-- `discovery/assumptions.md` if you advance with assumptions
+- `discovery/challenge.md`
+- `discovery/_system/state.yaml`
+- `discovery/_system/decisions.md`
+- `discovery/_system/assumptions.md` if you advance with assumptions
 
 ## Guiding questions
 
@@ -26,14 +26,14 @@ Create the working folder, understand what the user brings, and locate the matur
 
 ## Using the template
 
-Fill out in `discovery-document.md`:
+Fill out in `challenge.md`:
 
 - Project objective.
 - Maturity level and evidence.
 - Initial context.
 - Scope and out of scope.
 
-If the user brings documents, log them in `knowledge-base.md` as loaded sources.
+If the user brings documents, log them in `_sources/knowledge-base.md` as loaded sources.
 
 ## Gate
 
