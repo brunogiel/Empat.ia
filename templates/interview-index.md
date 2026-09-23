@@ -22,7 +22,7 @@ This index lets you see what material has come in, what still needs to be organi
 
 - `received`: the material is in `incoming/`, but hasn't been organized yet.
 - `organized`: it already has an ID, a transcript/note and minimum metadata.
-- `evidence_extracted`: it has been moved into `evidence-ledger.md`.
+- `evidence_extracted`: it has been moved into `_system/evidence-ledger.md`.
 - `ready_for_synthesis`: it can be used for patterns.
 - `incomplete`: missing transcript, notes, metadata or consent.
 

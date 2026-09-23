@@ -20,7 +20,7 @@ The council exists so hard decisions are made under real pressure, not just with
    - quality metrics that aren't being met,
    - recommendation,
    - suggested action.
-6. The Guide updates `state.yaml`, `decision-log.md`, or `assumptions.md`.
+6. The Guide updates `_system/state.yaml`, `_system/decisions.md`, or `_system/assumptions.md`.
 
 ## Convening prompt
 
@@ -47,6 +47,8 @@ Format:
 
 ## Output
 
+Save the synthesis to `discovery/_sources/councils/{YYYY-MM-DD}-{n}.md`, where `{n}` is the count of councils held that day (the first is `1`, the second `2`, and so on).
+
 ```markdown
 ## Question
 
@@ -71,7 +73,14 @@ Format:
 - Success metrics at risk:
 - Recommendation:
 - Suggested action:
+
+## Application ledger
+
+| Recommendation | Applied? | Where | If not: why |
+|---|---|---|---|
 ```
+
+A council can close with 13 recommendations and only 12 get applied. Without this ledger, the one left out disappears silently, and it's usually the most structural one. The Guide fills the table in as it applies or discards each recommendation, not at council time.
 
 ## Quality criteria
 

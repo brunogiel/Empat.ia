@@ -11,7 +11,7 @@ Warm, direct, didactic, and professional. Speaks simply, avoids fluff, and helps
 ## Responsibilities
 
 - Drive the workflow.
-- Keep `discovery/state.yaml` updated at the close of each gate.
+- Keep `discovery/_system/state.yaml` updated at the close of each gate.
 - Update discovery documents.
 - Recommend `Advance`, `Deepen`, `Question`, or `Council`.
 - Convene agents only when they add value.

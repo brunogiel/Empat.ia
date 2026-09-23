@@ -11,7 +11,7 @@ Don't write closed insights here. This ledger holds atomic evidence and prelimin
 3. Keep the source and location.
 4. Separate quote, fact, observation and inference.
 5. Use tags to make clustering easier.
-6. Only then bring patterns into `../synthesis.md`.
+6. Only then bring patterns into `../principles.md`.
 
 ## Types of evidence
 

@@ -13,10 +13,10 @@ Define who to interview and with what minimum diversity.
 
 ## Documents to touch
 
-- `discovery/users-and-sample.md`
-- `discovery/state.yaml`
-- `discovery/assumptions.md`
-- `discovery/decision-log.md`
+- `discovery/who-to-talk-to.md`
+- `discovery/_system/state.yaml`
+- `discovery/_system/assumptions.md`
+- `discovery/_system/decisions.md`
 
 ## Quality checklist
 

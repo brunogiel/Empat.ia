@@ -39,14 +39,14 @@ Process **interview by interview**. Don't cross patterns here, that's synthesis 
    - **Moments of tension, surprise or emotion.**
    - **New questions** (what this opens for the next round).
    - **Co-pilot readings** (your inferences, clearly labeled, not facts).
-4. **[LATENT] Extract atomic evidence** into `discovery/interviews/evidence-ledger.md`: one row per unit, typed (`quote`/`fact`/`observation`/`workaround`/`emotion`/`contradiction`/`material`/`open_question`/`copilot_reading`), each traceable to the interview ID and a location (transcript spot or note section). Keep insights out of the ledger; this is atomic evidence only.
+4. **[LATENT] Extract atomic evidence** into `discovery/_system/evidence-ledger.md`: one row per unit, typed (`quote`/`fact`/`observation`/`workaround`/`emotion`/`contradiction`/`material`/`open_question`/`copilot_reading`), each traceable to the interview ID and a location (transcript spot or note section). Keep insights out of the ledger; this is atomic evidence only.
 5. **[DET] Update `discovery/interviews/index.md`**: metadata, files, status `done`, gaps left.
 6. **[LATENT] Interview retro (the distinctive step).** Close the loop back to the guide. Produce three things, inside the note under a clear "Guide / method learnings" section:
    - **Questions left on the table.** Follow-ups the interviewee opened and you didn't pursue, sections of the guide that went uncovered (and whether that was fine because you followed the person, or a real miss).
    - **Concrete edits to the master guide** for the next interview (add / reword / reorder / drop a question; a technique that worked, like a closing recap). Be specific and quote the guide line.
    - **Part 2?** Default **no**: you learn more from new interviews than from re-interviewing. Only recommend a part 2 if a genuinely important theme was missed.
    If the user reflected out loud during or after the call (their own debrief), capture that verbatim into this section, it's often the sharpest input.
-7. **[DET] Gate.** Close with a recommendation: `Advance` (enough material to cross patterns), `Deepen` (key interviews missing), `Question` (sampling or capture bias), or `Council` (strong contradictions). Update `state.yaml` if the method's state file exists.
+7. **[DET] Gate.** Close with a recommendation: `Advance` (enough material to cross patterns), `Deepen` (key interviews missing), `Question` (sampling or capture bias), or `Council` (strong contradictions). Update `_system/state.yaml` if the method's state file exists.
 
 ## Hard rules
 
@@ -61,7 +61,7 @@ Process **interview by interview**. Don't cross patterns here, that's synthesis 
 
 - A clean transcript in `transcripts/`.
 - A structured note in `notes/` (1:1 with the template), including the **Guide / method learnings** retro.
-- New rows in `evidence-ledger.md`, traceable.
+- New rows in `_system/evidence-ledger.md`, traceable.
 - An updated `index.md` (status + gaps).
 - A gate recommendation. No master guide edited unless the user approved it.
 
@@ -76,5 +76,5 @@ Process **interview by interview**. Don't cross patterns here, that's synthesis 
 
 ## Notes
 
-- This skill is part of the Empat.ia method bundle and reads its `templates/` (`interview-note-template.md`, `evidence-ledger.md`). In standalone use (no `discovery/` folder), it still produces the note + retro wherever the user points.
+- This skill is part of the Empat.ia method bundle and reads its `templates/` (`interview-note-template.md`, `_system/evidence-ledger.md`). In standalone use (no `discovery/` folder), it still produces the note + retro wherever the user points.
 - Source-agnostic by design. If the user's transcripts live in a specific tool (a recorder, a meeting app), a project-level wrapper skill can handle fetching from that tool and then hand the raw transcript to this flow.

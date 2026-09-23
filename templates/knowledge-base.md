@@ -70,7 +70,7 @@ Group by topic:
 
 ## Detected assumptions
 
-Move or duplicate into `assumptions.md`.
+Move or duplicate into `_system/assumptions.md`.
 
 | Assumption | Where it comes from | Risk if false |
 |---|---|---|

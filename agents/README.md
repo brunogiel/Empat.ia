@@ -5,6 +5,7 @@ Agents are selectable voices. **The Guide proposes, the user decides.** The Guid
 Rules:
 
 - Don't convene all of them by default.
+- Never propose `editor` for convening: it's not a voice, it runs automatically at every gate, not on demand.
 - Don't propose `technologist` if the project has no relevant technology.
 - Configure `industry-expert` at runtime with the actual industry.
 - Propose `sme-owner` if the project touches SMEs, shops, small teams, local providers, or B2B sales to small businesses.
@@ -41,6 +42,7 @@ When using this prompt, the user or the Guide pastes the real context and questi
 ## Roster
 
 - `guide`: orchestrator and facilitator.
+- `editor`: keeps discovery files distilled, routed, and within budget. Not a council agent: it is never convened, it runs on its own at every gate, before the Guide offers `Advance`.
 - `qualitative-researcher`: interviews, sample, and traceability.
 - `deep-market-researcher`: web research with sources.
 - `uxer`: journeys, needs, and experience.

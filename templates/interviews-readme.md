@@ -65,8 +65,8 @@ INT-003_alias-a_shop-owner_2026-05-18_transcript.md
 4. Create a structured note in `notes/` using `_notes-template.md`.
 5. Save photos, documents or screenshots in `artifacts/`.
 6. Save consent or restrictions in `consent/`.
-7. Extract atomic evidence into `evidence-ledger.md`.
-8. Only then cross-reference patterns in `../synthesis.md`.
+7. Extract atomic evidence into `_system/evidence-ledger.md`.
+8. Only then cross-reference patterns in `../principles.md`.
 
 ## What counts as evidence
 

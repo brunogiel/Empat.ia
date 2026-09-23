@@ -14,7 +14,7 @@ Empat.ia is a co-pilot that guides you through an empathic design process follow
 ## What it does
 
 - It walks you through building **design principles** traceable to evidence. That is the central deliverable.
-- It creates a `discovery/` folder inside your project with persistent documents (state, assumptions, decisions, interviews, synthesis).
+- It creates a `discovery/` folder inside your project, split in three zones: what you open, what the assistant keeps, and the raw material underneath.
 - It guides you step by step through 10 stages, from initial alignment to evidence-based synthesis.
 - It separates facts, assumptions, and inferences. It doesn't let you confuse them.
 - It turns raw interview material into traceable atomic evidence before writing insights and principles.
@@ -60,20 +60,38 @@ Optional, if you want it available across all your projects without pasting the 
 
 Then you invoke it with _"use Empat.ia"_ from any project.
 
+## The discovery folder
+
+```text
+discovery/
+  README.md  challenge.md  who-to-talk-to.md  recruiting.md    you open these
+  field-kit/  cheatsheet.md guide.md modules.md                you take these to the interview
+              checklist.md observation.md
+  findings.md  principles.md                                   the deliverable
+  _system/    state, assumptions, decisions, evidence, budgets  the assistant's workspace
+  _sources/   market research, knowledge base, councils,        raw and long
+              data reviews, guide versions
+  interviews/ incoming, transcripts, notes, artifacts,          field material
+              consent, processed
+```
+
+Files you open have a line budget. When one grows past it, the excess moves down to `_sources/`
+instead of turning the file you need in the room into something you cannot read. Nothing is deleted.
+
 ## The 10 stages
 
 | Stage | What happens | Estimated time | Deliverable |
 |---|---|---|---|
-| 1. Start | Alignment, context, decision to unblock | 30-60 min | Initial `discovery-document.md` |
-| 2. Design Challenge | Framing the problem without putting in a solution | 30-90 min | Challenge in the main document |
-| 3. Market research | Category, substitutes, references (when applicable) | 1-3 hrs | `market-research.md` with sources |
-| 4. Knowledge base | What we know, what we assume, what's left to learn | 30-60 min | `knowledge-base.md` |
-| 5. Users and sample | Roles, profiles, and qualitative sample | 30-90 min | `users-and-sample.md` |
-| 6. Interview guides | One guide per profile, cheat sheet not questionnaire | 1-2 hrs | `interview-guides.md` |
-| 7. Recruitment | Channels, messages, tracker | 2-5 days | `recruitment.md` updating as you go |
-| 8. Field checklist | Before, during, after each interview | 30 min | `field-checklist.md` |
+| 1. Start | Alignment, context, decision to unblock | 30-60 min | Initial `challenge.md` |
+| 2. Design Challenge | Framing the problem without putting in a solution | 30-90 min | Challenge in `challenge.md` |
+| 3. Market research | Category, substitutes, references (when applicable) | 1-3 hrs | `_sources/market-research.md` with sources |
+| 4. Knowledge base | What we know, what we assume, what's left to learn | 30-60 min | `_sources/knowledge-base.md` |
+| 5. Users and sample | Roles, profiles, and qualitative sample | 30-90 min | `who-to-talk-to.md` |
+| 6. Interview guides | The field kit: script, one-page cheat sheet, per-profile modules | 1-2 hrs | `field-kit/` |
+| 7. Recruitment | Channels, messages, tracker | 2-5 days | `recruiting.md` updating as you go |
+| 8. Field checklist | Before, during, after each interview | 30 min | `field-kit/checklist.md` |
 | 9. Interview capture | Transcripts, notes, consents, atomic evidence | 1-3 weeks | Populated `interviews/` |
-| 10. Synthesis | From evidence to **design principles** + insights, patterns, and HMW | 3-5 hrs | `synthesis.md` |
+| 10. Synthesis | From evidence to **design principles** + insights, patterns, and HMW | 3-5 hrs | `principles.md` |
 
 **Final deliverable**: a set of **design principles** traceable to interview quotes and evidence. Decision rules that you'll then use to guide:
 

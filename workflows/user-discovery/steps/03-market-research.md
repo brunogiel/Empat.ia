@@ -12,10 +12,10 @@ Do deep market research when it applies, using current web and citable sources.
 
 ## Documents to touch
 
-- `discovery/market-research.md`
-- `discovery/discovery-document.md`
-- `discovery/state.yaml`
-- `discovery/decision-log.md`
+- `discovery/_sources/market-research.md`
+- `discovery/challenge.md`
+- `discovery/_system/state.yaml`
+- `discovery/_system/decisions.md`
 
 ## Web rule
 
@@ -38,7 +38,7 @@ Minimum output:
 
 ## Using the template
 
-Fill out `market-research.md` with tables of:
+Fill out `_sources/market-research.md` with tables of:
 
 - Findings with data, source, and implication.
 - Players, substitutes, and benchmarks.

@@ -6,10 +6,10 @@ The method uses a main guide, persistent documents, and selectable agents to und
 
 There is no single canvas. The work lives in `discovery/`:
 
-- `discovery-document.md`
-- `state.yaml`
-- `assumptions.md`
-- `decision-log.md`
+- `challenge.md`
+- `_system/state.yaml`
+- `_system/assumptions.md`
+- `_system/decisions.md`
 - stage-specific documents
 
 Fixed gate menu:
@@ -51,6 +51,6 @@ Source principles:
 - User, customer, payer, decision-maker, and operator can be different people.
 - Interview mainstream and extremes.
 - Experts help, but don't replace users.
-- Transcripts and notes come in through `discovery/interviews/incoming/`, are logged in `index.md`, and become atomic evidence in `evidence-ledger.md`.
+- Transcripts and notes come in through `discovery/interviews/incoming/`, are logged in `index.md`, and become atomic evidence in `_system/evidence-ledger.md`.
 - No insight without evidence.
 - HMW must not carry a hidden solution.
