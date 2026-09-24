@@ -18,18 +18,18 @@ Insights, patterns, HMWs, and top quotes are material that supports the principl
 
 ## Documents to touch
 
-- `discovery/principles.md`
-- `discovery/interviews/index.md`
-- `discovery/_system/evidence-ledger.md`
-- `discovery/challenge.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/decisions.md`
-- `discovery/_system/assumptions.md`
+- `discovery/5-debrief/principles.md`
+- `discovery/4-field/0-index.md`
+- `discovery/_engine/evidence.md`
+- `discovery/1-desk-research/brief.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/decisions.md`
+- `discovery/_engine/assumptions.md`
 
 ## Process
 
-1. Review `interviews/index.md` to see what material is ready and what gaps remain.
-2. Review `_system/evidence-ledger.md`.
+1. Review `4-field/0-index.md` to see what material is ready and what gaps remain.
+2. Review `_engine/evidence.md`.
 3. Fill out a summary per interviewee only with processed interviews.
 4. Group evidence by themes.
 5. Cross profiles.
@@ -42,7 +42,7 @@ Insights, patterns, HMWs, and top quotes are material that supports the principl
 ## Quality criteria
 
 - An insight is not a summary: it is a new perspective on the problem.
-- Each insight needs a fact or quote traceable to `_system/evidence-ledger.md`.
+- Each insight needs a fact or quote traceable to `_engine/evidence.md`.
 - The principles are design rules, not features.
 - HMWs shouldn't carry a hidden solution.
 - A good HMW lets you imagine several solutions quickly.
@@ -63,7 +63,7 @@ Suggest `Council` before closing if:
 - There are weak insights.
 - There are relevant contradictions.
 - There are design principles without evidence.
-- The `_system/evidence-ledger.md` shows important gaps.
+- The `_engine/evidence.md` shows important gaps.
 - The user wants to prioritize opportunities.
 
 ## Gate

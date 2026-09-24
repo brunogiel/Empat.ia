@@ -14,13 +14,13 @@ This stage exists so the user can drop in all the real field material, and the G
 
 ## Documents to touch
 
-- `discovery/interviews/`
-- `discovery/interviews/README.md`
-- `discovery/interviews/index.md`
-- `discovery/_system/evidence-ledger.md`
-- `discovery/_sources/knowledge-base.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/assumptions.md`
+- `discovery/4-field/`
+- `discovery/4-field/0-index.md`
+- `discovery/4-field/0-index.md`
+- `discovery/_engine/evidence.md`
+- `discovery/1-desk-research/knowledge.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/assumptions.md`
 
 ## Folder structure
 
@@ -49,7 +49,7 @@ This stage exists so the user can drop in all the real field material, and the G
 4. Copy or move clean transcripts to `transcripts/`.
 5. Create a structured note in `notes/` using `_notes-template.md`.
 6. Save materials in `artifacts/` and consents in `consent/`.
-7. Extract atomic evidence into `_system/evidence-ledger.md`.
+7. Extract atomic evidence into `_engine/evidence.md`.
 8. Mark gaps before moving to synthesis.
 
 ## How to process each interview
@@ -82,5 +82,5 @@ Suggested action:
 - There are verbatim quotes.
 - Observations are separated from interpretations.
 - `index.md` lists files, consent, and gaps.
-- `_system/evidence-ledger.md` has evidence per interview.
+- `_engine/evidence.md` has evidence per interview.
 - There are enough profiles to cross patterns, or gaps are recorded.

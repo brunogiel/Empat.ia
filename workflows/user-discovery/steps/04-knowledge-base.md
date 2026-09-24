@@ -14,10 +14,10 @@ Organize what the user brings: what we know, what we don't know, and what we wan
 
 ## Documents to touch
 
-- `discovery/_sources/knowledge-base.md`
-- `discovery/_system/assumptions.md`
-- `discovery/challenge.md`
-- `discovery/_system/state.yaml`
+- `discovery/1-desk-research/knowledge.md`
+- `discovery/_engine/assumptions.md`
+- `discovery/1-desk-research/brief.md`
+- `discovery/_engine/state.yaml`
 
 ## Structure
 
@@ -30,11 +30,11 @@ Organize what the user brings: what we know, what we don't know, and what we wan
 
 ## Using the template
 
-In `_sources/knowledge-base.md`, use tables with IDs:
+In `1-desk-research/knowledge.md`, use tables with IDs:
 
 - `S-*` for things we know.
 - `NS-*` for things we don't know.
-- Assumptions that must also move to `_system/assumptions.md`.
+- Assumptions that must also move to `_engine/assumptions.md`.
 
 Don't synthesize prematurely. This stage clears the ground.
 

@@ -1,43 +1,21 @@
-# Interview Guides
+# Interview guide
 
-Suggested duration: 45-60 minutes. If there is a translator, complex context or a field visit, consider 60-90 minutes.
+The master guide. **It is never crossed out and never edited during an
+interview**: you carry a disposable copy, `4-field/_prep/INT-00X-<alias>-prep.md`,
+and you mark that one.
 
-The guide is a cheat sheet, not a questionnaire. It helps you cover learning objectives without killing the conversation.
+Questions only. Two printed pages, and that is a hard cap — this is the file
+that grew to 257 lines on the first real run and became unusable in the room it
+was written for. Everything that is not a question has another home: the
+protocol in `3-guide/process.md`, the learning objectives in
+`1-desk-research/knowledge.md`, the logistics in `2-profiling/recruiting.md`.
 
-## Principles
+It is a direction, not a questionnaire. Ask why even where it is not written,
+and if a thread gets good, follow the thread and drop the rest. Coverage is
+worth less than depth.
 
-- The interviewee is the expert.
-- One person leads and another takes notes when possible.
-- Open questions, not yes/no.
-- Move from context and day-to-day toward depth.
-- Ask for stories, examples and recent situations.
-- Always ask why.
-- Leave silences.
-- Don't sell or validate a solution.
-- Don't finish what the interviewee is saying.
-
-## Learning objectives
-
-| Objective | Which document it comes from | Questions that cover it |
-|---|---|---|
-| Pending | knowledge-base.md | Pending |
-
-## Guide by profile
-
-Duplicate this section for each type of user if the profiles are different.
-
-### Profile
-
-Pending.
-
-### Interview context
-
-- Ideal place:
-- Modality:
-- Duration:
-- Who interviews:
-- Who takes notes:
-- Required permissions:
+**More than one profile?** Copy this file per profile:
+`guide-owner.md`, `guide-operator.md`. One guide each, whole. Not deltas.
 
 ### 1. Start, rapport and consent
 
@@ -113,13 +91,3 @@ Goal: open up future needs without inducing a solution.
 - Is there anything important I didn't ask?
 - Is there anyone else I should talk to?
 - Can we reach out again if a question comes up?
-
-## Forbidden questions or to be reframed
-
-| Avoid | Better ask |
-|---|---|
-| Would you like to use an app for this? | How do you solve this situation today? |
-| Would you pay for this? | What does it cost today to solve it badly? |
-| Does this seem useful to you? | At what specific moment would something like this have helped you? |
-| Which feature do you want? | What part of the process creates the most friction for you? |
-

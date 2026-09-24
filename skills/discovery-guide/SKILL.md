@@ -53,8 +53,8 @@ If the user says yes, then you initialize (see "Init"). If they say no, don't to
 
 Load the state and continue:
 
-1. Read `discovery/_system/state.yaml`, `discovery/challenge.md`, `discovery/_system/assumptions.md`, and the step file corresponding to the `current_step`.
-2. If `_system/state.yaml` doesn't exist or is broken, don't improvise: offer to reinitialize (with the user's permission).
+1. Read `discovery/_engine/state.yaml`, `discovery/1-desk-research/brief.md`, `discovery/_engine/assumptions.md`, and the step file corresponding to the `current_step`.
+2. If `_engine/state.yaml` doesn't exist or is broken, don't improvise: offer to reinitialize (with the user's permission).
 3. Show the current state (see "Command: status") and the next recommended action.
 4. Continue from `current_step`.
 
@@ -77,9 +77,9 @@ If the folder already exists and predates the three-zone layout, run the same sc
 
 After init:
 
-1. Pre-fill `discovery/challenge.md` with what was discussed in the initial conversation: project name, one-line description, decision to unblock, tentative user, prior materials, time window.
-2. Mark open assumptions in `discovery/_system/assumptions.md` (for example: "the tentative user is X, unvalidated").
-3. Update `_system/state.yaml`: `current_step: start`, `current_status: capturing`, `recommended_action: Deepen`.
+1. Pre-fill `discovery/1-desk-research/brief.md` with what was discussed in the initial conversation: project name, one-line description, decision to unblock, tentative user, prior materials, time window.
+2. Mark open assumptions in `discovery/_engine/assumptions.md` (for example: "the tentative user is X, unvalidated").
+3. Update `_engine/state.yaml`: `current_step: start`, `current_status: capturing`, `recommended_action: Deepen`.
 4. Show the state and the next recommended action.
 
 ## The discovery folder
@@ -88,24 +88,24 @@ Three zones. The criterion is not "agent versus human", it is who opens the file
 
 ```text
 discovery/
-  README.md  challenge.md  who-to-talk-to.md  recruiting.md      zone 1: the user opens these
-  field-kit/     cheatsheet.md guide.md modules.md               what they take to the interview
+  README.md  1-desk-research/brief.md  2-profiling/profiles.md  2-profiling/recruiting.md      zone 1: the user opens these
+  3-guide/     cheatsheet.md guide.md modules.md               what they take to the interview
                  checklist.md observation.md
-  findings.md  principles.md                                     the deliverable
-  _system/       state.yaml assumptions.md decisions.md           zone 2: you live here
+  5-debrief/findings.md  5-debrief/principles.md                                     the deliverable
+  _engine/       state.yaml assumptions.md decisions.md           zone 2: you live here
                  evidence-ledger.md budgets.yaml                  the user does not open it
-  _sources/      market-research.md knowledge-base.md             zone 3: raw and long
+  _engine/sources/      market-research.md knowledge-base.md             zone 3: raw and long
                  councils/ data-reviews/ guide-versions/          consulted, not read
-  interviews/    incoming/ transcripts/ notes/ artifacts/         field material
+  4-field/    incoming/ transcripts/ notes/ artifacts/         field material
                  consent/ processed/
 ```
 
 Two rules that hold the whole thing up:
 
-- **State lives in `_system/state.yaml` and nowhere else.** Never write the current step into a
+- **State lives in `_engine/state.yaml` and nowhere else.** Never write the current step into a
   second document. Two state files always end up disagreeing, and the user believes the wrong one.
-- **Zone 1 files have line budgets** in `_system/budgets.yaml`. Over budget means the content
-  belongs in `_sources/`, not that it should be deleted.
+- **Zone 1 files have line budgets** in `_engine/budgets.yaml`. Over budget means the content
+  belongs in `_engine/sources/`, not that it should be deleted.
 
 ## Hard principles
 
@@ -116,13 +116,13 @@ Two rules that hold the whole thing up:
 - Separate facts, opinions, hypotheses, assumptions, and co-pilot readings.
 - If you advance with incomplete information, log `advanced_with_assumptions`.
 - If an inference is yours, label it `Co-pilot reading`.
-- **Every gate closes with a recommendation: `Advance`, `Deepen`, `Question`, or `Council`. And before closing a gated stage, you update `_system/state.yaml` with the new `current_status` (`drafted`, `validated`, or `advanced_with_assumptions`). No stage closes without a state update.**
+- **Every gate closes with a recommendation: `Advance`, `Deepen`, `Question`, or `Council`. And before closing a gated stage, you update `_engine/state.yaml` with the new `current_status` (`drafted`, `validated`, or `advanced_with_assumptions`). No stage closes without a state update.**
 - The user brings the content. You organize, ask, teach, and recommend.
 - Work with available evidence before asking for more information.
 - Prioritize traceable progress over perfect completeness.
 - Don't use methodological jargon when a simple phrase will do.
 - Write every document in the project's `language`, the scaffolding included.
-- When a zone 1 file grows past its budget, move the excess to `_sources/`. Never delete it.
+- When a zone 1 file grows past its budget, move the excess to `_engine/sources/`. Never delete it.
 
 ## Method bundle
 
@@ -144,7 +144,7 @@ Read only the active step file. Don't load all steps unless the user asks to rev
 Order:
 
 1. `01-start.md`
-2. `02-design-challenge.md`
+2. `02-design-1-desk-research/brief.md`
 3. `03-market-research.md`
 4. `04-knowledge-base.md`
 5. `05-users-sample.md`
@@ -171,7 +171,7 @@ When closing a stage or important sub-stage:
 1. **Run the `editor`** over the files this stage touched. It distills, moves misplaced content
    to the file that owns it, and trims by budget. It shows its plan and waits for an OK before
    moving anything. It never deletes.
-2. **Update `_system/state.yaml`** with the new stage status (`drafted`, `validated`, or `advanced_with_assumptions`) and `updated_at`.
+2. **Update `_engine/state.yaml`** with the new stage status (`drafted`, `validated`, or `advanced_with_assumptions`) and `updated_at`.
 3. Show the action menu:
 
 ```text
@@ -189,7 +189,7 @@ Don't present it as A/B/C. Use clear names.
 
 ## Command: status
 
-When the user asks "how's it going", "status", "where are we", "summary", or similar, return a short block by reading `_system/state.yaml` and the file structure:
+When the user asks "how's it going", "status", "where are we", "summary", or similar, return a short block by reading `_engine/state.yaml` and the file structure:
 
 ```text
 Project: {project_name}
@@ -207,7 +207,7 @@ one question: what is blocking the first interview. Preparation is not evidence.
 produce two thousand lines of documents and zero field data, and the state file is the only place
 that difference is visible.
 
-Don't include a count of assumptions in the status. Assumptions live in `_system/assumptions.md` and are worked on there, not in the summary.
+Don't include a count of assumptions in the status. Assumptions live in `_engine/assumptions.md` and are worked on there, not in the summary.
 
 ## Default response format
 
@@ -269,40 +269,40 @@ Act as the indicated agent of Design with Empathy and AI. Respond from your spec
 
 Market research is its own flow. It requires current web access and sources. If there's no web, explain that and leave the stage in `not_started` or `capturing`.
 
-The output is written in `discovery/_sources/market-research.md` and must include sources.
+The output is written in `discovery/1-desk-research/market.md` and must include sources.
 
 ## Expected output
 
 Always keep updated:
 
-- `discovery/challenge.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/assumptions.md`
-- `discovery/_system/decisions.md`
+- `discovery/1-desk-research/brief.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/assumptions.md`
+- `discovery/_engine/decisions.md`
 - The corresponding stage document.
 
-When interviews are done, the user can dump all the raw material in `discovery/interviews/incoming/`. Then:
+When interviews are done, the user can dump all the raw material in `discovery/4-field/_raw/`. Then:
 
-1. Log each interview in `discovery/interviews/index.md`.
-2. Save clean transcripts in `discovery/interviews/transcripts/`.
-3. Create structured notes in `discovery/interviews/notes/` using `_notes-template.md`.
-4. Save photos, screenshots, and documents in `discovery/interviews/artifacts/`.
-5. Log consent or restrictions in `discovery/interviews/consent/`.
-6. Extract atomic evidence into `discovery/_system/evidence-ledger.md`.
-7. Distill what is emerging into `discovery/findings.md`, pointing at evidence IDs. No principles there yet.
-8. Use `discovery/principles.md` only after you have traceable evidence.
+1. Log each interview in `discovery/4-field/0-index.md`.
+2. Save clean transcripts in `discovery/4-field/_raw/`.
+3. Create structured notes in `discovery/4-field/` using `_notes-template.md`.
+4. Save photos, screenshots, and documents in `discovery/4-field/_raw/`.
+5. Log consent or restrictions in `discovery/4-field/_raw/`.
+6. Extract atomic evidence into `discovery/_engine/evidence.md`.
+7. Distill what is emerging into `discovery/5-debrief/findings.md`, pointing at evidence IDs. No principles there yet.
+8. Use `discovery/5-debrief/principles.md` only after you have traceable evidence.
 
-The final deliverable of the project is the **design principles** in `principles.md`. Insights, patterns, HMW, and top quotes are material that supports the principles, not the final output. Each principle has to be traceable to specific facts or quotes in `_system/evidence-ledger.md`. If a principle can't be traced, it's not a principle: it's an opinion.
+The final deliverable of the project is the **design principles** in `5-debrief/principles.md`. Insights, patterns, HMW, and top quotes are material that supports the principles, not the final output. Each principle has to be traceable to specific facts or quotes in `_engine/evidence.md`. If a principle can't be traced, it's not a principle: it's an opinion.
 
 ## Success metrics
 
 - The user knows where they stand and what the next recommended action is.
 - The method doesn't move too fast.
 - Assumptions don't get mixed up with facts.
-- Every final **design principle** can be traced to specific facts or quotes in `_system/evidence-ledger.md`.
+- Every final **design principle** can be traced to specific facts or quotes in `_engine/evidence.md`.
 - The final insights, patterns, and HMW are also traced to evidence.
 - Interviews last 45-60 minutes and don't induce answers.
-- Someone other than the author can run an interview from `field-kit/` alone.
-- `field-kit/cheatsheet.md` fits on one page and is what the interviewer actually holds.
+- Someone other than the author can run an interview from `3-guide/` alone.
+- `3-guide/guide.md` fits on one page and is what the interviewer actually holds.
 - The default qualitative sample is 10-12 interviews when applicable.
 - The user never had to run a weird installer: they told their assistant "install this for me" with the link to the repo, or copied the SKILL.md to their skills folder.

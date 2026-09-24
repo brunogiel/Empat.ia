@@ -1,12 +1,14 @@
 method: design-empathy-ai
-version: 2
+version: 3
 project_name: ""
 created_at: ""
 updated_at: ""
 # Working language for every document in discovery/. Set at init (--lang).
-# The scaffolding is written in this language, not only the conversation.
+# Every file is WRITTEN in this language by the assistant when the file is born,
+# not only the conversation. The repository stays in English; your folder does not.
 language: ""
 guide: guide
+current_phase: 1
 current_step: start
 current_status: not_started
 valid_statuses:
@@ -37,62 +39,119 @@ available_agents:
   - sme-owner
   - cab-driver
 # The editor is not a council agent and is never convened. It runs at every gate:
-# it distills, routes misplaced content and trims by the budgets in budgets.yaml.
+# it distills, routes misplaced content, empties notes.md and trims by the budgets
+# in budgets.yaml. It never deletes.
 editor: on
-# Hard rule: a stage with a gate cannot be closed without updating 'status' to 'drafted',
-# 'validated' or 'advanced_with_assumptions'. The Guide cannot jump from one step to
-# another without touching this file and updating updated_at.
-# This file is the only place the project state lives. No other document repeats it.
+
+# --- How to read this file -------------------------------------------------
+#
+# Hard rule: a step with a gate cannot be closed without updating 'status' to
+# 'drafted', 'validated' or 'advanced_with_assumptions', and updating updated_at.
+#
+# This file is the only place the project STATE lives. No other document repeats it.
+#
+# The folder listing answers a DIFFERENT question, and that is why the two never
+# collide: the listing tells you HOW FAR you got (if 3-guide/ exists, you entered
+# phase 3), this file tells you WHAT STATE each step is in. A file is born when you
+# ENTER its step, not when you close it, so existence never means "done".
+#
+# 'file' is what the assistant creates when the step starts: from the template of
+# the same name, written in `language`, pre-filled with what the project already
+# knows. Nothing is created at install except phase 1's brief.
+#
+# 'on_demand: true' means the file is born only if the project needs it. A project
+# that runs no observation never sees an observation file.
+# ---------------------------------------------------------------------------
+
+phases:
+  1:
+    name: desk-research
+    folder: 1-desk-research
+    steps: [start, design_challenge, market_research, knowledge_base]
+  2:
+    name: profiling
+    folder: 2-profiling
+    steps: [profiles, recruiting]
+  3:
+    name: guide
+    folder: 3-guide
+    steps: [interview_guide, field_process]
+  4:
+    name: field
+    folder: 4-field
+    steps: [interview_capture, observation]
+  5:
+    name: debrief
+    folder: 5-debrief
+    steps: [debrief]
+
 steps:
   start:
+    phase: 1
     status: not_started
-    output: challenge.md
+    file: 1-desk-research/brief.md
     gate: true
   design_challenge:
+    phase: 1
     status: not_started
-    output: challenge.md
+    file: 1-desk-research/brief.md
     gate: true
   market_research:
+    phase: 1
     status: not_started
-    output: _sources/market-research.md
+    file: 1-desk-research/market.md
     gate: true
   knowledge_base:
+    phase: 1
     status: not_started
-    output: _sources/knowledge-base.md
+    file: 1-desk-research/knowledge.md
     gate: true
-  users_sample:
+  profiles:
+    phase: 2
     status: not_started
-    output: who-to-talk-to.md
+    file: 2-profiling/profiles.md
     gate: true
-  interview_guides:
+  recruiting:
+    phase: 2
     status: not_started
-    output: field-kit/guide.md + field-kit/cheatsheet.md + field-kit/modules.md
-    gate: true
-  recruitment:
-    status: not_started
-    output: recruiting.md
+    file: 2-profiling/recruiting.md
     gate: false
-  field_checklist:
+  interview_guide:
+    phase: 3
     status: not_started
-    output: field-kit/checklist.md
-    gate: false
-  guide_context:
+    file: 3-guide/guide.md
+    gate: true
+  field_process:
+    phase: 3
     status: not_started
-    output: field-kit/observation.md
+    file: 3-guide/process.md
     gate: false
   interview_capture:
+    phase: 4
     status: not_started
-    output: interviews/index.md + _system/evidence-ledger.md + findings.md
+    file: 4-field/0-index.md + 4-field/0-interview-feedback.md + _engine/evidence.md
     gate: true
-  synthesis:
+  observation:
+    phase: 4
     status: not_started
-    output: principles.md
+    file: 4-field/0-observation-plan.md
+    gate: false
+    on_demand: true
+  debrief:
+    phase: 5
+    status: not_started
+    file: 5-debrief/findings.md + 5-debrief/principles.md
     gate: true
+
 interviews:
   target: 10
   done: 0
-  # Field signal. From step 07 on, if 'done' is still 0 and more than
+  # Field signal. From phase 4 on, if 'done' is still 0 and more than
   # 'stale_after_days' have passed since created_at, the Guide says so before
   # anything else and asks what is blocking the first interview.
   # Preparation is not evidence. The method does not replace fieldwork.
   stale_after_days: 7
+  # Unprocessed transcripts block nothing, but the Guide raises them before
+  # offering Advance into phase 5. Synthesising over unprocessed material is
+  # the one thing the method already forbids.
+  unprocessed: 0

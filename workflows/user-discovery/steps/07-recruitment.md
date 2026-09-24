@@ -13,9 +13,9 @@ Prepare messages and a scheduling plan.
 
 ## Documents to touch
 
-- `discovery/recruiting.md`
-- `discovery/who-to-talk-to.md`
-- `discovery/_system/state.yaml`
+- `discovery/2-profiling/recruiting.md`
+- `discovery/2-profiling/profiles.md`
+- `discovery/_engine/state.yaml`
 
 ## Checklist
 

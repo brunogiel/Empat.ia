@@ -20,7 +20,7 @@ The council exists so hard decisions are made under real pressure, not just with
    - quality metrics that aren't being met,
    - recommendation,
    - suggested action.
-6. The Guide updates `_system/state.yaml`, `_system/decisions.md`, or `_system/assumptions.md`.
+6. The Guide updates `_engine/state.yaml`, `_engine/decisions.md`, or `_engine/assumptions.md`.
 
 ## Convening prompt
 
@@ -47,7 +47,7 @@ Format:
 
 ## Output
 
-Save the synthesis to `discovery/_sources/councils/{YYYY-MM-DD}-{n}.md`, where `{n}` is the count of councils held that day (the first is `1`, the second `2`, and so on).
+Save the synthesis to `discovery/_engine/sources/councils/{YYYY-MM-DD}-{n}.md`, where `{n}` is the count of councils held that day (the first is `1`, the second `2`, and so on).
 
 ```markdown
 ## Question

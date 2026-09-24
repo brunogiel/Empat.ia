@@ -12,10 +12,10 @@ Co-create a challenge in `How might we...` format centered on user, need, and im
 
 ## Documents to touch
 
-- `discovery/challenge.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/assumptions.md`
-- `discovery/_system/decisions.md`
+- `discovery/1-desk-research/brief.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/assumptions.md`
+- `discovery/_engine/decisions.md`
 
 ## Quality checklist
 
@@ -29,7 +29,7 @@ Co-create a challenge in `How might we...` format centered on user, need, and im
 
 ## Using the template
 
-Update in `challenge.md`:
+Update in `1-desk-research/brief.md`:
 
 - Current challenge.
 - Why it isn't too broad.

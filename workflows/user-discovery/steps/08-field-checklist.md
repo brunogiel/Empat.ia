@@ -14,9 +14,9 @@ Prepare a protocol for before, during, and after interviewing.
 
 ## Documents to touch
 
-- `discovery/field-kit/checklist.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/decisions.md`
+- `discovery/3-guide/process.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/decisions.md`
 
 ## Quality checklist
 
@@ -31,7 +31,7 @@ Prepare a protocol for before, during, and after interviewing.
 
 ## Guide context
 
-If the problem happens in a specific place, process, or tool, fill out `field-kit/observation.md`.
+If the problem happens in a specific place, process, or tool, fill out `4-field/0-observation-plan.md`.
 
 Use observation, shadowing, experts, analogous inspiration, or usage materials as the case requires.
 
