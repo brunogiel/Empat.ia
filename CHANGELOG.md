@@ -68,6 +68,11 @@ carried ~400 lines of generic method text that is identical in every project.
 - `observation.md` was titled `# Context Guide` inside. Name and content never matched.
 - The shipped guide template broke the line budget the method shipped alongside it.
 
+### Planned, not in this release
+
+- **Ideation** and **testing** as phases 6 and 7. Phase 5 already names the handoff; the
+  method stops at the principles rather than pretending otherwise.
+
 ### Removed
 
 - `field-kit/cheatsheet.md`, `field-kit/modules.md` and `interviews/README.md`. Migration

@@ -118,6 +118,20 @@ takes you through phases 1 to 3 at the minimum, or _"I already did the
 interviews"_ and it starts at phase 4. Skipped phases are recorded as what you
 are assuming by skipping them, so the gap stays visible instead of disappearing.
 
+## What comes next
+
+The method ends at design principles, and that is on purpose: the How Might We
+questions it produces are the handoff, not the finish line. Two phases are
+planned and not built yet.
+
+| Coming | What it would cover |
+|---|---|
+| **Ideation** | Take the How Might We questions into concepts: diverge, cluster, choose with criteria that trace back to the principles instead of to taste |
+| **Testing** | Put a concept in front of the same people, and learn from what they do with it rather than from what they say about it |
+
+Until they exist, phase 5 hands you the questions and says so plainly. It does
+not pretend the work is over.
+
 ## The Guide's four actions
 
 At every gate, the Guide recommends an action:

@@ -140,7 +140,7 @@ steps:
   debrief:
     phase: 5
     status: not_started
-    file: 5-debrief/findings.md + 5-debrief/principles.md
+    file: 5-debrief/findings.md + 5-debrief/principles.md + 5-debrief/output/summary.md
     gate: true
 
 interviews:
