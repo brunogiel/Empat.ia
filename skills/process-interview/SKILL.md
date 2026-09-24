@@ -1,13 +1,13 @@
 ---
 name: process-interview
-description: Activate after a user-discovery interview is done and the user wants to process it: "process this interview", "I just finished interviewing X", "turn this transcript into a note", "what did we get from the call with Y", "extract the evidence", "what should I have asked", "improve the guide for next time", "interview retro". Takes one raw interview (transcript, recording, or notes the user points to) plus where to save it, and produces a structured note, atomic evidence, an index update, and a guide-improvement retro. It is the "after the interview" complement to the interview-guides stage and operationalizes stage 09 (interview capture) of the Empat.ia method. Source-agnostic: it works from any transcript the assistant can read. Never invents data, preserves verbatim quotes, and never auto-edits the master guide (it proposes).
+description: Activate after a user-discovery interview is done and the user wants to process it: "process this interview", "I just finished interviewing X", "turn this transcript into a note", "what did we get from the call with Y", "extract the evidence", "what should I have asked", "improve the guide for next time", "interview retro". Takes one raw interview (transcript, recording, or notes the user points to) plus where to save it, and produces a structured note, atomic evidence, an index update, a guide-improvement retro, and the counted feedback on how the interview was conducted. It is the "after the interview" complement to phase 3 (the guide) and operationalizes step 4a of the Empat.ia method. Source-agnostic: it works from any transcript the assistant can read. Never invents data, preserves verbatim quotes, and never auto-edits the master guide (it proposes).
 ---
 
 # Process Interview
 
 Turn **one** raw interview into processed, traceable material, and close the loop back to the guide.
 
-This is the symmetric partner of the interview-guides stage: that stage builds the questions *before*; this skill processes the answers *after*. It operationalizes **stage 09 (Interview Capture)** of the Empat.ia method and adds the piece the method implies but doesn't make explicit: an **interview retro** that proposes what to ask next and how to sharpen the guide.
+This is the symmetric partner of the interview-guides stage: that stage builds the questions *before*; this skill processes the answers *after*. It operationalizes **step 4a, interview capture**, and adds the two pieces the method implies but never made explicit: an **interview retro** that proposes what to ask next and how to sharpen the guide, and **feedback on how the interview was conducted**, which nothing in the method used to look at.
 
 ## When to use
 
@@ -15,7 +15,7 @@ This is the symmetric partner of the interview-guides stage: that stage builds t
 - The user wants the takeaways, verbatim quotes, and evidence from one conversation.
 - The user wants a retro: what they could have asked, what to change in the guide for the next interview.
 
-Process **interview by interview**. Don't cross patterns here, that's synthesis (stage 10).
+Process **interview by interview**. Don't cross patterns here: that is phase 5, the debrief.
 
 ## Inputs (ask only what's missing, keep it to the minimum)
 
@@ -46,7 +46,23 @@ Process **interview by interview**. Don't cross patterns here, that's synthesis 
    - **Concrete edits to the master guide** for the next interview (add / reword / reorder / drop a question; a technique that worked, like a closing recap). Be specific and quote the guide line.
    - **Part 2?** Default **no**: you learn more from new interviews than from re-interviewing. Only recommend a part 2 if a genuinely important theme was missed.
    If the user reflected out loud during or after the call (their own debrief), capture that verbatim into this section, it's often the sharpest input.
-7. **[DET] Gate.** Close with a recommendation: `Advance` (enough material to cross patterns), `Deepen` (key interviews missing), `Question` (sampling or capture bias), or `Council` (strong contradictions). Update `_engine/state.yaml` if the method's state file exists.
+7. **[DET] Count what is countable.** Run
+   `python3 {method-root}/scripts/count_interview.py <transcript> --interviewer "<name>" --guide <master guide> --product "<your product terms>"`.
+   It returns words per speaker, questions, whys and chains, concrete anchors, product mentions,
+   whether there was a closing recap, and which guide blocks came up. **No transcript, or no
+   speaker labels: skip this and say so. Never estimate a number.**
+8. **[LATENT] Write the feedback entry** in `discovery/4-field/0-interview-feedback.md`, using
+   `references/interview-rubric.md`. Keep **Measured** and **Read** under separate headings: the
+   first is reproducible, the second is judgement the user can argue with.
+   - **Coverage is reported, never scored.** Leaving the guide for a better thread is often the
+     right call; ask whether the detour earned its place.
+   - **Never score a criterion out of ten.**
+   - The entry is about the interviewer, not the interviewee. No insights here.
+   - **If someone else ran the interview**, technique feedback naming them does not go into this
+     file, which the team reads. Say it in conversation; write it only if they ask.
+9. **[DET] Update `interviews.done` and `interviews.unprocessed`** in `_engine/state.yaml`. The
+   Guide reads `unprocessed` before offering Advance into the debrief.
+10. **[DET] Gate.** Close with a recommendation: `Advance` (enough material to cross patterns), `Deepen` (key interviews missing), `Question` (sampling or capture bias), or `Council` (strong contradictions). Update `_engine/state.yaml` if the method's state file exists.
 
 ## Hard rules
 

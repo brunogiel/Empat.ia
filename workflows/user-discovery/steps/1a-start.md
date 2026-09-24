@@ -1,4 +1,4 @@
-# 01, Start and Maturity Level
+# 1a, Start and maturity level
 
 ## Objective
 
@@ -9,6 +9,12 @@ Create the working folder, understand what the user brings, and locate the matur
 - First understand whether the person is just starting, has already tried something, or already knows their users.
 - Don't begin with solutions.
 - The guide explains the process and asks for active involvement.
+
+## First, the file of this step
+
+This step writes into `1-desk-research/brief.md`, which already exists: it is
+one of the two files installed on day one. Write in the language set in
+`_engine/state.yaml`.
 
 ## Documents to touch
 

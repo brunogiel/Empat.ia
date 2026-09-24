@@ -1,4 +1,4 @@
-# 06, Interview Guides
+# 3a, The interview guide
 
 ## Objective
 
@@ -12,6 +12,18 @@ Build the field kit: what you actually take to a 45-60 minute interview.
 - Context and daily life first; depth afterward.
 - Ask about real experiences, not abstract opinions.
 - Don't lead the answers.
+
+## First, the file of this step
+
+The file this step writes does not exist yet. That is the design: nothing is
+created at install except phase 1's brief.
+
+1. **[DET]** Create it:
+   `python3 <method-root>/scripts/init_project.py --project-root . --add interview_guide`
+2. **[DET]** Write it **in the language set in `_engine/state.yaml`**, not in
+   the language of the repository.
+3. **[LATENT]** Pre-fill it with what the project already knows. An empty
+   template handed to the user is not a finished step.
 
 ## Documents to touch
 

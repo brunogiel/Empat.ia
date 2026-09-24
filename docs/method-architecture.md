@@ -26,7 +26,7 @@ Valid statuses:
 
 The work lives in `discovery/`.
 
-It has three zones, split by who opens a file and when:
+It is numbered by phase, and it grows as the user goes. Six files exist at install and only two of them are the user's; every other file is born when its step starts, written in the project's language:
 
 - **Zone 1**, the root and `3-guide/`: what the user opens. Line-budgeted, kept short.
 - **Zone 2**, `_engine/`: state, assumptions, decisions, evidence, budgets. The assistant's workspace.
@@ -45,7 +45,7 @@ Documents:
 - `3-guide/guide.md`: one page, what the interviewer holds during the interview.
 - `3-guide/guide.md`: per-profile variants as deltas against the base guide.
 - `5-debrief/findings.md`: what is emerging, distilled, pointing at evidence IDs.
-- `_engine/budgets.yaml`: line budget per zone 1 file.
+- `_engine/budgets.yaml`: line budget per file the user opens. `3-guide/guide.md` is a hard cap.
 - `_engine/state.yaml`: current step, status, available agents and recommended action.
 - `_engine/assumptions.md`: active, validated and discarded assumptions.
 - `_engine/decisions.md`: decisions and tradeoffs.

@@ -1,4 +1,4 @@
-# 02, Design Challenge
+# 1b, Design challenge
 
 ## Objective
 
@@ -9,6 +9,12 @@ Co-create a challenge in `How might we...` format centered on user, need, and im
 - Don't look for a challenge to justify the product you already have in mind.
 - Avoid making it too broad or too specific.
 - The challenge serves as the grounding wire for the whole process.
+
+## First, the file of this step
+
+This step writes into `1-desk-research/brief.md`, which already exists: it is
+one of the two files installed on day one. Write in the language set in
+`_engine/state.yaml`.
 
 ## Documents to touch
 

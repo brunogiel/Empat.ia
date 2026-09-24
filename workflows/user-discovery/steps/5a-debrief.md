@@ -1,4 +1,4 @@
-# 10, Synthesis
+# 5a, Debrief
 
 ## Objective
 
@@ -15,6 +15,18 @@ Insights, patterns, HMWs, and top quotes are material that supports the principl
 - Derive design principles and HMWs from evidence.
 - Principles are actionable design rules, not features or opinions.
 - Don't make things up.
+
+## First, the file of this step
+
+The file this step writes does not exist yet. That is the design: nothing is
+created at install except phase 1's brief.
+
+1. **[DET]** Create it:
+   `python3 <method-root>/scripts/init_project.py --project-root . --add findings`
+2. **[DET]** Write it **in the language set in `_engine/state.yaml`**, not in
+   the language of the repository.
+3. **[LATENT]** Pre-fill it with what the project already knows. An empty
+   template handed to the user is not a finished step.
 
 ## Documents to touch
 

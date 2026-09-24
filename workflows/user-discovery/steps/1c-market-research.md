@@ -1,4 +1,4 @@
-# 03, Market Research
+# 1c, Market research
 
 ## Objective
 
@@ -9,6 +9,18 @@ Do deep market research when it applies, using current web and citable sources.
 - Market research helps partially answer the design challenge.
 - It can look at reports, trends, market size, players, benchmarks, and relevant geographies.
 - It does not replace talking to users.
+
+## First, the file of this step
+
+The file this step writes does not exist yet. That is the design: nothing is
+created at install except phase 1's brief.
+
+1. **[DET]** Create it:
+   `python3 <method-root>/scripts/init_project.py --project-root . --add market_research`
+2. **[DET]** Write it **in the language set in `_engine/state.yaml`**, not in
+   the language of the repository.
+3. **[LATENT]** Pre-fill it with what the project already knows. An empty
+   template handed to the user is not a finished step.
 
 ## Documents to touch
 
