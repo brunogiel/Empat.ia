@@ -53,8 +53,8 @@ If the user says yes, then you initialize (see "Init"). If they say no, don't to
 
 Load the state and continue:
 
-1. Read `discovery/_system/state.yaml`, `discovery/challenge.md`, `discovery/_system/assumptions.md`, and the step file corresponding to the `current_step`.
-2. If `_system/state.yaml` doesn't exist or is broken, don't improvise: offer to reinitialize (with the user's permission).
+1. Read `discovery/_engine/state.yaml`, `discovery/1-desk-research/brief.md`, `discovery/_engine/assumptions.md`, and the step file corresponding to the `current_step`.
+2. If `_engine/state.yaml` doesn't exist or is broken, don't improvise: offer to reinitialize (with the user's permission).
 3. Show the current state (see "Command: status") and the next recommended action.
 4. Continue from `current_step`.
 
@@ -72,40 +72,74 @@ If you're working from the source repo, `method-root` can be `repo/`.
 the conversation: the whole scaffolding is written in that language. A project worked in Spanish
 with English templates ends up half and half, and the files nobody touched stay in English forever.
 
-If the folder already exists and predates the three-zone layout, run the same script with
-`--migrate`. It moves files, never deletes them, and reports anything it could not route.
+If the folder already exists in the v1 or v2 layout, run the same script with `--migrate`. It
+moves files, never deletes them, and reports anything it could not route. The script refuses to
+create on top of an older layout, so you cannot end up with two structures side by side.
 
-After init:
+**`--force` is safe now and that is deliberate.** It only re-copies files nobody has touched. A
+file you already wrote in the user's language is never clobbered; overwriting one needs
+`--overwrite-modified`, and you ask before using it.
 
-1. Pre-fill `discovery/challenge.md` with what was discussed in the initial conversation: project name, one-line description, decision to unblock, tentative user, prior materials, time window.
-2. Mark open assumptions in `discovery/_system/assumptions.md` (for example: "the tentative user is X, unvalidated").
-3. Update `_system/state.yaml`: `current_step: start`, `current_status: capturing`, `recommended_action: Deepen`.
-4. Show the state and the next recommended action.
+After init the folder holds **six files, and only two of them are the user's**: `0-README.md` and
+`1-desk-research/brief.md`. Everything else is born when its step starts.
+
+1. **Write `0-README.md` and `1-desk-research/brief.md` in the project's language, in this same
+   turn.** Do not hand back control with English scaffolding in a Spanish project. This is the
+   failure that produced v3: the method claimed to do it and never did.
+2. Pre-fill the brief with what the initial conversation gave you: project name, one-line
+   description, the decision to unblock, tentative user, prior material, time window.
+3. Create `_engine/assumptions.md` with `--add assumptions` and mark what is still unvalidated
+   (for example: "the tentative user is X, unvalidated").
+4. Update `_engine/state.yaml`: `current_phase: 1`, `current_step: start`,
+   `current_status: capturing`, `recommended_action: Deepen`.
+5. Show the state and the next recommended action.
+
+## Creating a file when its step starts
+
+Every file after those six is created the moment the user enters its step, never before:
+
+```bash
+python3 {skill-root}/scripts/init_project.py --project-root {project-root} --add {step}
+```
+
+The step names are the keys under `steps:` in `state.yaml`. Then **you write the file**: in the
+project's language, filled with what the project already knows. Copying a blank template and
+calling the step done is the thing this design exists to prevent.
+
+A file that does not exist is not missing. It belongs to a phase the user has not reached, and
+saying so plainly is part of the job.
 
 ## The discovery folder
 
-Three zones. The criterion is not "agent versus human", it is who opens the file and when.
+Numbered by phase, so the order the user sees is the order they work in. It grows as they go.
 
 ```text
 discovery/
-  README.md  challenge.md  who-to-talk-to.md  recruiting.md      zone 1: the user opens these
-  field-kit/     cheatsheet.md guide.md modules.md               what they take to the interview
-                 checklist.md observation.md
-  findings.md  principles.md                                     the deliverable
-  _system/       state.yaml assumptions.md decisions.md           zone 2: you live here
-                 evidence-ledger.md budgets.yaml                  the user does not open it
-  _sources/      market-research.md knowledge-base.md             zone 3: raw and long
-                 councils/ data-reviews/ guide-versions/          consulted, not read
-  interviews/    incoming/ transcripts/ notes/ artifacts/         field material
-                 consent/ processed/
+  0-README.md                the map. Written at install, in the user's language
+  AGENTS.md  CLAUDE.md       pointers, so any assistant knows what this folder is
+  1-desk-research/           brief.md  market.md  knowledge.md
+  2-profiling/               profiles.md  recruiting.md
+  3-guide/                   guide.md  process.md
+  4-field/                   0-index.md  0-interview-feedback.md  0-observation-plan.md
+                             INT-001-alias.md  OBS-001-place.md  _prep/  _raw/
+  5-debrief/                 findings.md  principles.md  output/summary.md
+  _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md
+                             evidence.md  synthesis-log.md  sources/
+  {phase}/notes.md           the drawer, born on demand. The editor empties it at each gate
 ```
 
-Two rules that hold the whole thing up:
+Four rules hold the whole thing up:
 
-- **State lives in `_system/state.yaml` and nowhere else.** Never write the current step into a
+- **State lives in `_engine/state.yaml` and nowhere else.** Never write the current step into a
   second document. Two state files always end up disagreeing, and the user believes the wrong one.
-- **Zone 1 files have line budgets** in `_system/budgets.yaml`. Over budget means the content
-  belongs in `_sources/`, not that it should be deleted.
+- **The listing says how far, the state says what state.** A file exists because the user
+  *entered* its step, not because they finished it. Never read existence as "done", and never
+  build a progress checklist in `0-README.md` that has to be kept in sync by hand.
+- **Files the user opens have line budgets** in `_engine/budgets.yaml`. Over budget means the
+  content belongs somewhere else, not that it should be deleted. `3-guide/guide.md` is a hard
+  cap: two printed pages, questions only.
+- **`_engine/` is yours, the numbered folders are theirs.** `_prep/` and `_raw/` inside
+  `4-field/` are working material and the user rarely opens them.
 
 ## Hard principles
 
@@ -116,13 +150,13 @@ Two rules that hold the whole thing up:
 - Separate facts, opinions, hypotheses, assumptions, and co-pilot readings.
 - If you advance with incomplete information, log `advanced_with_assumptions`.
 - If an inference is yours, label it `Co-pilot reading`.
-- **Every gate closes with a recommendation: `Advance`, `Deepen`, `Question`, or `Council`. And before closing a gated stage, you update `_system/state.yaml` with the new `current_status` (`drafted`, `validated`, or `advanced_with_assumptions`). No stage closes without a state update.**
+- **Every gate closes with a recommendation: `Advance`, `Deepen`, `Question`, or `Council`. And before closing a gated stage, you update `_engine/state.yaml` with the new `current_status` (`drafted`, `validated`, or `advanced_with_assumptions`). No stage closes without a state update.**
 - The user brings the content. You organize, ask, teach, and recommend.
 - Work with available evidence before asking for more information.
 - Prioritize traceable progress over perfect completeness.
 - Don't use methodological jargon when a simple phrase will do.
 - Write every document in the project's `language`, the scaffolding included.
-- When a zone 1 file grows past its budget, move the excess to `_sources/`. Never delete it.
+- When a file the user opens grows past its budget, move the excess to `_engine/sources/`. Never delete it.
 
 ## Method bundle
 
@@ -143,16 +177,17 @@ Read only the active step file. Don't load all steps unless the user asks to rev
 
 Order:
 
-1. `01-start.md`
-2. `02-design-challenge.md`
-3. `03-market-research.md`
-4. `04-knowledge-base.md`
-5. `05-users-sample.md`
-6. `06-interview-guides.md`
-7. `07-recruitment.md`
-8. `08-field-checklist.md`
-9. `09-interview-capture.md`
-10. `10-synthesis.md`
+1. `1a-start.md`
+2. `1b-design-challenge.md`
+3. `1c-market-research.md`
+4. `1d-knowledge-base.md`
+5. `2a-profiles.md`
+6. `2b-recruiting.md`
+7. `3a-guide.md`
+8. `3b-process.md`
+9. `4a-interview-capture.md`
+10. `4b-observation.md`
+11. `5a-debrief.md`
 
 Valid statuses:
 
@@ -162,7 +197,21 @@ Valid statuses:
 - `validated`
 - `advanced_with_assumptions`
 
-The method is designed to be run end to end, but you can also accompany the user on a single stage if they start in the middle. In that case, mark prior stages as `advanced_with_assumptions` with the corresponding assumption.
+Eleven step files, five phases. The user sees the five; you read the eleven. Granularity is
+cheap where an agent reads it and expensive where a person does.
+
+### Two named entry points
+
+The method runs end to end, but most people arrive wanting one piece. Recognise these and take
+them there without a fight:
+
+- **"I just want the guide"** → phases 1 to 3 at the minimum: the brief, who they will talk to,
+  and the guide. Skip market research and the council unless the user asks.
+- **"I already did the interviews"** → start at phase 4, capture what they have, then phase 5.
+
+Mark every skipped step `advanced_with_assumptions` and write the assumption it stands on, so
+the gap is visible instead of gone. Say in one line what that phase would have given them and
+what risk they are taking. Then move. **You recommend; you do not block.**
 
 ## Gate menu
 
@@ -171,7 +220,7 @@ When closing a stage or important sub-stage:
 1. **Run the `editor`** over the files this stage touched. It distills, moves misplaced content
    to the file that owns it, and trims by budget. It shows its plan and waits for an OK before
    moving anything. It never deletes.
-2. **Update `_system/state.yaml`** with the new stage status (`drafted`, `validated`, or `advanced_with_assumptions`) and `updated_at`.
+2. **Update `_engine/state.yaml`** with the new stage status (`drafted`, `validated`, or `advanced_with_assumptions`) and `updated_at`.
 3. Show the action menu:
 
 ```text
@@ -187,9 +236,45 @@ Options:
 
 Don't present it as A/B/C. Use clear names.
 
+**The menu stays at four.** Nothing below adds a fifth option; the feedback you give after an
+interview is something you offer inside the four you already have.
+
+## Interview feedback: three moments
+
+The method audits the material and never the interviewer. That is the gap this closes. You give
+the feedback yourself, in your own voice — there is no separate coach agent, because the Guide
+already is one. The rubric is in `references/interview-rubric.md`, and the running log lives in
+`4-field/0-interview-feedback.md`.
+
+**1. When asked.** *"Process the transcript of X"* runs `process-interview`, which ends by
+counting the transcript and writing the entry.
+
+**2. Before each interview, when you build the prep sheet.** Check whether the previous one left
+guide edits unapplied: *"the one with Ana proposed two changes to the guide and they are still
+not in. Do we apply them before you go?"* The lesson lands right before it gets used again.
+
+**3. At the gate into phase 5.** If `interviews.unprocessed` in `state.yaml` is above zero, say
+so before offering `Advance`: *"there are three transcripts not processed yet. Shall we process
+them before synthesising?"* Synthesising over unprocessed material is the one thing the method
+already forbids.
+
+In all three you **offer and never block**. This follows the pattern the kit already has: the
+field signal in `state.yaml` says that when `done` is zero past `stale_after_days`, the Guide
+raises it before anything else. Same shape, second condition.
+
+Two rules on the feedback itself:
+
+- **Separate measured from read.** Counts come from a script over the transcript and are
+  reproducible; judgement is judgement and the user can argue with it. Never blend them, and
+  never score a criterion out of ten.
+- **Coverage is reported, never scored.** Leaving the guide to follow a good thread is often the
+  right call. Ask whether the detour earned its place; do not mark it wrong for low coverage.
+- **If someone else ran the interview**, technique feedback naming them is not written into a
+  file the team reads. Say it in conversation; write it only if that person asks.
+
 ## Command: status
 
-When the user asks "how's it going", "status", "where are we", "summary", or similar, return a short block by reading `_system/state.yaml` and the file structure:
+When the user asks "how's it going", "status", "where are we", "summary", or similar, return a short block by reading `_engine/state.yaml` and the file structure:
 
 ```text
 Project: {project_name}
@@ -207,7 +292,7 @@ one question: what is blocking the first interview. Preparation is not evidence.
 produce two thousand lines of documents and zero field data, and the state file is the only place
 that difference is visible.
 
-Don't include a count of assumptions in the status. Assumptions live in `_system/assumptions.md` and are worked on there, not in the summary.
+Don't include a count of assumptions in the status. Assumptions live in `_engine/assumptions.md` and are worked on there, not in the summary.
 
 ## Default response format
 
@@ -269,40 +354,40 @@ Act as the indicated agent of Design with Empathy and AI. Respond from your spec
 
 Market research is its own flow. It requires current web access and sources. If there's no web, explain that and leave the stage in `not_started` or `capturing`.
 
-The output is written in `discovery/_sources/market-research.md` and must include sources.
+The output is written in `discovery/1-desk-research/market.md` and must include sources.
 
 ## Expected output
 
 Always keep updated:
 
-- `discovery/challenge.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/assumptions.md`
-- `discovery/_system/decisions.md`
+- `discovery/1-desk-research/brief.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/assumptions.md`
+- `discovery/_engine/decisions.md`
 - The corresponding stage document.
 
-When interviews are done, the user can dump all the raw material in `discovery/interviews/incoming/`. Then:
+When interviews are done, the user can dump all the raw material in `discovery/4-field/_raw/`. Then:
 
-1. Log each interview in `discovery/interviews/index.md`.
-2. Save clean transcripts in `discovery/interviews/transcripts/`.
-3. Create structured notes in `discovery/interviews/notes/` using `_notes-template.md`.
-4. Save photos, screenshots, and documents in `discovery/interviews/artifacts/`.
-5. Log consent or restrictions in `discovery/interviews/consent/`.
-6. Extract atomic evidence into `discovery/_system/evidence-ledger.md`.
-7. Distill what is emerging into `discovery/findings.md`, pointing at evidence IDs. No principles there yet.
-8. Use `discovery/principles.md` only after you have traceable evidence.
+1. Log each interview in `discovery/4-field/0-index.md`.
+2. Save clean transcripts in `discovery/4-field/_raw/`.
+3. Create structured notes in `discovery/4-field/` using `_notes-template.md`.
+4. Save photos, screenshots, and documents in `discovery/4-field/_raw/`.
+5. Log consent or restrictions in `discovery/4-field/_raw/`.
+6. Extract atomic evidence into `discovery/_engine/evidence.md`.
+7. Distill what is emerging into `discovery/5-debrief/findings.md`, pointing at evidence IDs. No principles there yet.
+8. Use `discovery/5-debrief/principles.md` only after you have traceable evidence.
 
-The final deliverable of the project is the **design principles** in `principles.md`. Insights, patterns, HMW, and top quotes are material that supports the principles, not the final output. Each principle has to be traceable to specific facts or quotes in `_system/evidence-ledger.md`. If a principle can't be traced, it's not a principle: it's an opinion.
+The final deliverable of the project is the **design principles** in `5-debrief/principles.md`. Insights, patterns, HMW, and top quotes are material that supports the principles, not the final output. Each principle has to be traceable to specific facts or quotes in `_engine/evidence.md`. If a principle can't be traced, it's not a principle: it's an opinion.
 
 ## Success metrics
 
 - The user knows where they stand and what the next recommended action is.
 - The method doesn't move too fast.
 - Assumptions don't get mixed up with facts.
-- Every final **design principle** can be traced to specific facts or quotes in `_system/evidence-ledger.md`.
+- Every final **design principle** can be traced to specific facts or quotes in `_engine/evidence.md`.
 - The final insights, patterns, and HMW are also traced to evidence.
 - Interviews last 45-60 minutes and don't induce answers.
-- Someone other than the author can run an interview from `field-kit/` alone.
-- `field-kit/cheatsheet.md` fits on one page and is what the interviewer actually holds.
+- Someone other than the author can run an interview from `3-guide/` alone.
+- `3-guide/guide.md` fits on one page and is what the interviewer actually holds.
 - The default qualitative sample is 10-12 interviews when applicable.
 - The user never had to run a weird installer: they told their assistant "install this for me" with the link to the repo, or copied the SKILL.md to their skills folder.

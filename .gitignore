@@ -8,6 +8,6 @@ source-materials/
 private/
 *.pdf
 
-# Bruno's local dev brain (symlink to second brain) + per-repo local prefs
+# Local development preferences, not part of the method
 .brain
 CLAUDE.local.md

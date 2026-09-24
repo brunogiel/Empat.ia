@@ -12,7 +12,7 @@ Empat.ia (Design with Empathy and AI) is an installable user discovery method fo
 
 ## State
 
-Project state lives in `discovery/_system/state.yaml`.
+Project state lives in `discovery/_engine/state.yaml`.
 
 Valid statuses:
 
@@ -26,41 +26,41 @@ Valid statuses:
 
 The work lives in `discovery/`.
 
-It has three zones, split by who opens a file and when:
+It is numbered by phase, and it grows as the user goes. Six files exist at install and only two of them are the user's; every other file is born when its step starts, written in the project's language:
 
-- **Zone 1**, the root and `field-kit/`: what the user opens. Line-budgeted, kept short.
-- **Zone 2**, `_system/`: state, assumptions, decisions, evidence, budgets. The assistant's workspace.
-- **Zone 3**, `_sources/`: raw and long material. Consulted, not read.
+- **Zone 1**, the root and `3-guide/`: what the user opens. Line-budgeted, kept short.
+- **Zone 2**, `_engine/`: state, assumptions, decisions, evidence, budgets. The assistant's workspace.
+- **Zone 3**, `_engine/sources/`: raw and long material. Consulted, not read.
 
-`interviews/` keeps field material and belongs to none of the three.
+`4-field/` keeps field material and belongs to none of the three.
 
-Project state lives in `_system/state.yaml` and is never repeated in a second document.
-Zone 1 files carry a line budget in `_system/budgets.yaml`; the `editor` enforces it at each gate
-by moving the excess to `_sources/`, never by deleting it.
+Project state lives in `_engine/state.yaml` and is never repeated in a second document.
+Zone 1 files carry a line budget in `_engine/budgets.yaml`; the `editor` enforces it at each gate
+by moving the excess to `_engine/sources/`, never by deleting it.
 
 Documents:
 
 - `README.md`: the map of the folder and what to open now.
-- `challenge.md`: goal, maturity level, context, scope and the design challenge.
-- `field-kit/cheatsheet.md`: one page, what the interviewer holds during the interview.
-- `field-kit/modules.md`: per-profile variants as deltas against the base guide.
-- `findings.md`: what is emerging, distilled, pointing at evidence IDs.
-- `_system/budgets.yaml`: line budget per zone 1 file.
-- `_system/state.yaml`: current step, status, available agents and recommended action.
-- `_system/assumptions.md`: active, validated and discarded assumptions.
-- `_system/decisions.md`: decisions and tradeoffs.
-- `_sources/knowledge-base.md`: knowns, unknowns and learning goals.
-- `_sources/market-research.md`: market research with sources.
-- `who-to-talk-to.md`: roles, participant profiles and sample.
-- `field-kit/guide.md`: the script, questions only.
-- `recruiting.md`: outreach, channels and recruiting tracker.
-- `field-kit/checklist.md`: before, during and after fieldwork.
-- `field-kit/observation.md`: observation, experts, analogies and immersion.
-- `principles.md`: the deliverable. Design principles traceable to evidence.
-- `interviews/README.md`: intake and processing flow for field material.
-- `interviews/index.md`: interview tracker, files, consent and gaps.
-- `_system/evidence-ledger.md`: atomic evidence by interview before synthesis.
-- `interviews/notes/_notes-template.md`: structured note template for each interview.
+- `1-desk-research/brief.md`: goal, maturity level, context, scope and the design challenge.
+- `3-guide/guide.md`: one page, what the interviewer holds during the interview.
+- `3-guide/guide.md`: per-profile variants as deltas against the base guide.
+- `5-debrief/findings.md`: what is emerging, distilled, pointing at evidence IDs.
+- `_engine/budgets.yaml`: line budget per file the user opens. `3-guide/guide.md` is a hard cap.
+- `_engine/state.yaml`: current step, status, available agents and recommended action.
+- `_engine/assumptions.md`: active, validated and discarded assumptions.
+- `_engine/decisions.md`: decisions and tradeoffs.
+- `1-desk-research/knowledge.md`: knowns, unknowns and learning goals.
+- `1-desk-research/market.md`: market research with sources.
+- `2-profiling/profiles.md`: roles, participant profiles and sample.
+- `3-guide/guide.md`: the script, questions only.
+- `2-profiling/recruiting.md`: outreach, channels and recruiting tracker.
+- `3-guide/process.md`: before, during and after fieldwork.
+- `4-field/0-observation-plan.md`: observation, experts, analogies and immersion.
+- `5-debrief/principles.md`: the deliverable. Design principles traceable to evidence.
+- `4-field/0-index.md`: intake and processing flow for field material.
+- `4-field/0-index.md`: interview tracker, files, consent and gaps.
+- `_engine/evidence.md`: atomic evidence by interview before synthesis.
+- `templates/interview-note-template.md`: structured note template for each interview.
 
 ## Gates
 

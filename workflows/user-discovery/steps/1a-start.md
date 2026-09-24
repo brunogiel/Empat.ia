@@ -1,4 +1,4 @@
-# 01, Start and Maturity Level
+# 1a, Start and maturity level
 
 ## Objective
 
@@ -10,12 +10,18 @@ Create the working folder, understand what the user brings, and locate the matur
 - Don't begin with solutions.
 - The guide explains the process and asks for active involvement.
 
+## First, the file of this step
+
+This step writes into `1-desk-research/brief.md`, which already exists: it is
+one of the two files installed on day one. Write in the language set in
+`_engine/state.yaml`.
+
 ## Documents to touch
 
-- `discovery/challenge.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/decisions.md`
-- `discovery/_system/assumptions.md` if you advance with assumptions
+- `discovery/1-desk-research/brief.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/decisions.md`
+- `discovery/_engine/assumptions.md` if you advance with assumptions
 
 ## Guiding questions
 
@@ -26,14 +32,14 @@ Create the working folder, understand what the user brings, and locate the matur
 
 ## Using the template
 
-Fill out in `challenge.md`:
+Fill out in `1-desk-research/brief.md`:
 
 - Project objective.
 - Maturity level and evidence.
 - Initial context.
 - Scope and out of scope.
 
-If the user brings documents, log them in `_sources/knowledge-base.md` as loaded sources.
+If the user brings documents, log them in `1-desk-research/knowledge.md` as loaded sources.
 
 ## Gate
 

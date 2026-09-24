@@ -1,5 +1,83 @@
 # Changelog
 
+## 3.0.0 - 2026-09-24
+
+Breaking. `discovery/` is numbered by phase and grows as you go. Existing projects migrate with
+`python3 scripts/init_project.py --project-root <path> --migrate`, which moves files and never
+deletes them. v1 and v2 folders are both handled.
+
+### Why
+
+The folder installed 21 files and 1,430 lines of blank forms, in English, with no indication of
+when each one is used. A real run logged "the texts were moved to Spanish by hand" and "do not
+run --force: it overwrites the Spanish". Two of the four problems were of the method's own
+making: the language feature was announced in three places and built in none, and every install
+carried ~400 lines of generic method text that is identical in every project.
+
+### Added
+
+- `tests/test_init.py`. Twenty checks, standard library only. The repository had no tests and no
+  CI, which is how two breaking releases shipped in two days without either one running a clean
+  install against itself.
+- `scripts/count_interview.py` and `scripts/patterns_es.py`. The numbers behind interview
+  feedback come from counting a transcript, so two runs agree. Anything that cannot be counted
+  is reported as uncounted; nothing is estimated. Handles both one-turn-per-line transcripts and
+  the single-line exports recorders produce.
+- `references/interview-rubric.md` and `references/interviewing.md`. Eleven criteria, each
+  sourced, plus the generic method text that used to be copied into every project.
+- `AGENTS.md` and `CLAUDE.md` inside `discovery/`. Without them the method only worked when the
+  skill was installed globally: a fresh session opening the user's project found an unexplained
+  folder.
+- `--add STEP`, so creating a phase's file is deterministic instead of copied by hand.
+- `--overwrite-modified`. `--force` now only re-copies untouched files.
+- `detect_version()`, replacing `looks_like_v1()`. The old function answered yes/no, so a v2
+  folder read as "not v1" and got the new layout planted beside the old one silently.
+- A fourth job for the `editor`: empty `notes.md` at every gate. An item bound for a phase that
+  has not started stays put under a heading naming it.
+- `4b-observation.md`. `state.yaml` declared eleven steps against ten files; `guide_context` had
+  no file and lived buried in the field checklist.
+- Interview feedback at three moments, given by the Guide. No new agent: the Guide's own
+  contract already describes a coach, and its menu stays at four actions.
+
+### Changed
+
+- Six files install, and two of them are the user's. Everything else is born when its step
+  starts, written in the project's language.
+- Five numbered phases: desk research, profiling, the guide, the field, the debrief. Recruiting
+  moves into phase 2, because it is the only step that takes days rather than hours.
+- Observation moves out of the field kit and into the field, where it belongs, with `OBS-` notes
+  alongside `INT-` ones feeding the same evidence ledger.
+- `guide.md` cut from 125 to 93 lines: questions only, under a hard 100-line cap. It is the file
+  that grew to 257 lines on the first external run.
+- `principles.md` split four ways. It was five documents stapled together, and `findings.md` —
+  added the day before — repeated four of its seven sections.
+- Six interview trays collapse into `4-field/_raw/`. The field index goes from 14 columns to 7.
+- The per-interview prep sheet replaces the one-page cheatsheet. It carries no line cap but must
+  mark every block with a priority and a time box, which is what makes a long sheet usable under
+  pressure.
+- The README drops "The method won't let you skip", which contradicted the paragraph after it.
+  Two named entry points replace it: "I just want the guide" and "I already did the interviews".
+
+### Fixed
+
+- `--force` overwrote hand-translated files with the English templates.
+- The init planted v3 beside a v2 folder without a word.
+- `state.yaml` declared eleven steps and shipped ten.
+- `guide.md` told you to duplicate a section per profile while `modules.md` said that is never
+  done. One mechanism now: one guide file per profile.
+- `observation.md` was titled `# Context Guide` inside. Name and content never matched.
+- The shipped guide template broke the line budget the method shipped alongside it.
+
+### Planned, not in this release
+
+- **Ideation** and **testing** as phases 6 and 7. Phase 5 already names the handoff; the
+  method stops at the principles rather than pretending otherwise.
+
+### Removed
+
+- `field-kit/cheatsheet.md`, `field-kit/modules.md` and `interviews/README.md`. Migration
+  archives the first two under `_engine/sources/` rather than deleting them.
+
 ## 2.0.0 - 2026-09-23
 
 Breaking. The `discovery/` folder is reorganized into three zones. Existing projects migrate with
@@ -23,8 +101,11 @@ in the method routed the overflow or capped the growth.
   It shows its plan, waits for an OK, and never deletes.
 - A canonical path and an application ledger for council output. A council can return thirteen
   recommendations and have twelve applied; the ledger keeps the missing one visible.
-- `language` in `state.yaml` and `--lang` on init. The scaffolding is written in the project's
-  language, not only the conversation.
+- `language` in `state.yaml` and `--lang` on init.
+  ⚠ **Corrected in 3.0.0.** This entry claimed the scaffolding was written in the project's
+  language. It was not: `--lang` only stamped a string into `state.yaml` while the English
+  templates were copied over it. The claim also appeared in `SKILL.md` and in a comment in
+  `state.yaml`. Three places said it; no code did it.
 - A field signal in `state.yaml`: from stage 07 on, zero interviews past `stale_after_days` is
   reported before anything else.
 - `VERSION` and this changelog.

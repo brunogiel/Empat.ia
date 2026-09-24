@@ -1,4 +1,4 @@
-# 06, Interview Guides
+# 3a, The interview guide
 
 ## Objective
 
@@ -13,14 +13,26 @@ Build the field kit: what you actually take to a 45-60 minute interview.
 - Ask about real experiences, not abstract opinions.
 - Don't lead the answers.
 
+## First, the file of this step
+
+The file this step writes does not exist yet. That is the design: nothing is
+created at install except phase 1's brief.
+
+1. **[DET]** Create it:
+   `python3 <method-root>/scripts/init_project.py --project-root . --add interview_guide`
+2. **[DET]** Write it **in the language set in `_engine/state.yaml`**, not in
+   the language of the repository.
+3. **[LATENT]** Pre-fill it with what the project already knows. An empty
+   template handed to the user is not a finished step.
+
 ## Documents to touch
 
-- `discovery/field-kit/guide.md`
-- `discovery/field-kit/cheatsheet.md`
-- `discovery/field-kit/modules.md`
-- `discovery/_sources/knowledge-base.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/decisions.md`
+- `discovery/3-guide/guide.md`
+- `discovery/3-guide/guide.md`
+- `discovery/3-guide/guide.md`
+- `discovery/1-desk-research/knowledge.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/decisions.md`
 
 ## Recommended structure
 
@@ -34,7 +46,7 @@ Build the field kit: what you actually take to a 45-60 minute interview.
 
 ## Using the template
 
-In `field-kit/guide.md`:
+In `3-guide/guide.md`:
 
 - Write the questions the way you will say them out loud.
 - Map each learning objective to questions. Keep that table: it is what makes the guide readable later.
@@ -43,11 +55,11 @@ In `field-kit/guide.md`:
 
 The guide should feel conversational. Don't turn it into a survey.
 
-In `field-kit/cheatsheet.md`: one page, and it stays one page. Blocks with their timing, the
+In `3-guide/guide.md`: one page, and it stays one page. Blocks with their timing, the
 opening question of each, the allowed follow-ups, the words not to say. Nothing else.
 This is the page you hold during the interview. The guide is what you read the night before.
 
-In `field-kit/modules.md`: per-profile variants as deltas against the base guide, never a full
+In `3-guide/guide.md`: per-profile variants as deltas against the base guide, never a full
 duplicated guide. Every block number a module references has to exist in `guide.md` today.
 
 ## What does NOT go here
@@ -57,12 +69,12 @@ leaving it in the guide means the file that owns it stays empty.
 
 | If you wrote it in the guide | It belongs in |
 |---|---|
-| Pre-interview or field observation checklists | `field-kit/checklist.md` |
-| Interview sequence, logistics, scheduling, incentives | `recruiting.md` |
-| Coding definitions, how to classify evidence later | `_system/evidence-ledger.md` |
-| Assumptions and their IDs | `_system/assumptions.md`, and the guide links to them |
-| Version history, changelog, why the guide changed | `_sources/guide-versions/` |
-| Council output | `_sources/councils/` |
+| Pre-interview or field observation checklists | `3-guide/process.md` |
+| Interview sequence, logistics, scheduling, incentives | `2-profiling/recruiting.md` |
+| Coding definitions, how to classify evidence later | `_engine/evidence.md` |
+| Assumptions and their IDs | `_engine/assumptions.md`, and the guide links to them |
+| Version history, changelog, why the guide changed | `_engine/sources/guide-versions/` |
+| Council output | `_engine/sources/councils/` |
 
 Two more rules that come from real use:
 

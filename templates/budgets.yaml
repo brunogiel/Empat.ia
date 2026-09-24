@@ -1,51 +1,99 @@
 # Line budgets per discovery file.
+#
 # Purpose: keep every file a skeleton, not a dump. An assistant that keeps
-# writing past the budget is a signal the content belongs in _sources/,
-# not here.
+# writing past the budget is a signal that the content belongs somewhere else,
+# usually _engine/sources/.
 #
-# What happens when a file goes over budget:
-# the excess moves to _sources/ (a dated appendix, a versioned copy,
-# whatever fits the material). It is NEVER deleted. Budgets protect
-# readability, not history.
+# What happens when a file goes over budget: the excess moves to
+# _engine/sources/ (a dated appendix, a versioned copy, whatever fits). It is
+# NEVER deleted. Budgets protect readability, not history. The editor does the
+# move, shows its plan first, and waits for an OK.
 #
-# hard: true means the budget takes no exception. Anything else is a
-# guideline: going over it once in a while is fine if the content earns
-# it, but treat it as a signal to trim.
+# hard: true means the budget takes no exception. Anything else is a guideline:
+# going over it once in a while is fine if the content earns it, but treat it as
+# a signal to trim.
 #
-# _sources/ and _system/ carry no budget: that's where the long and the
-# raw live, on purpose.
+# _engine/ carries no budget: that is where the long and the raw live, on purpose.
 
 budgets:
-  README.md:
+  0-README.md:
     lines: 60
     hard: false
-  challenge.md:
+
+  1-desk-research/brief.md:
     lines: 150
     hard: false
-  who-to-talk-to.md:
+  1-desk-research/market.md:
     lines: 150
     hard: false
-  recruiting.md:
-    lines: 150
-    hard: false
-  field-kit/cheatsheet.md:
-    lines: 40
-    hard: true
-  field-kit/guide.md:
+  1-desk-research/knowledge.md:
     lines: 120
     hard: false
-  field-kit/modules.md:
-    lines: 80
+
+  2-profiling/profiles.md:
+    lines: 120
     hard: false
-  field-kit/checklist.md:
-    lines: 80
-    hard: false
-  field-kit/observation.md:
-    lines: 80
-    hard: false
-  findings.md:
+  2-profiling/recruiting.md:
     lines: 150
     hard: false
-  principles.md:
+
+  # THE hard budget of the method. 100 lines is about two printed pages.
+  #
+  # This is the file that grows across interviews, and growing is exactly how it
+  # broke before: the first external run produced a 257-line guide that had
+  # absorbed the field checklists, the recruiting logistics and the coding
+  # definitions, and became unusable in the room it was written for.
+  #
+  # Questions only. Everything else has another home, see the editor's routing
+  # table in agents/editor.md.
+  3-guide/guide.md:
+    lines: 100
+    hard: true
+  3-guide/process.md:
+    lines: 80
+    hard: false
+
+  4-field/0-index.md:
+    lines: 80
+    hard: false
+  4-field/0-interview-feedback.md:
+    lines: 200
+    hard: false
+  4-field/0-observation-plan.md:
+    lines: 80
+    hard: false
+
+  5-debrief/findings.md:
     lines: 150
     hard: false
+  # The deliverable. Design principles and nothing else: the patterns that
+  # support them live in findings.md, the working notes of the synthesis live in
+  # _engine/, and what you hand to someone else lives in output/.
+  5-debrief/principles.md:
+    lines: 120
+    hard: false
+  5-debrief/output/summary.md:
+    lines: 80
+    hard: false
+
+# Files with no line budget, on purpose.
+#
+# 4-field/_prep/*-prep.md — the sheet you carry into the room. It is disposable
+#   and it is written for one interview, so length is not what makes it usable.
+#   Capping it would break a practice that works: a real prep sheet in the field
+#   ran 284 lines against a 123-line master guide, and it worked, because every
+#   block carried a priority mark and a time box. That is the requirement instead
+#   of a line count. See the structural rule below.
+#
+# 4-field/INT-*.md and OBS-*.md — your evidence. It is as long as the interview was.
+#
+# 4-field/notes.md — the drawer. The editor empties it at every gate.
+
+structural:
+  4-field/_prep/*-prep.md:
+    # Not a line budget. A prep sheet is usable in the room when you can drop
+    # blocks under time pressure without re-reading it.
+    require:
+      - every block carries a priority mark
+      - every block carries a time box in minutes
+      - the questions are copied verbatim from the master guide, none added, none lost

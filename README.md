@@ -45,9 +45,13 @@ Your assistant downloads the method, explains what it's about, and gets started 
 
 At any point you can ask _"how's it going"_ or _"status"_ and it shows you where you are.
 
-### Using it in Spanish
+### Working in your own language
 
-To use it in Spanish, just tell your assistant (Claude or Codex): _"usemos esta repo en español"_ ("let's use this repo in Spanish"). The assistant will translate on the fly and run the method in Spanish with you.
+Tell your assistant which language you work in, and the whole folder is written
+in it, not just the conversation. The repository stays in English; your
+`discovery/` folder does not. File and folder names keep their English spelling
+on purpose — they are the method's plumbing, and the numbers do the work of
+telling you the order.
 
 ### Installing as a global skill
 
@@ -62,36 +66,39 @@ Then you invoke it with _"use Empat.ia"_ from any project.
 
 ## The discovery folder
 
+It is numbered by phase, so the order you see is the order you work in. And it
+**grows as you go**: six files exist at install, and only two of those are
+yours. Every other file is written when you reach its phase, in your language,
+already filled with what the project knows by then.
+
 ```text
 discovery/
-  README.md  challenge.md  who-to-talk-to.md  recruiting.md    you open these
-  field-kit/  cheatsheet.md guide.md modules.md                you take these to the interview
-              checklist.md observation.md
-  findings.md  principles.md                                   the deliverable
-  _system/    state, assumptions, decisions, evidence, budgets  the assistant's workspace
-  _sources/   market research, knowledge base, councils,        raw and long
-              data reviews, guide versions
-  interviews/ incoming, transcripts, notes, artifacts,          field material
-              consent, processed
+  0-README.md            the map: where am I, what do I open now
+  1-desk-research/       brief.md  market.md  knowledge.md
+  2-profiling/           profiles.md  recruiting.md
+  3-guide/               guide.md  process.md
+  4-field/               0-index.md  0-interview-feedback.md
+                         INT-001-alias.md  OBS-001-place.md  _prep/  _raw/
+  5-debrief/             findings.md  principles.md  output/summary.md
+  _engine/               state, assumptions, decisions, evidence, budgets, sources
+  AGENTS.md  CLAUDE.md   two pointers so any assistant knows what this folder is
 ```
 
-Files you open have a line budget. When one grows past it, the excess moves down to `_sources/`
-instead of turning the file you need in the room into something you cannot read. Nothing is deleted.
+A file that does not exist yet is the design, not a broken install. Files you
+open have a line budget: when one grows past it, the excess moves down to
+`_engine/` instead of turning the document you need in the room into something
+you cannot read. `3-guide/guide.md` has a hard cap of two printed pages, because
+that is the file that broke first.
 
-## The 10 stages
+## The five phases
 
-| Stage | What happens | Estimated time | Deliverable |
+| Phase | What happens | Estimated time | What it leaves behind |
 |---|---|---|---|
-| 1. Start | Alignment, context, decision to unblock | 30-60 min | Initial `challenge.md` |
-| 2. Design Challenge | Framing the problem without putting in a solution | 30-90 min | Challenge in `challenge.md` |
-| 3. Market research | Category, substitutes, references (when applicable) | 1-3 hrs | `_sources/market-research.md` with sources |
-| 4. Knowledge base | What we know, what we assume, what's left to learn | 30-60 min | `_sources/knowledge-base.md` |
-| 5. Users and sample | Roles, profiles, and qualitative sample | 30-90 min | `who-to-talk-to.md` |
-| 6. Interview guides | The field kit: script, one-page cheat sheet, per-profile modules | 1-2 hrs | `field-kit/` |
-| 7. Recruitment | Channels, messages, tracker | 2-5 days | `recruiting.md` updating as you go |
-| 8. Field checklist | Before, during, after each interview | 30 min | `field-kit/checklist.md` |
-| 9. Interview capture | Transcripts, notes, consents, atomic evidence | 1-3 weeks | Populated `interviews/` |
-| 10. Synthesis | From evidence to **design principles** + insights, patterns, and HMW | 3-5 hrs | `principles.md` |
+| **1 · Desk research** | Alignment, the design challenge, the market, and what you already know versus what you are assuming | 2-5 hrs | `1-desk-research/` |
+| **2 · Profiling** | Who you need to talk to, and how you reach them. Recruiting starts here because it is the only step that takes days, not hours | 2-5 days | `2-profiling/` |
+| **3 · The guide** | The instrument: the questions, and how your team works in the room | 1-2 hrs | `3-guide/` |
+| **4 · The field** | Interviews and, when it applies, observation. One note per person, one per outing, plus feedback on how you are interviewing | 1-3 weeks | `4-field/` |
+| **5 · Debrief** | Cross everything into design principles, and one page you can hand to someone who read none of it | 3-5 hrs | `5-debrief/` |
 
 **Final deliverable**: a set of **design principles** traceable to interview quotes and evidence. Decision rules that you'll then use to guide:
 
@@ -101,9 +108,29 @@ instead of turning the file you need in the room into something you cannot read.
 
 The principles come with patterns, insights, top quotes, and "How might we..." (HMW) questions that open the next ideation phase. The principles are what you keep when the method ends.
 
-The gated stages (1, 2, 3, 4, 5, 6, 9, 10) require updating the state before advancing. The method won't let you skip.
+Each phase closes with a gate: the Guide tells you what you have, what you are
+still assuming, and what it would cost to move on. **It recommends; it does not
+block.** If you decide to advance on assumptions, it records the assumption and
+moves.
 
-You can also use Empat.ia for a single stage. If you already have interviews done and just want synthesis, you can start straight at stage 10.
+You do not have to run the whole thing. Say _"I just want the guide"_ and it
+takes you through phases 1 to 3 at the minimum, or _"I already did the
+interviews"_ and it starts at phase 4. Skipped phases are recorded as what you
+are assuming by skipping them, so the gap stays visible instead of disappearing.
+
+## What comes next
+
+The method ends at design principles, and that is on purpose: the How Might We
+questions it produces are the handoff, not the finish line. Two phases are
+planned and not built yet.
+
+| Coming | What it would cover |
+|---|---|
+| **Ideation** | Take the How Might We questions into concepts: diverge, cluster, choose with criteria that trace back to the principles instead of to taste |
+| **Testing** | Put a concept in front of the same people, and learn from what they do with it rather than from what they say about it |
+
+Until they exist, phase 5 hands you the questions and says so plainly. It does
+not pretend the work is over.
 
 ## The Guide's four actions
 

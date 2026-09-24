@@ -1,4 +1,4 @@
-# 03, Market Research
+# 1c, Market research
 
 ## Objective
 
@@ -10,12 +10,24 @@ Do deep market research when it applies, using current web and citable sources.
 - It can look at reports, trends, market size, players, benchmarks, and relevant geographies.
 - It does not replace talking to users.
 
+## First, the file of this step
+
+The file this step writes does not exist yet. That is the design: nothing is
+created at install except phase 1's brief.
+
+1. **[DET]** Create it:
+   `python3 <method-root>/scripts/init_project.py --project-root . --add market_research`
+2. **[DET]** Write it **in the language set in `_engine/state.yaml`**, not in
+   the language of the repository.
+3. **[LATENT]** Pre-fill it with what the project already knows. An empty
+   template handed to the user is not a finished step.
+
 ## Documents to touch
 
-- `discovery/_sources/market-research.md`
-- `discovery/challenge.md`
-- `discovery/_system/state.yaml`
-- `discovery/_system/decisions.md`
+- `discovery/1-desk-research/market.md`
+- `discovery/1-desk-research/brief.md`
+- `discovery/_engine/state.yaml`
+- `discovery/_engine/decisions.md`
 
 ## Web rule
 
@@ -38,7 +50,7 @@ Minimum output:
 
 ## Using the template
 
-Fill out `_sources/market-research.md` with tables of:
+Fill out `1-desk-research/market.md` with tables of:
 
 - Findings with data, source, and implication.
 - Players, substitutes, and benchmarks.

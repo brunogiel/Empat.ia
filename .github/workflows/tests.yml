@@ -1,0 +1,22 @@
+name: tests
+
+# The method shipped two breaking releases in two days and neither one ran a
+# clean install against itself. That is what this is here to stop.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: The initializer does what the docs promise
+        run: python3 tests/test_init.py
+      - name: The method hangs together
+        run: python3 tests/test_consistency.py
