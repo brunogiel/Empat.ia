@@ -41,9 +41,13 @@ its place.
 | Which feature do you want? | What part of the process creates the most friction for you? |
 | Would you use my product if it did X? | What do you do today when that happens? |
 | Do you think an app would solve that? | How do you imagine that could get better? |
+| What would the ideal platform look like? | What would an ideal month look like? What would stop happening? |
 
-The last two are the trap that survives good form: both are open questions, and
-both still carry the answer inside them.
+Two traps survive good form. "Would you use my product" and "would an app solve
+that" are open questions that still carry the answer inside them. And "the ideal
+platform" asks the interviewee to design the solution for you: what comes back
+is their product, not their problem. Ask about their ideal month instead, and if
+they describe a product anyway, ask for the last time the problem behind it happened.
 
 ## Mistakes
 
@@ -58,16 +62,25 @@ both still carry the answer inside them.
 
 ## Naming
 
-One ID per interview or observation, carried across every file it produces.
+One base name per interview, shared by every file it produces:
+`INT-00X-name-surname-company`, lowercase, no accents. Drop the company when it
+is just the surname. The date lives in the index, not in the file name.
 
 ```text
-INT-001_alias_profile_YYYY-MM-DD_transcript.md
-INT-001_alias_profile_YYYY-MM-DD_notes.md
-OBS-001_place_YYYY-MM-DD_photos.zip
+4-field/INT-006-ana-lopez-acme.md
+4-field/_prep/INT-006-ana-lopez-acme-prep.md
+4-field/_raw/INT-006-ana-lopez-acme-transcript.txt
+4-field/OBS-001-place.md
 ```
 
-Use an alias whenever privacy requires it. If consent is missing, do not use
-identifiable quotes.
+One transcript per interview. If the recorder mixed up speakers, the relabeled
+version replaces the raw one in the same file, and the header says where the
+original lives. Live notes taken in the room go at the top as `#` comments; the
+interview itself starts at `# === INTERVIEW START ===` (any language's marker
+the counting script knows). Nothing above that line is counted.
+
+Use an alias instead of the name whenever privacy requires it. If consent is
+missing, do not use identifiable quotes.
 
 ## What counts as evidence
 

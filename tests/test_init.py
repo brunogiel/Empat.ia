@@ -265,5 +265,69 @@ class TestRepoIsConsistent(unittest.TestCase):
         self.assertEqual(offenders, [], "v2 paths survive:\n" + "\n".join(offenders))
 
 
+class NamedFolder(unittest.TestCase):
+    """A project can call its folder discovery-<project>, and nothing breaks."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_folder_flag_creates_the_named_folder(self):
+        result = run("--project-root", str(self.tmp), "--folder", "discovery-acme")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.tmp / "discovery-acme" / "_engine" / "state.yaml").exists())
+        self.assertFalse((self.tmp / "discovery").exists())
+
+    def test_a_renamed_folder_is_found_without_the_flag(self):
+        run("--project-root", str(self.tmp), "--folder", "discovery-acme")
+        result = run("--project-root", str(self.tmp), "--add", "profiles")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.tmp / "discovery-acme" / "2-profiling" / "profiles.md").exists())
+
+    def test_plain_and_named_folder_together_are_refused(self):
+        run("--project-root", str(self.tmp))
+        run("--project-root", str(self.tmp), "--folder", "discovery-acme")
+        result = run("--project-root", str(self.tmp), "--add", "profiles")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--folder", result.stdout + result.stderr)
+
+    def test_two_named_folders_are_refused_not_guessed(self):
+        run("--project-root", str(self.tmp), "--folder", "discovery-a")
+        run("--project-root", str(self.tmp), "--folder", "discovery-b")
+        result = run("--project-root", str(self.tmp), "--add", "profiles")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--folder", result.stdout + result.stderr)
+
+
+class CountFromTheStartMarker(unittest.TestCase):
+    """One transcript file holds notes, small talk and the interview."""
+
+    def test_comments_and_small_talk_are_not_counted(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import interview_text
+        text = ("# header\n# live note: Ana: ask why\n"
+                "Ana: hi, waiting for him\n"
+                "# === INTERVIEW START ===\n"
+                "Ana: tell me about the last time\nLuis: it was monday\n")
+        kept = interview_text(text)
+        self.assertNotIn("waiting", kept)
+        self.assertNotIn("live note", kept)
+        self.assertIn("Luis: it was monday", kept)
+
+    def test_a_hash_that_is_speech_is_kept(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import interview_text
+        kept = interview_text("Ana: what matters?\nLuis: two things\n#1 is speed\n")
+        self.assertIn("#1 is speed", kept)
+
+    def test_without_a_marker_only_comments_go(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import interview_text
+        kept = interview_text("# note\nAna: hi\nLuis: hello\n")
+        self.assertEqual(kept, "Ana: hi\nLuis: hello")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

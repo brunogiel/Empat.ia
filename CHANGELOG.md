@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Live notes taken during an interview go at the top of its transcript in `4-field/_raw/`, as a comment block. They used to end up at the bottom of the master guide or in a separate file, detached from the conversation they came from. `process-interview` reads them first.
+- Every file of an interview shares one base name, `INT-00X-name-surname-company`. The date moves to the index. A reader of `4-field/` sees who each interview was with, not an alias and a date.
+- One transcript per interview. A relabeled transcript replaces the raw one instead of sitting next to it; the first real run left three files for one conversation.
+- `count_interview.py` skips `#` lines and starts at `# === INTERVIEW START ===` (or `# === INICIO ENTREVISTA ===`), so live notes and small talk live in the same file without being counted.
+- The folder can be named `discovery-<project>/`. `init_project.py` takes `--folder`, and finds a single renamed folder without it.
+- "What would the ideal platform look like?" joins the questions to avoid: it asks the interviewee to design the product. Ask about their ideal month.
+- Step 4a described the v2 folder layout. It now describes `4-field/`.
+
 ## 3.0.0 - 2026-09-24
 
 Breaking. `discovery/` is numbered by phase and grows as you go. Existing projects migrate with

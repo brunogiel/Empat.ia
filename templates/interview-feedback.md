@@ -5,7 +5,7 @@ purpose: a single number tells you nothing, but the series between interview 1
 and interview 8 tells you whether you are getting better.
 
 This file is about **you**, not about what the interviewee said. What they said
-lives in `INT-00X-<alias>.md`. Cross-interview patterns live in
+lives in `INT-00X-<name>-<surname>.md`. Cross-interview patterns live in
 `5-debrief/findings.md`. No insights here.
 
 Two things are kept apart in every entry, and the labels are not decoration:
