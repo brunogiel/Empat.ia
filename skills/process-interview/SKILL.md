@@ -27,9 +27,9 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
 ## Flow
 
 1. **[DET] Get the transcript.** Read it from `discovery/4-field/_raw/` or the pointer the user gave. If it's long, save it first and read it in chunks until you've read 100%. Never summarize from a partial read; if you couldn't read all of it, say so.
-   **Live notes go on top.** If the interviewer or an observer took notes during the call, put them at the top of the saved transcript as a comment block (`# …`), under the header. Not in the master guide, not in a separate file. If you find them written at the bottom of a master guide, move them here and clean the guide. Read them first: they mark the moment someone in the room saw something, and the retro and the feedback start there.
-2. **[DET] Assign an ID and a base name**, `INT-00X-name-surname-company` (lowercase, no accents, company dropped when it is the surname; an alias if consent requires it). Save **one** transcript as `discovery/4-field/_raw/<base>-transcript.txt`. If the recorder mixed up speakers, relabel it and let the relabeled version replace the raw one, with the recorder's ID in the header. Small talk before the interviewee joins stays above a `# === INTERVIEW START ===` line, which the counting script starts from.
-3. **[LATENT] Write the structured note** in `discovery/4-field/` using `templates/interview-note-template.md`. Fill it from the real material:
+   **Live notes go on top.** If the interviewer or an observer took notes during the call, put them at the top of the saved transcript, under a `## Live notes` heading, as bullets. Not in the master guide, not in a separate file. If you find them written at the bottom of a master guide, move them here and clean the guide. Read them first: they mark the moment someone in the room saw something, and the retro and the feedback start there.
+2. **[DET] Assign an ID and a base name**, `INT-00X-name-surname-company` (lowercase, no accents, company dropped when it is the surname; an alias if consent requires it). Save **one** transcript, in Markdown, as `discovery/4-field/_raw/<base>-transcript.md`: a header line, then `## Live notes`, then `## Before the interview` for any small talk, then `## Interview` (or `## Entrevista`), one turn per paragraph. If the recorder mixed up speakers, relabel it and let the relabeled version replace the raw one, with the recorder's ID in the header. The counting script starts at the `## Interview` line; nothing above it is counted.
+3. **[LATENT] Write the structured note** in `discovery/4-field/` using `templates/interview-note.md`. Fill it from the real material:
    - **Metadata** (interviewee anonymized per consent, profile, date, duration, modality, interviewer, recording, consent).
    - **Context** (who they are, where the problem happens, their role).
    - **Verbatim quotes** (exact words, with topic + moment). Preserve them; this is the raw gold.
@@ -40,7 +40,7 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
    - **Moments of tension, surprise or emotion.**
    - **New questions** (what this opens for the next round).
    - **Co-pilot readings** (your inferences, clearly labeled, not facts).
-4. **[LATENT] Extract atomic evidence** into `discovery/_engine/evidence.md`: one row per unit, typed (`quote`/`fact`/`observation`/`workaround`/`emotion`/`contradiction`/`material`/`open_question`/`copilot_reading`), each traceable to the interview ID and a location (transcript spot or note section). Keep insights out of the ledger; this is atomic evidence only.
+4. **[LATENT] Extract atomic evidence** into `discovery/_engine/evidence.md`: one row per unit, typed (`quote`/`fact`/`observation`/`workaround`/`emotion`/`contradiction`/`material`/`open_question`/`copilot_reading`), each traceable to the interview ID and a location (transcript spot or note section). ID the row `INT-00X-NN` (`OBS-00X-NN` for an observation), numbered within this interview starting at `01`, never a global `EV-NNN`: two interviews get processed in parallel without their IDs colliding. Keep insights out of the ledger; this is atomic evidence only.
 5. **[DET] Update `discovery/4-field/0-index.md`**: metadata, files, status `done`, gaps left.
 6. **[LATENT] Interview retro (the distinctive step).** Close the loop back to the guide. Produce three things, inside the note under a clear "Guide / method learnings" section:
    - **Questions left on the table.** Follow-ups the interviewee opened and you didn't pursue, sections of the guide that went uncovered (and whether that was fine because you followed the person, or a real miss).
@@ -52,9 +52,11 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
    It returns words per speaker, questions, whys and chains, concrete anchors, product mentions,
    whether there was a closing recap, and which guide blocks came up. **No transcript, or no
    speaker labels: skip this and say so. Never estimate a number.**
-8. **[LATENT] Write the feedback entry** in `discovery/4-field/0-interview-feedback.md`, using
-   `references/interview-rubric.md`. Keep **Measured** and **Read** under separate headings: the
-   first is reproducible, the second is judgement the user can argue with.
+8. **[LATENT] Write the feedback file** in `discovery/4-field/feedback/<base>-feedback.md`, from
+   `templates/interview-feedback.md`, using `references/interview-rubric.md`. One file per
+   interview, not an accumulating log: create `4-field/feedback/0-README.md` first if this is the
+   first one (`--add interview_feedback`). Keep **Measured** and **Read** under separate headings:
+   the first is reproducible, the second is judgement the user can argue with.
    - **Coverage is reported, never scored.** Leaving the guide for a better thread is often the
      right call; ask whether the detour earned its place.
    - **Never score a criterion out of ten.**
@@ -76,9 +78,10 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
 
 ## Expected output
 
-- One transcript in `discovery/4-field/_raw/<base>-transcript.txt`.
+- One transcript in `discovery/4-field/_raw/<base>-transcript.md`.
 - A structured note in `discovery/4-field/<base>.md` (1:1 with the template), including the **Guide / method learnings** retro.
-- New rows in `_engine/evidence.md`, traceable.
+- New rows in `_engine/evidence.md`, traceable, IDed `INT-00X-NN` / `OBS-00X-NN`.
+- A feedback file in `discovery/4-field/feedback/<base>-feedback.md`.
 - An updated `discovery/4-field/0-index.md` (status + gaps).
 - A gate recommendation. No master guide edited unless the user approved it.
 
@@ -93,5 +96,5 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
 
 ## Notes
 
-- This skill is part of the Empat.ia method bundle and reads its `templates/` (`interview-note-template.md`, `_engine/evidence.md`). In standalone use (no `discovery/` folder), it still produces the note + retro wherever the user points.
-- Source-agnostic by design. If the user's transcripts live in a specific tool (a recorder, a meeting app), a project-level wrapper skill can handle fetching from that tool and then hand the raw transcript to this flow.
+- This skill is part of the Empat.ia method bundle and reads its `templates/` (`interview-note.md`, `_engine/evidence.md`). In standalone use (no `discovery/` folder), it still produces the note + retro wherever the user points.
+- Source-agnostic by design. If the user's transcripts live in a specific tool (a recorder, a meeting app), a project-level wrapper skill can handle fetching from that tool and then hand the raw transcript to this flow. That wrapper skill belongs to the assistant, not the user: it lives in `discovery/_engine/skills/`, not in a numbered phase folder.

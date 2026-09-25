@@ -117,16 +117,28 @@ Numbered by phase, so the order the user sees is the order they work in. It grow
 discovery/
   0-README.md                the map. Written at install, in the user's language
   AGENTS.md  CLAUDE.md       pointers, so any assistant knows what this folder is
-  1-desk-research/           brief.md  market.md  knowledge.md
+  1-desk-research/           brief.md  market.md  knowledge.md  sources/
   2-profiling/               profiles.md  recruiting.md
   3-guide/                   guide.md  process.md
-  4-field/                   0-index.md  0-interview-feedback.md  0-observation-plan.md
+  4-field/                   0-index.md  0-observation-plan.md  feedback/
                              INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
   5-debrief/                 findings.md  principles.md  output/summary.md
   _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md
-                             evidence.md  synthesis-log.md  sources/
+                             evidence.md  synthesis-log.md  sources/  skills/
   {phase}/notes.md           the drawer, born on demand. The editor empties it at each gate
 ```
+
+- **`1-desk-research/sources/`** holds client material as-is (briefs, decks,
+  canvases, spreadsheets, whiteboards), so a human can see what the method was
+  fed. That is different from **`_engine/sources/`**, which keeps only the
+  assistant's own working material (councils, data-reviews, guide-versions).
+- **`4-field/feedback/`** holds interview feedback: one file per interview,
+  `INT-00X-name-surname-feedback.md`, plus a `0-README.md` explaining how to
+  read them. No longer a single accumulating log.
+- **`_engine/skills/`** holds project-level wrapper skills, when the project
+  needs one (for example, one that fetches transcripts from the team's
+  recorder). They belong to the assistant, not the human, so they never go in
+  a numbered phase folder.
 
 The folder can be called `discovery-<project>/` instead, when one place holds more than one
 discovery. The script finds a single renamed folder on its own and takes `--folder` otherwise.
@@ -247,8 +259,9 @@ interview is something you offer inside the four you already have.
 
 The method audits the material and never the interviewer. That is the gap this closes. You give
 the feedback yourself, in your own voice — there is no separate coach agent, because the Guide
-already is one. The rubric is in `references/interview-rubric.md`, and the running log lives in
-`4-field/0-interview-feedback.md`.
+already is one. The rubric is in `references/interview-rubric.md`, and the feedback lives in
+`4-field/feedback/`, one file per interview (`INT-00X-name-surname-feedback.md`), explained by its
+own `0-README.md`.
 
 **1. When asked.** *"Process the transcript of X"* runs `process-interview`, which ends by
 counting the transcript and writing the entry.

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Count what is countable in an interview transcript.
 
-The numbers that go into 4-field/0-interview-feedback.md come from here, not
+The numbers that go into 4-field/feedback/<base>-feedback.md come from here, not
 from a model reading the transcript and forming an impression. Two runs over the
 same file return the same answer; that is the whole point. Judgement -- whether
 a question led the answer, whether leaving the guide was worth it -- stays with
 the Guide and is labelled as judgement.
 
 Input
-  A .txt or .md transcript with speaker labels at the start of a line:
+  A Markdown transcript with speaker labels at the start of a line:
       Bruno: ...           or      [Bruno] ...
   Who the interviewer is comes from --interviewer, never guessed.
   Timestamps are optional. Without them, interruptions are not counted and the
@@ -20,8 +20,8 @@ Output
 
 Usage
   python3 count_interview.py TRANSCRIPT --interviewer "Bruno"
-  python3 count_interview.py T.txt --interviewer Bruno --product "Empatia,la app"
-  python3 count_interview.py T.txt --interviewer Bruno --guide discovery/3-guide/guide.md
+  python3 count_interview.py T.md --interviewer Bruno --product "Empatia,la app"
+  python3 count_interview.py T.md --interviewer Bruno --guide discovery/3-guide/guide.md
 """
 
 from __future__ import annotations
@@ -204,31 +204,48 @@ def guide_coverage(guide_path: str | None, turns):
     return hit
 
 
-START_MARKERS = ("# === INTERVIEW START ===", "# === INICIO ENTREVISTA ===")
+# New convention: the transcript is Markdown, and the interview itself starts
+# after a line that is exactly '## Interview' or '## Entrevista'. The old
+# marker convention (small talk and live notes as '#' comments, the interview
+# starting at a '# === INTERVIEW START ===' line) still works, so a transcript
+# written before this change keeps counting the same way.
+START_MARKERS = ("## Interview", "## Entrevista",
+                  "# === INTERVIEW START ===", "# === INICIO ENTREVISTA ===")
+
+HEADING = re.compile(r"^#{1,6}\s")
 
 
 def interview_text(transcript: str) -> str:
     """The part of the file that gets counted.
 
-    One file per interview holds everything: a header, the live notes taken in
-    the room, the small talk before the interviewee joined, and the interview.
-    Comment lines ('# ...') are never counted. If a start marker is
-    present, only what follows it is counted, so the small talk before the
-    interviewee joins does not inflate the interviewer's share.
+    One file per interview holds a header, the live notes taken in the room
+    (under '## Live notes'), the small talk before the interviewee joined
+    (under '## Before the interview'), and the interview itself (under
+    '## Interview' or '## Entrevista'). Everything before that line is never
+    counted, so live notes and small talk do not inflate the interviewer's
+    share. Below it, markdown heading lines and blockquote lines are still
+    never counted -- they are structure, not speech.
     """
     lines = transcript.splitlines()
     for i, line in enumerate(lines):
         if line.strip() in START_MARKERS:
             lines = lines[i + 1:]
             break
-    return "\n".join(l for l in lines if not is_comment(l))
+    return "\n".join(l for l in lines if not is_noise(l))
 
 
-def is_comment(line: str) -> bool:
-    """A '#' followed by a space, or a bare '#'. Not '#1 priority' or '#hashtag':
-    those are words someone said, and a turn can continue on such a line."""
+def is_noise(line: str) -> bool:
+    """A markdown heading ('#' through '######' followed by a space, or a bare
+    '#') or a blockquote line ('> ...'). Not '#1 priority' or '#hashtag': those
+    are words someone said, and a turn can continue on such a line."""
     stripped = line.strip()
-    return stripped == "#" or stripped.startswith("# ")
+    if stripped == "#":
+        return True
+    if HEADING.match(stripped):
+        return True
+    if stripped.startswith("> "):
+        return True
+    return False
 
 
 def main() -> int:

@@ -56,8 +56,8 @@ budgets:
   4-field/0-index.md:
     lines: 80
     hard: false
-  4-field/0-interview-feedback.md:
-    lines: 200
+  4-field/feedback/0-README.md:
+    lines: 60
     hard: false
   4-field/0-observation-plan.md:
     lines: 80
@@ -87,7 +87,15 @@ budgets:
 #
 # 4-field/INT-*.md and OBS-*.md — your evidence. It is as long as the interview was.
 #
+# 4-field/feedback/INT-*-feedback.md — one per interview. Only the folder's
+#   0-README.md carries a budget; the entries themselves are as long as the
+#   rubric needs, and capping them would push toward scoring instead of reading.
+#
 # 4-field/notes.md — the drawer. The editor empties it at every gate.
+#
+# 1-desk-research/sources/ — client material as-is (briefs, decks, canvases,
+#   spreadsheets, whiteboards). It exists so a human can see what the method
+#   was fed; the editor never trims it.
 
 structural:
   4-field/_prep/*-prep.md:

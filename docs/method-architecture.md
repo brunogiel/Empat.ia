@@ -29,10 +29,12 @@ The work lives in `discovery/`.
 It is numbered by phase, and it grows as the user goes. Six files exist at install and only two of them are the user's; every other file is born when its step starts, written in the project's language:
 
 - **Zone 1**, the root and `3-guide/`: what the user opens. Line-budgeted, kept short.
-- **Zone 2**, `_engine/`: state, assumptions, decisions, evidence, budgets. The assistant's workspace.
-- **Zone 3**, `_engine/sources/`: raw and long material. Consulted, not read.
+- **Zone 2**, `_engine/`: state, assumptions, decisions, evidence, budgets, project-level skills (`_engine/skills/`). The assistant's workspace.
+- **Zone 3**, `_engine/sources/`: the assistant's own raw and long material (councils, data-reviews, guide-versions). Consulted, not read.
 
-`4-field/` keeps field material and belongs to none of the three.
+`1-desk-research/sources/` is a different thing: client material as-is (briefs, decks, canvases,
+spreadsheets, whiteboards), kept so a human can see what the method was fed. `4-field/` keeps
+field material and belongs to none of the three zones.
 
 Project state lives in `_engine/state.yaml` and is never repeated in a second document.
 Zone 1 files carry a line budget in `_engine/budgets.yaml`; the `editor` enforces it at each gate
@@ -60,7 +62,7 @@ Documents:
 - `4-field/0-index.md`: intake and processing flow for field material.
 - `4-field/0-index.md`: interview tracker, files, consent and gaps.
 - `_engine/evidence.md`: atomic evidence by interview before synthesis.
-- `templates/interview-note-template.md`: structured note template for each interview.
+- `templates/interview-note.md`: structured note template for each interview.
 
 ## Gates
 

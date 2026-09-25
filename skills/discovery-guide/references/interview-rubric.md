@@ -1,8 +1,8 @@
 # Interview rubric
 
 What to look at after an interview, and how to say it. The Guide uses this; it
-is not copied into the user's folder. The running log goes to
-`4-field/0-interview-feedback.md`.
+is not copied into the user's folder. One feedback file per interview goes to
+`4-field/feedback/`, explained by its own `0-README.md`.
 
 Every criterion below comes from the method's own sources, and each one says
 where it comes from. None of them was invented for this file.

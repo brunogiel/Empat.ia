@@ -13,6 +13,17 @@ Don't write closed insights here. This ledger holds atomic evidence and prelimin
 5. Use tags to make clustering easier.
 6. Only then bring patterns into `../principles.md`.
 
+## Evidence IDs are per interview
+
+`INT-00X-NN` for an interview, `OBS-00X-NN` for an observation: the number
+restarts at `01` inside each interview, not a single global counter
+(`EV-001`, `EV-002`...). Two interviews being processed at the same time never
+collide on an ID this way.
+
+A quote is copied **verbatim** from the transcript, transcription errors
+included. Check it against the transcript before you rely on it: a recorder's
+mis-hearing does not become gospel just because it landed in the ledger.
+
 ## Types of evidence
 
 - `quote`: the interviewee's exact words.
@@ -29,13 +40,13 @@ Don't write closed insights here. This ledger holds atomic evidence and prelimin
 
 | Evidence ID | Interview | Profile | Type | Evidence | Location | Tags | Preliminary reading | Confidence | Use in synthesis |
 |---|---|---|---|---|---|---|---|---|---|
-| EV-001 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review |
+| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review |
 
 ## Contradictions to preserve
 
 | ID | Evidence A | Evidence B | Why it matters | What's still to validate |
 |---|---|---|---|---|
-| Pending | EV-... | EV-... | Pending | Pending |
+| Pending | INT-...-.. | INT-...-.. | Pending | Pending |
 
 ## Candidate quotes
 
@@ -47,4 +58,4 @@ Don't write closed insights here. This ledger holds atomic evidence and prelimin
 
 | Question | Evidence that triggers it | Who to ask | Priority |
 |---|---|---|---|
-| Pending | EV-... | Pending | low/medium/high |
+| Pending | INT-...-.. | Pending | low/medium/high |

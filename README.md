@@ -74,13 +74,13 @@ already filled with what the project knows by then.
 ```text
 discovery/
   0-README.md            the map: where am I, what do I open now
-  1-desk-research/       brief.md  market.md  knowledge.md
+  1-desk-research/       brief.md  market.md  knowledge.md  sources/
   2-profiling/           profiles.md  recruiting.md
   3-guide/               guide.md  process.md
-  4-field/               0-index.md  0-interview-feedback.md
+  4-field/               0-index.md  0-observation-plan.md  feedback/
                          INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
   5-debrief/             findings.md  principles.md  output/summary.md
-  _engine/               state, assumptions, decisions, evidence, budgets, sources
+  _engine/               state, assumptions, decisions, evidence, budgets, sources, skills
   AGENTS.md  CLAUDE.md   two pointers so any assistant knows what this folder is
 ```
 

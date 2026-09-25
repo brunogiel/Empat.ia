@@ -27,6 +27,9 @@ created at install except phase 1's brief.
 ## Documents to touch
 
 - `discovery/1-desk-research/knowledge.md`
+- `discovery/1-desk-research/sources/`: actual files the client handed over
+  (briefs, decks, canvases, spreadsheets, whiteboards), kept as-is so a human
+  can see what the method was fed.
 - `discovery/_engine/assumptions.md`
 - `discovery/1-desk-research/brief.md`
 - `discovery/_engine/state.yaml`

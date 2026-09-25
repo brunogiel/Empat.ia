@@ -38,7 +38,7 @@ Job 4 is what keeps the drawer from becoming the problem it was meant to solve. 
 | Coding definitions, evidence taxonomy, atomic evidence | `_engine/evidence.md` |
 | Assumptions and their IDs | `_engine/assumptions.md` (other files link, never copy) |
 | Per-interview context, roles, place, modality, time boxes | that interview's `4-field/_prep/*-prep.md`, never the master guide |
-| How the interviewer did, counts, technique feedback | `4-field/0-interview-feedback.md` |
+| How the interviewer did, counts, technique feedback | `4-field/feedback/<base>-feedback.md` |
 | Where to go, who to observe, what to look for | `4-field/0-observation-plan.md` |
 | Cross-interview patterns, weak signals, contradictions, gaps | `5-debrief/findings.md` |
 | Working notes of the synthesis, the evidence chain, the quality checklist | `_engine/synthesis-log.md` |
