@@ -204,6 +204,26 @@ def guide_coverage(guide_path: str | None, turns):
     return hit
 
 
+START_MARKERS = ("# === INTERVIEW START ===", "# === INICIO ENTREVISTA ===")
+
+
+def interview_text(transcript: str) -> str:
+    """The part of the file that gets counted.
+
+    One file per interview holds everything: a header, the live notes taken in
+    the room, the small talk before the interviewee joined, and the interview.
+    Comment lines (starting with '#') are never counted. If a start marker is
+    present, only what follows it is counted, so the small talk before the
+    interviewee joins does not inflate the interviewer's share.
+    """
+    lines = transcript.splitlines()
+    for i, line in enumerate(lines):
+        if line.strip() in START_MARKERS:
+            lines = lines[i + 1:]
+            break
+    return "\n".join(l for l in lines if not l.lstrip().startswith("#"))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Count an interview transcript.")
     parser.add_argument("transcript")
@@ -223,7 +243,7 @@ def main() -> int:
 
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     patterns = load_patterns(args.patterns)
-    turns = parse(path.read_text(encoding="utf-8", errors="ignore"))
+    turns = parse(interview_text(path.read_text(encoding="utf-8", errors="ignore")))
 
     if not turns:
         raise SystemExit(

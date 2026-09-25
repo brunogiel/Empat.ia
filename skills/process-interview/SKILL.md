@@ -28,7 +28,7 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
 
 1. **[DET] Get the transcript.** Read it from `incoming/` or the pointer the user gave. If it's long, save it first and read it in chunks until you've read 100%. Never summarize from a partial read; if you couldn't read all of it, say so.
    **Live notes go on top.** If the interviewer or an observer took notes during the call, put them at the top of the saved transcript as a comment block (`# …`), under the header. Not in the master guide, not in a separate file. If you find them written at the bottom of a master guide, move them here and clean the guide. Read them first: they mark the moment someone in the room saw something, and the retro and the feedback start there.
-2. **[DET] Assign an ID** (`INT-00X`) and save a clean transcript to `discovery/4-field/_raw/`.
+2. **[DET] Assign an ID and a base name**, `INT-00X-name-surname-company` (lowercase, no accents, company dropped when it is the surname; an alias if consent requires it). Save **one** transcript as `discovery/4-field/_raw/<base>-transcript.txt`. If the recorder mixed up speakers, relabel it and let the relabeled version replace the raw one, with the recorder's ID in the header. Small talk before the interviewee joins stays above a `# === INTERVIEW START ===` line, which the counting script starts from.
 3. **[LATENT] Write the structured note** in `discovery/4-field/` using `templates/interview-note-template.md`. Fill it from the real material:
    - **Metadata** (interviewee anonymized per consent, profile, date, duration, modality, interviewer, recording, consent).
    - **Context** (who they are, where the problem happens, their role).

@@ -331,6 +331,27 @@ def report(header: str, lines) -> None:
             print(f"  {line}")
 
 
+def resolve_folder(project_root: Path, folder: str | None) -> str:
+    """Which folder holds the discovery.
+
+    'discovery' unless the user names another. A project that already renamed
+    its folder to 'discovery-<project>' keeps working without the flag: if
+    exactly one such folder exists, that is the one. Two of them is ambiguous,
+    and guessing would write into the wrong project.
+    """
+    if folder:
+        return folder
+    if (project_root / "discovery").exists():
+        return "discovery"
+    named = sorted(p.name for p in project_root.glob("discovery-*") if p.is_dir())
+    if len(named) == 1:
+        return named[0]
+    if len(named) > 1:
+        raise SystemExit(f"More than one discovery folder here ({', '.join(named)}). "
+                         "Say which one with --folder.")
+    return "discovery"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Initialize, extend or migrate an Empat.ia discovery folder.")
@@ -339,6 +360,10 @@ def main() -> int:
     parser.add_argument("--lang", default="en",
                         help="Working language for the project, e.g. en, es, pt. "
                              "The assistant writes every file in this language.")
+    parser.add_argument("--folder", default=None,
+                        help="Name of the discovery folder. Default 'discovery', or the one "
+                             "'discovery-*' folder already in the project. Use 'discovery-<project>' "
+                             "when one place holds more than one discovery.")
     parser.add_argument("--add", metavar="STEP",
                         help="Materialise one phase's file. Run it when the step starts.")
     parser.add_argument("--migrate", action="store_true",
@@ -355,7 +380,7 @@ def main() -> int:
     method_root = (Path(args.method_root).expanduser().resolve() if args.method_root
                    else Path(__file__).resolve().parents[1])
     templates = method_root / "templates"
-    discovery = project_root / "discovery"
+    discovery = project_root / resolve_folder(project_root, args.folder)
 
     if not templates.exists():
         raise SystemExit(f"Templates not found: {templates}")

@@ -36,12 +36,10 @@ created at install except phase 1's brief.
 
 ## Folder structure
 
-- `incoming/`: raw material the user brings.
-- `transcripts/`: clean transcripts per interview.
-- `notes/`: structured notes per interview.
-- `artifacts/`: photos, screenshots, documents, or shared materials.
-- `consent/`: consent, restrictions, and privacy notes.
-- `processed/`: auxiliary derivatives if needed.
+- `4-field/INT-00X-name-surname-company.md`: one structured note per interview.
+- `4-field/_prep/`: the per-interview prep sheets.
+- `4-field/_raw/`: one transcript per interview, plus photos, documents and consent notes.
+- `4-field/0-index.md`: the tracker.
 
 ## Rules
 
@@ -50,18 +48,18 @@ created at install except phase 1's brief.
 - Mark interviewer observations separately from what the user said.
 - Live notes (taken during the call by whoever led or sat in) go **at the top of the transcript**, in the same file in `4-field/_raw/`, as a comment block under the header. Never in the master guide, never in a separate document: the note stays attached to the conversation that produced it.
 - Save name, date, profile, and context.
-- Use `_notes-template.md` for each interview.
+- Use the `interview-note` template for each interview.
 - Record moments of tension, surprise, or emotion.
 - Capture tools, documents, spaces, and workarounds.
 
 ## Process
 
-1. Ask the user to drop all the material in `incoming/`.
-2. Assign an ID per interview: `INT-001`, `INT-002`, etc.
-3. Fill out `index.md` with metadata, files, and status.
-4. Copy or move clean transcripts to `transcripts/`.
-5. Create a structured note in `notes/` using `_notes-template.md`.
-6. Save materials in `artifacts/` and consents in `consent/`.
+1. Ask the user to drop all the material in `4-field/_raw/`.
+2. Assign an ID and base name per interview: `INT-001-name-surname-company`.
+3. Fill out `0-index.md` with metadata and status.
+4. Keep one transcript per interview in `_raw/`, named after the base name.
+5. Create a structured note in `4-field/` from the `interview-note` template.
+6. Save materials and consent notes in `_raw/` under the same base name.
 7. Extract atomic evidence into `_engine/evidence.md`.
 8. Mark gaps before moving to synthesis.
 

@@ -5,7 +5,8 @@ observations. It answers three questions — what came in, what is still
 unprocessed, and where the sample is thin.
 
 Files are not listed: they are derivable from the ID. `INT-003` means
-`INT-003-<alias>.md`, its sheet in `_prep/`, and its raw material in `_raw/`.
+`INT-003-<name>-<surname>[-<company>].md`, its sheet in `_prep/`, and its one
+transcript in `_raw/`, all sharing that base name.
 
 ## Where we stand
 

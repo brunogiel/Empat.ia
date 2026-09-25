@@ -121,12 +121,16 @@ discovery/
   2-profiling/               profiles.md  recruiting.md
   3-guide/                   guide.md  process.md
   4-field/                   0-index.md  0-interview-feedback.md  0-observation-plan.md
-                             INT-001-alias.md  OBS-001-place.md  _prep/  _raw/
+                             INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
   5-debrief/                 findings.md  principles.md  output/summary.md
   _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md
                              evidence.md  synthesis-log.md  sources/
   {phase}/notes.md           the drawer, born on demand. The editor empties it at each gate
 ```
+
+The folder can be called `discovery-<project>/` instead, when one place holds more than one
+discovery. The script finds a single renamed folder on its own and takes `--folder` otherwise.
+Wherever this file says `discovery/`, read the project's folder.
 
 Four rules hold the whole thing up:
 

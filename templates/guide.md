@@ -79,7 +79,8 @@ Goal: discover informal solutions and real competition.
 
 ### 7. Ideal scenario and aspirations
 
-Goal: open up future needs without inducing a solution.
+Goal: open up future needs without inducing a solution. Ask about their ideal
+month, not the ideal product: the product answer is their design, not their problem.
 
 - If this worked much better, what would have to happen?
 - What would an ideal experience look like?
