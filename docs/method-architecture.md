@@ -62,7 +62,7 @@ Documents:
 - `4-field/0-index.md`: intake and processing flow for field material.
 - `4-field/0-index.md`: interview tracker, files, consent and gaps.
 - `_engine/evidence.md`: atomic evidence by interview before synthesis.
-- `templates/interview-note-template.md`: structured note template for each interview.
+- `templates/interview-note.md`: structured note template for each interview.
 
 ## Gates
 
