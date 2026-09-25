@@ -48,6 +48,7 @@ created at install except phase 1's brief.
 - Preserve verbatim quotes.
 - Don't mix users without identifying the source.
 - Mark interviewer observations separately from what the user said.
+- Live notes (taken during the call by whoever led or sat in) go **at the top of the transcript**, in the same file in `4-field/_raw/`, as a comment block under the header. Never in the master guide, never in a separate document: the note stays attached to the conversation that produced it.
 - Save name, date, profile, and context.
 - Use `_notes-template.md` for each interview.
 - Record moments of tension, surprise, or emotion.

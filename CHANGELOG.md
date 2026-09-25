@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Live notes taken during an interview go at the top of its transcript in `4-field/_raw/`, as a comment block. They used to end up at the bottom of the master guide or in a separate file, detached from the conversation they came from. `process-interview` reads them first.
+
 ## 3.0.0 - 2026-09-24
 
 Breaking. `discovery/` is numbered by phase and grows as you go. Existing projects migrate with
