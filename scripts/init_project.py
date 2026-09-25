@@ -53,7 +53,7 @@ LAZY = {
     "interview_guide": ("guide.md", "3-guide/guide.md"),
     "field_process": ("process.md", "3-guide/process.md"),
     "field_index": ("field-index.md", "4-field/0-index.md"),
-    "interview_feedback": ("interview-feedback.md", "4-field/0-interview-feedback.md"),
+    "interview_feedback": ("feedback-readme.md", "4-field/feedback/0-README.md"),
     "observation": ("observation-plan.md", "4-field/0-observation-plan.md"),
     "evidence": ("evidence.md", "_engine/evidence.md"),
     "assumptions": ("assumptions.md", "_engine/assumptions.md"),
@@ -69,17 +69,23 @@ LAZY = {
 PER_ITEM = {
     "interview-note": "interview-note.md",
     "interview-prep": "interview-prep.md",
+    "interview-feedback": "interview-feedback.md",
     "observation-note": "observation-note.md",
     "notes": "notes.md",
 }
 
 DIRECTORIES = [
     "1-desk-research",
+    # Client material -- briefs, decks, canvases, spreadsheets, whiteboards --
+    # so a human can see what the method was fed. Not the assistant's own
+    # working material: that goes to _engine/sources/ below.
+    "1-desk-research/sources",
     "2-profiling",
     "3-guide",
     "4-field",
     "4-field/_prep",
     "4-field/_raw",
+    "4-field/feedback",
     "5-debrief",
     "5-debrief/output",
     "_engine",
@@ -87,6 +93,9 @@ DIRECTORIES = [
     "_engine/sources/councils",
     "_engine/sources/data-reviews",
     "_engine/sources/guide-versions",
+    # Project-level wrapper skills (e.g. one that fetches transcripts from the
+    # team's recorder). These belong to the assistant, not the human.
+    "_engine/skills",
 ]
 
 # --- Migration -------------------------------------------------------------
@@ -150,7 +159,7 @@ STATE_REWRITES = {
     "output: field-kit/checklist.md": "file: 3-guide/process.md",
     "output: field-kit/observation.md": "file: 4-field/0-observation-plan.md",
     "output: interviews/index.md + _system/evidence-ledger.md + findings.md":
-        "file: 4-field/0-index.md + 4-field/0-interview-feedback.md + _engine/evidence.md",
+        "file: 4-field/0-index.md + 4-field/feedback/0-README.md + _engine/evidence.md",
     "output: principles.md": "file: 5-debrief/findings.md + 5-debrief/principles.md",
     "version: 2": "version: 3",
 }
@@ -283,13 +292,18 @@ def migrate(discovery: Path, version: int) -> tuple[list, list]:
             move(item, discovery / "4-field" / "_raw" / item.name, moved, unrouted,
                  f"{tray}/{item.name}")
 
-    # Everything else under _sources/ keeps its shape one level down.
+    # Everything else under _sources/ is raw input material a human should be
+    # able to see -- the market research and knowledge base above are already
+    # gone from here by this point, moved by MIGRATION_V2. What is left is
+    # client material (briefs, decks, canvases, spreadsheets, whiteboards),
+    # so it goes to 1-desk-research/sources/, not to _engine/sources/, which
+    # is reserved for the assistant's own working material.
     sources_dir = discovery / "_sources"
     if sources_dir.is_dir():
         for item in sorted(sources_dir.iterdir()):
             if item.name == ".DS_Store":
                 continue
-            move(item, discovery / "_engine" / "sources" / item.name, moved, unrouted,
+            move(item, discovery / "1-desk-research" / "sources" / item.name, moved, unrouted,
                  f"_sources/{item.name}")
 
     # Loose files at the root that nothing claimed.

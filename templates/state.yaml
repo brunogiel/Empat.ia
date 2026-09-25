@@ -129,7 +129,7 @@ steps:
   interview_capture:
     phase: 4
     status: not_started
-    file: 4-field/0-index.md + 4-field/0-interview-feedback.md + _engine/evidence.md
+    file: 4-field/0-index.md + 4-field/feedback/0-README.md + _engine/evidence.md
     gate: true
   observation:
     phase: 4

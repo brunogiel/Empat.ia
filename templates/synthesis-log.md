@@ -13,8 +13,8 @@ Source: `4-field/0-index.md` and `_engine/evidence.md`.
 
 | ID | Profile | Date | Status in index | Evidence available | Notes |
 |---|---|---|---|---|---|
-| INT-001 | Pending | Pending | received / organized / evidence_extracted / ready_for_synthesis | EV-... | Pending |
-| OBS-001 | Pending | Pending | Pending | EV-... | Pending |
+| INT-001 | Pending | Pending | received / organized / evidence_extracted / ready_for_synthesis | INT-001-.. | Pending |
+| OBS-001 | Pending | Pending | Pending | OBS-001-.. | Pending |
 
 ## Process followed
 
@@ -41,7 +41,7 @@ not belong here: they go to `5-debrief/findings.md`.
 - Date: Pending.
 - Context: Pending.
 - Status in `0-index.md`: Pending.
-- Evidence IDs: EV-...
+- Evidence IDs: INT-001-..
 - Strong quotes: Pending.
 - Interviewer observations *(separate from interpretation)*: Pending.
 - Moments of tension, surprise or emotion: Pending.
@@ -54,7 +54,7 @@ with no complete row behind it is not traceable.
 
 | Evidence ID | Fact, quote or observation | Pattern | Insight | Principle | HMW |
 |---|---|---|---|---|---|
-| EV-... | Pending | Pending | Pending | Pending | Pending |
+| INT-...-.. | Pending | Pending | Pending | Pending | Pending |
 
 ## Quality checklist
 

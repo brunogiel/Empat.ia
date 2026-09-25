@@ -84,7 +84,10 @@ Tentative inferences from the agent. Don't treat them as truth until they're val
 
 ## Raw material pending organization
 
-Paste unprocessed notes here if we don't yet know where they go.
+Paste unprocessed notes here if we don't yet know where they go. An actual
+file the client handed over (a brief, a deck, a canvas, a spreadsheet, a
+whiteboard photo) goes in `1-desk-research/sources/` instead, as-is, so a
+human can see what the method was fed.
 
 ```text
 Pending.

@@ -69,15 +69,40 @@ is just the surname. The date lives in the index, not in the file name.
 ```text
 4-field/INT-006-ana-lopez-acme.md
 4-field/_prep/INT-006-ana-lopez-acme-prep.md
-4-field/_raw/INT-006-ana-lopez-acme-transcript.txt
+4-field/_raw/INT-006-ana-lopez-acme-transcript.md
 4-field/OBS-001-place.md
 ```
 
-One transcript per interview. If the recorder mixed up speakers, the relabeled
-version replaces the raw one in the same file, and the header says where the
-original lives. Live notes taken in the room go at the top as `#` comments; the
-interview itself starts at `# === INTERVIEW START ===` (any language's marker
-the counting script knows). Nothing above that line is counted.
+One transcript per interview, in Markdown, not `.txt`. If the recorder mixed up
+speakers, the relabeled version replaces the raw one in the same file, and the
+header says where the original lives (the raw export stays in the recorder).
+It carries a header, then live notes, then the interview itself, one turn per
+paragraph, a blank line between turns:
+
+```text
+# Transcript · INT-006 · Ana López (Acme) · 2026-09-25
+> Recorder: <tool>, id <id>. Relabeled turn by turn; the raw export stays in the recorder.
+> Speakers: Ana (interviewer) · Luis (interviewee)
+
+## Live notes
+- note taken in the room
+
+## Before the interview
+Ana: small talk...
+
+## Interview
+Ana: question
+
+Luis: answer
+```
+
+Live notes go under `## Live notes`, as bullets, not as `#` comments; small
+talk before the interviewee joins goes under `## Before the interview`. The
+counting script starts at `## Interview` (or `## Entrevista`); nothing above
+that line is counted, and headings or blockquote lines below it are not
+counted either. A transcript written before this convention, with live notes
+as `#` comments and a `# === INTERVIEW START ===` line, still counts the same
+way: the script keeps recognizing both.
 
 Use an alias instead of the name whenever privacy requires it. If consent is
 missing, do not use identifiable quotes.

@@ -77,6 +77,13 @@ class TestCleanInstall(TempProject):
             found = list((self.discovery / phase).rglob("*.md"))
             self.assertEqual(found, [], f"{phase} should be empty at install")
 
+    def test_1_desk_research_sources_is_created(self):
+        """Client material (briefs, decks, canvases, spreadsheets, whiteboards)
+        needs a folder a human can see, distinct from _engine/sources/, which
+        is the assistant's own working material."""
+        self.init()
+        self.assertTrue((self.discovery / "1-desk-research" / "sources").is_dir())
+
 
 class TestAddStep(TempProject):
 
@@ -85,6 +92,17 @@ class TestAddStep(TempProject):
         result = self.init("--add", "market_research")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((self.discovery / "1-desk-research" / "market.md").exists())
+
+    def test_interview_feedback_step_creates_the_feedback_readme(self):
+        """Interview feedback moved from one accumulating log to one file per
+        interview. --add interview_feedback only materialises the folder's
+        0-README.md; per-interview files are written by the assistant."""
+        self.init()
+        result = self.init("--add", "interview_feedback")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        readme = self.discovery / "4-field" / "feedback" / "0-README.md"
+        self.assertTrue(readme.exists())
+        self.assertFalse((self.discovery / "4-field" / "0-interview-feedback.md").exists())
 
     def test_unknown_step_fails_loudly(self):
         self.init()
@@ -231,6 +249,22 @@ class TestMigrationLosesNothing(TempProject):
         self.assertIn("v2-cheatsheet.md", sources)
         self.assertIn("v2-modules.md", sources)
 
+    def test_leftover_sources_route_to_desk_research_not_engine(self):
+        """market-research.md and knowledge-base.md are mapped explicitly and
+        go to 1-desk-research/{market,knowledge}.md. Anything else left in
+        _sources/ is raw client material a human should see, so it goes to
+        1-desk-research/sources/, not to _engine/sources/, which is the
+        assistant's own working material."""
+        layout = self.build_v2_folder()
+        (self.discovery / "_sources" / "client-deck.pdf").write_text("deck\n", encoding="utf-8")
+        result = self.init("--migrate")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "1-desk-research" / "sources" / "client-deck.pdf").exists())
+        self.assertFalse((self.discovery / "_engine" / "sources" / "client-deck.pdf").exists())
+        # The explicitly mapped files still go where they always did.
+        self.assertTrue((self.discovery / "1-desk-research" / "market.md").exists())
+        self.assertTrue((self.discovery / "1-desk-research" / "knowledge.md").exists())
+
 
 class TestRepoIsConsistent(unittest.TestCase):
     """Checks about the bundle itself, not about any one project."""
@@ -327,6 +361,53 @@ class CountFromTheStartMarker(unittest.TestCase):
         from count_interview import interview_text
         kept = interview_text("# note\nAna: hi\nLuis: hello\n")
         self.assertEqual(kept, "Ana: hi\nLuis: hello")
+
+    def test_the_new_marker_is_interview_heading(self):
+        """The current convention: '## Interview' (or '## Entrevista'), not the
+        old '# === INTERVIEW START ===' line."""
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import interview_text
+        text = ("# Transcript · INT-006 · Ana Lopez (Acme) · 2026-09-25\n"
+                "> Recorder: otter, id 123.\n"
+                "> Speakers: Ana (interviewer) · Luis (interviewee)\n\n"
+                "## Live notes\n- ask why twice\n\n"
+                "## Before the interview\n"
+                "Ana: how's the weather\n\n"
+                "## Interview\n"
+                "Ana: tell me about the last time\n\n"
+                "Luis: it was monday\n")
+        kept = interview_text(text)
+        self.assertNotIn("ask why twice", kept)
+        self.assertNotIn("weather", kept)
+        self.assertIn("Luis: it was monday", kept)
+
+    def test_entrevista_marker_also_works(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import interview_text
+        text = "Ana: charla previa\n## Entrevista\nAna: pregunta\nLuis: respuesta\n"
+        kept = interview_text(text)
+        self.assertNotIn("charla previa", kept)
+        self.assertIn("Luis: respuesta", kept)
+
+    def test_headings_below_the_marker_are_not_counted(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import interview_text
+        text = ("## Interview\n"
+                "### A section someone pasted mid-transcript\n"
+                "Ana: question\n\nLuis: answer\n")
+        kept = interview_text(text)
+        self.assertNotIn("section someone pasted", kept)
+        self.assertIn("Luis: answer", kept)
+
+    def test_blockquotes_below_the_marker_are_not_counted(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import interview_text
+        text = ("## Interview\n"
+                "> Recorder note: audio glitch at 12:03\n"
+                "Ana: question\n\nLuis: answer\n")
+        kept = interview_text(text)
+        self.assertNotIn("audio glitch", kept)
+        self.assertIn("Luis: answer", kept)
 
 
 if __name__ == "__main__":

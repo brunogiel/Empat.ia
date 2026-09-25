@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+First real run of the method, second round of fixes.
+
 ### Changed
 
 - Live notes taken during an interview go at the top of its transcript in `4-field/_raw/`, as a comment block. They used to end up at the bottom of the master guide or in a separate file, detached from the conversation they came from. `process-interview` reads them first.
@@ -11,6 +13,40 @@
 - The folder can be named `discovery-<project>/`. `init_project.py` takes `--folder`, and finds a single renamed folder without it.
 - "What would the ideal platform look like?" joins the questions to avoid: it asks the interviewee to design the product. Ask about their ideal month.
 - Step 4a described the v2 folder layout. It now describes `4-field/`.
+- **Transcripts are Markdown, not `.txt`.** One file per interview,
+  `4-field/_raw/INT-00X-name-surname-company-transcript.md`: a header, `## Live
+  notes`, `## Before the interview`, then `## Interview` (or `## Entrevista`),
+  one turn per paragraph. `count_interview.py` starts counting after the
+  `## Interview` / `## Entrevista` line, never counts a markdown heading or a
+  blockquote line, and still keeps a line like `#1 is speed` because it is
+  something someone said. The old convention (`#` comments, `# === INTERVIEW
+  START ===`) still counts the same way, so nothing written under the old
+  rule needs rewriting.
+- **Interview feedback is one file per interview**, not one accumulating log.
+  `4-field/feedback/0-README.md` explains how to read them (measured vs read,
+  coverage reported never scored, one shared Measured table so files compare
+  side by side); `4-field/feedback/INT-00X-name-surname-feedback.md` holds
+  each interview's entry. The single `0-interview-feedback.md` grew unwieldy
+  the moment more than a couple of interviews were in, and made it easy to
+  paste one interview's feedback under the wrong heading.
+- **Client material now lands where a human can see it.** Briefs, decks,
+  canvases, spreadsheets and whiteboards go to `1-desk-research/sources/`.
+  `_engine/sources/` is reserved for the assistant's own working material
+  (councils, data-reviews, guide-versions); mixing the two made it impossible
+  to tell, from the folder alone, what the project had been fed versus what
+  the assistant had produced along the way.
+- **Evidence IDs are per interview**: `INT-00X-NN` (`OBS-00X-NN` for an
+  observation), not a global `EV-NNN` counter. Two interviews can now be
+  processed in parallel without their evidence rows colliding on an ID.
+  `templates/evidence.md` also says plainly that a quote is copied verbatim
+  from the transcript, transcription errors included, and should be checked
+  against it.
+
+### Added
+
+- `_engine/skills/`, for project-level wrapper skills (for example, one that
+  fetches transcripts from the team's recorder). They belong to the assistant,
+  not the human, so they never land in a numbered phase folder.
 
 ## 3.0.0 - 2026-09-24
 

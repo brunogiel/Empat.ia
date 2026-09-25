@@ -28,7 +28,7 @@ Pending.
 
 | Theme | What it groups | Who mentions it | Evidence |
 |---|---|---|---|
-| Pending | Pending | Pending | EV-... |
+| Pending | Pending | Pending | INT-...-.. |
 
 ## Patterns that repeat
 
@@ -36,7 +36,7 @@ Patterns that appear across several people, or that carry weight by impact.
 
 | Pattern | Evidence | Profiles | Implication |
 |---|---|---|---|
-| Pending | EV-... | Pending | Pending |
+| Pending | INT-...-.. | Pending | Pending |
 
 ## Weak signals and outliers
 
@@ -54,7 +54,7 @@ One you cannot explain is itself a finding.
 
 | Contradiction | Evidence A | Evidence B | Possible reading | How to validate it |
 |---|---|---|---|---|
-| Pending | EV-... | EV-... | Pending | Pending |
+| Pending | INT-...-.. | INT-...-.. | Pending | Pending |
 
 ## Prioritized insights
 
@@ -63,7 +63,7 @@ evidence, impact and opportunity.
 
 | Insight | Evidence | Why it matters | Confidence |
 |---|---|---|---|
-| Pending | EV-... | Pending | low / medium / high |
+| Pending | INT-...-.. | Pending | low / medium / high |
 
 ## Evidence gaps
 

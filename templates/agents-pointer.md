@@ -24,6 +24,11 @@ then write it. The step names are the keys under `steps:` in `state.yaml`.
 `3-guide/guide.md` during fieldwork: it is the master guide, reused across every
 interview. Propose edits, apply them only when the user says so.
 
+**Project-level skills belong in `_engine/skills/`.** If this project needs its
+own wrapper skill (for example, one that fetches transcripts from the team's
+recorder), it lives there, not in a numbered phase folder: it is yours, not
+the human's.
+
 **Budgets.** `_engine/budgets.yaml` caps the files the user opens.
 `3-guide/guide.md` is a hard cap.
 
