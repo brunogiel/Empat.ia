@@ -212,7 +212,7 @@ def interview_text(transcript: str) -> str:
 
     One file per interview holds everything: a header, the live notes taken in
     the room, the small talk before the interviewee joined, and the interview.
-    Comment lines (starting with '#') are never counted. If a start marker is
+    Comment lines ('# ...') are never counted. If a start marker is
     present, only what follows it is counted, so the small talk before the
     interviewee joins does not inflate the interviewer's share.
     """
@@ -221,7 +221,14 @@ def interview_text(transcript: str) -> str:
         if line.strip() in START_MARKERS:
             lines = lines[i + 1:]
             break
-    return "\n".join(l for l in lines if not l.lstrip().startswith("#"))
+    return "\n".join(l for l in lines if not is_comment(l))
+
+
+def is_comment(line: str) -> bool:
+    """A '#' followed by a space, or a bare '#'. Not '#1 priority' or '#hashtag':
+    those are words someone said, and a turn can continue on such a line."""
+    stripped = line.strip()
+    return stripped == "#" or stripped.startswith("# ")
 
 
 def main() -> int:

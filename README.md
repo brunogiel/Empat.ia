@@ -78,7 +78,7 @@ discovery/
   2-profiling/           profiles.md  recruiting.md
   3-guide/               guide.md  process.md
   4-field/               0-index.md  0-interview-feedback.md
-                         INT-001-alias.md  OBS-001-place.md  _prep/  _raw/
+                         INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
   5-debrief/             findings.md  principles.md  output/summary.md
   _engine/               state, assumptions, decisions, evidence, budgets, sources
   AGENTS.md  CLAUDE.md   two pointers so any assistant knows what this folder is

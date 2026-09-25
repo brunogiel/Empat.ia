@@ -1,7 +1,7 @@
 # Interview guide
 
 The master guide. **It is never crossed out and never edited during an
-interview**: you carry a disposable copy, `4-field/_prep/INT-00X-<alias>-prep.md`,
+interview**: you carry a disposable copy, `4-field/_prep/INT-00X-<name>-<surname>-prep.md`,
 and you mark that one.
 
 Questions only. Two printed pages, and that is a hard cap — this is the file

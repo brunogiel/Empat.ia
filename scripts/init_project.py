@@ -341,9 +341,9 @@ def resolve_folder(project_root: Path, folder: str | None) -> str:
     """
     if folder:
         return folder
-    if (project_root / "discovery").exists():
-        return "discovery"
     named = sorted(p.name for p in project_root.glob("discovery-*") if p.is_dir())
+    if (project_root / "discovery").exists():
+        named = ["discovery"] + named
     if len(named) == 1:
         return named[0]
     if len(named) > 1:

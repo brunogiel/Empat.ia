@@ -286,6 +286,13 @@ class NamedFolder(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((self.tmp / "discovery-acme" / "2-profiling" / "profiles.md").exists())
 
+    def test_plain_and_named_folder_together_are_refused(self):
+        run("--project-root", str(self.tmp))
+        run("--project-root", str(self.tmp), "--folder", "discovery-acme")
+        result = run("--project-root", str(self.tmp), "--add", "profiles")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--folder", result.stdout + result.stderr)
+
     def test_two_named_folders_are_refused_not_guessed(self):
         run("--project-root", str(self.tmp), "--folder", "discovery-a")
         run("--project-root", str(self.tmp), "--folder", "discovery-b")
@@ -308,6 +315,12 @@ class CountFromTheStartMarker(unittest.TestCase):
         self.assertNotIn("waiting", kept)
         self.assertNotIn("live note", kept)
         self.assertIn("Luis: it was monday", kept)
+
+    def test_a_hash_that_is_speech_is_kept(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import interview_text
+        kept = interview_text("Ana: what matters?\nLuis: two things\n#1 is speed\n")
+        self.assertIn("#1 is speed", kept)
 
     def test_without_a_marker_only_comments_go(self):
         sys.path.insert(0, str(REPO / "scripts"))
