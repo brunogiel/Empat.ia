@@ -41,12 +41,68 @@ First real run of the method, second round of fixes.
   `templates/evidence.md` also says plainly that a quote is copied verbatim
   from the transcript, transcription errors included, and should be checked
   against it.
+- **Per-profile interview guides are one whole guide each, never deltas.**
+  `3a-guide.md` said the opposite (deltas against a base guide) while
+  `templates/guide.md` already said "one guide each, whole. Not deltas."; the
+  step file now agrees with the template it ships. `docs/method-architecture.md`
+  had the same stale claim and is fixed too.
+- `templates/interview-note.md` no longer suggests a filename
+  (`YYYY-MM-DD_profile_eXX_notes.md`): the file's name is the interview's base
+  name, same as the transcript and the feedback file, and there is nothing to
+  choose.
+- `count_interview.py`'s `guide_blocks_note` and `interview-rubric.md` now say
+  plainly that keyword-based guide coverage both over-reports (a long
+  transcript touches a block's title words by chance) and under-reports (a
+  block covered in different words never matches). This was already an
+  approximation; now the failure mode is documented on both sides, as an open
+  issue, not redesigned.
+- `patterns_es.py`'s `CONCRETE` anchors only had feminine last-time forms
+  ("la última vez"). Added the masculine and other common forms: "el último",
+  "el otro día", "ayer", "la semana pasada".
+- `templates/interview-prep.md` opens with a reminder to check whether the
+  previous interview's retro (its note's "Guide / method learnings" section)
+  proposed guide edits that are still not applied, matching the Guide's
+  "moment 2" of feedback in `discovery-guide/SKILL.md`.
 
 ### Added
 
 - `_engine/skills/`, for project-level wrapper skills (for example, one that
   fetches transcripts from the team's recorder). They belong to the assistant,
   not the human, so they never land in a numbered phase folder.
+- `init_project.py --add <item> --name <base>` materialises a per-interview or
+  per-observation file (`interview-note`, `interview-prep`,
+  `interview-feedback`, `observation-note`) at its real destination
+  (`4-field/<base>.md`, `4-field/_prep/<base>-prep.md`,
+  `4-field/feedback/<base>-feedback.md`), validated against
+  `^(INT|OBS)-\d{3}-[a-z0-9-]+$` and never overwriting an existing file.
+  `PER_ITEM` existed since v3 but nothing ever called it; the Guide and
+  `process-interview` copied templates by hand instead, with no protection
+  against clobbering. `discovery-guide/SKILL.md`, `process-interview/SKILL.md`
+  and `4a-interview-capture.md` now point at the command instead.
+- `init_project.py --add` on an aggregate step (`interview_capture`,
+  `debrief`, whose `file:` in `state.yaml` lists more than one path) now runs
+  each concrete step it stands for and reports each one, instead of failing
+  with a bare "Unknown step" that sent you back to read `state.yaml` by hand.
+  `--add start` / `--add design_challenge` now say plainly that their file,
+  `1-desk-research/brief.md`, is created at install, not via `--add`.
+- `init_project.py --project-name` sets `project_name` in `state.yaml`
+  directly; it used to always fall back to the project root's folder name,
+  which is rarely the name the user gave the project.
+- `templates/interview-note.md` gets a "Guide / method learnings" section
+  (questions left on the table, concrete guide edits proposed not applied,
+  whether a part 2 is warranted), matching what `process-interview`'s step 6
+  already asked for but the template never had a place to hold.
+
+### Fixed
+
+- `count_interview.py`'s label-learning regex had no turn boundary, so a
+  single-line export (the whole call on one line, or two-space-separated
+  turns) could learn garbage labels from a colon inside prose, or silently
+  fold the interview into one speaker at 0%/100% share. A candidate label now
+  only counts at start of line, after a sentence ends (`.?!…` + whitespace),
+  or after 2+ spaces, and cannot itself contain `.?!`. If parsing still finds
+  only one distinct speaker, the script now exits with the same kind of clear
+  error as "no labels found", instead of reporting numbers for one voice.
 
 ## 3.0.0 - 2026-09-24
 

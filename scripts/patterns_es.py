@@ -22,9 +22,14 @@ WHY = [
     "que hizo que",
 ]
 
-# Anchoring in a concrete episode instead of a generality.
+# Anchoring in a concrete episode instead of a generality. Both the feminine
+# ("la ultima vez") and masculine/other forms ("el ultimo", "el otro dia") have
+# to be here: an interviewee answers "el ultimo reclamo" as often as "la ultima
+# vez", and the masculine form was missing entirely.
 CONCRETE = [
     "la ultima vez",
+    "la ultima",
+    "el ultimo",
     "la primera vez",
     "contame cuando",
     "contame de una vez",
@@ -33,6 +38,9 @@ CONCRETE = [
     "un caso concreto",
     "que paso ese dia",
     "pensando en la ultima",
+    "el otro dia",
+    "ayer",
+    "la semana pasada",
 ]
 
 # A closing recap: the interviewer giving back what they understood.

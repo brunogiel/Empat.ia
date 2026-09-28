@@ -49,7 +49,8 @@ created at install except phase 1's brief.
 - Live notes (taken during the call by whoever led or sat in) go **at the top of the transcript**, in the same file in `4-field/_raw/`, under a `## Live notes` heading. Never in the master guide, never in a separate document: the note stays attached to the conversation that produced it.
 - Transcripts are Markdown (`-transcript.md`), not `.txt`: a header, `## Live notes`, `## Before the interview`, then `## Interview` (or `## Entrevista`), one turn per paragraph.
 - Save name, date, profile, and context.
-- Use the `interview-note` template for each interview.
+- Create each interview's note with `--add interview-note --name <base>`, never by copying the
+  template by hand.
 - Record moments of tension, surprise, or emotion.
 - Capture tools, documents, spaces, and workarounds.
 
@@ -59,7 +60,8 @@ created at install except phase 1's brief.
 2. Assign an ID and base name per interview: `INT-001-name-surname-company`.
 3. Fill out `0-index.md` with metadata and status.
 4. Keep one transcript per interview in `_raw/`, named after the base name.
-5. Create a structured note in `4-field/` from the `interview-note` template.
+5. Create a structured note in `4-field/` with
+   `python3 <method-root>/scripts/init_project.py --project-root . --add interview-note --name <base>`.
 6. Save materials and consent notes in `_raw/` under the same base name.
 7. Extract atomic evidence into `_engine/evidence.md`.
 8. Mark gaps before moving to synthesis.

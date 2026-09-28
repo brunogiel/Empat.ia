@@ -1,6 +1,7 @@
 # Interview Notes
 
-Suggested filename: `YYYY-MM-DD_profile_eXX_notes.md`.
+The filename is the interview's base name (`INT-00X-name-surname-company`), same as the transcript
+and the feedback file: this note has no filename of its own to choose.
 
 ## Metadata
 
@@ -82,3 +83,22 @@ Tentative inferences. They are not facts.
 
 - Pending.
 
+## Guide / method learnings
+
+Closing the loop back to the guide. Proposed only: nothing here is applied to `3-guide/guide.md`
+until the user says so.
+
+- **Questions left on the table.** Follow-ups the interviewee opened and were not pursued,
+  sections of the guide that went uncovered (and whether that was a good call or a real miss).
+
+  Pending.
+
+- **Concrete edits to the master guide**, proposed not applied: add / reword / reorder / drop a
+  question, or a technique that worked. Quote the guide line it changes.
+
+  Pending.
+
+- **Part 2?** Default **no**: a new interview usually teaches more than a re-interview. Only
+  recommend one if a genuinely important theme was missed.
+
+  Pending.

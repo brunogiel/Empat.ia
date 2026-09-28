@@ -29,7 +29,11 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
 1. **[DET] Get the transcript.** Read it from `discovery/4-field/_raw/` or the pointer the user gave. If it's long, save it first and read it in chunks until you've read 100%. Never summarize from a partial read; if you couldn't read all of it, say so.
    **Live notes go on top.** If the interviewer or an observer took notes during the call, put them at the top of the saved transcript, under a `## Live notes` heading, as bullets. Not in the master guide, not in a separate file. If you find them written at the bottom of a master guide, move them here and clean the guide. Read them first: they mark the moment someone in the room saw something, and the retro and the feedback start there.
 2. **[DET] Assign an ID and a base name**, `INT-00X-name-surname-company` (lowercase, no accents, company dropped when it is the surname; an alias if consent requires it). Save **one** transcript, in Markdown, as `discovery/4-field/_raw/<base>-transcript.md`: a header line, then `## Live notes`, then `## Before the interview` for any small talk, then `## Interview` (or `## Entrevista`), one turn per paragraph. If the recorder mixed up speakers, relabel it and let the relabeled version replace the raw one, with the recorder's ID in the header. The counting script starts at the `## Interview` line; nothing above it is counted.
-3. **[LATENT] Write the structured note** in `discovery/4-field/` using `templates/interview-note.md`. Fill it from the real material:
+3. **[DET] Create the structured note** with
+   `python3 {method-root}/scripts/init_project.py --project-root . --add interview-note --name <base>`.
+   Never copy `templates/interview-note.md` by hand: the script never overwrites a file that
+   already exists at that path, which copying by hand does not protect against.
+   **[LATENT] Fill it** from the real material:
    - **Metadata** (interviewee anonymized per consent, profile, date, duration, modality, interviewer, recording, consent).
    - **Context** (who they are, where the problem happens, their role).
    - **Verbatim quotes** (exact words, with topic + moment). Preserve them; this is the raw gold.
@@ -52,11 +56,13 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
    It returns words per speaker, questions, whys and chains, concrete anchors, product mentions,
    whether there was a closing recap, and which guide blocks came up. **No transcript, or no
    speaker labels: skip this and say so. Never estimate a number.**
-8. **[LATENT] Write the feedback file** in `discovery/4-field/feedback/<base>-feedback.md`, from
-   `templates/interview-feedback.md`, using `references/interview-rubric.md`. One file per
-   interview, not an accumulating log: create `4-field/feedback/0-README.md` first if this is the
-   first one (`--add interview_feedback`). Keep **Measured** and **Read** under separate headings:
-   the first is reproducible, the second is judgement the user can argue with.
+8. **[DET] Create the feedback file** with
+   `python3 {method-root}/scripts/init_project.py --project-root . --add interview-feedback --name <base>`.
+   One file per interview, not an accumulating log: create `4-field/feedback/0-README.md` first if
+   this is the first one (`--add interview_feedback`, no `--name`: that one materialises the
+   folder's README, not a per-interview file).
+   **[LATENT] Write it**, using `references/interview-rubric.md`. Keep **Measured** and **Read**
+   under separate headings: the first is reproducible, the second is judgement the user can argue with.
    - **Coverage is reported, never scored.** Leaving the guide for a better thread is often the
      right call; ask whether the detour earned its place.
    - **Never score a criterion out of ten.**

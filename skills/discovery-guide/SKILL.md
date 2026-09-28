@@ -63,10 +63,12 @@ Load the state and continue:
 When the user confirms they want to start, run:
 
 ```bash
-python3 {skill-root}/scripts/init_project.py --project-root {project-root} --method-root {skill-root} --lang {language}
+python3 {skill-root}/scripts/init_project.py --project-root {project-root} --method-root {skill-root} --lang {language} --project-name "{project name}"
 ```
 
-If you're working from the source repo, `method-root` can be `repo/`.
+If you're working from the source repo, `method-root` can be `repo/`. `--project-name` is the
+name the user gave the project in the initial conversation; without it, `state.yaml` falls back to
+the project root's folder name, which is rarely the same thing.
 
 **Ask the working language before you run this, and pass it.** `--lang es` does not only change
 the conversation: the whole scaffolding is written in that language. A project worked in Spanish
@@ -108,6 +110,18 @@ calling the step done is the thing this design exists to prevent.
 
 A file that does not exist is not missing. It belongs to a phase the user has not reached, and
 saying so plainly is part of the job.
+
+**Per-interview and per-observation files work the same way, but take a name.** Use
+`--add interview-note|interview-prep|interview-feedback|observation-note --name <base>`, where
+`<base>` is the interview or observation ID: `INT-004-ana-lopez-acme`, `OBS-002-store-floor`.
+
+```bash
+python3 {skill-root}/scripts/init_project.py --project-root {project-root} \
+  --add interview-note --name INT-004-ana-lopez-acme
+```
+
+Never copy these templates by hand: the script never overwrites a file that already exists, which
+copying by hand does not protect against.
 
 ## The discovery folder
 
@@ -387,7 +401,9 @@ When interviews are done, the user can dump all the raw material in `discovery/4
 
 1. Log each interview in `discovery/4-field/0-index.md`.
 2. Save clean transcripts in `discovery/4-field/_raw/`.
-3. Create structured notes in `discovery/4-field/` using `_notes-template.md`.
+3. Create structured notes in `discovery/4-field/` with
+   `python3 {skill-root}/scripts/init_project.py --project-root {project-root} --add interview-note --name <base>`
+   (the interview-note template, per interview).
 4. Save photos, screenshots, and documents in `discovery/4-field/_raw/`.
 5. Log consent or restrictions in `discovery/4-field/_raw/`.
 6. Extract atomic evidence into `discovery/_engine/evidence.md`.

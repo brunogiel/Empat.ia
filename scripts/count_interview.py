@@ -36,6 +36,16 @@ from pathlib import Path
 SPEAKER = re.compile(r"^\s*(?:\[(?P<b>[^\]]{1,40})\]|(?P<a>[^:\n]{1,40}):)\s*(?P<text>.*)$")
 TIMESTAMP = re.compile(r"\b\d{1,2}:\d{2}(?::\d{2})?\b")
 
+# A label only counts at a real turn boundary: start of line, after a sentence
+# ends (".", "?", "!", "…" followed by whitespace), or after 2+ spaces (the
+# separator recorder exports use when the whole call sits on one line). A bare
+# "\s" boundary, which the previous version used, lets a colon inside prose
+# ("hola, ¿cómo andás? Them: bien") get learned as a label.
+LABEL_BOUNDARY = r"(?:^|(?<=[.?!\u2026])\s+|(?<=  ))"
+# The label itself cannot contain sentence-ending punctuation: that is what
+# stopped "sí.  Me" or "hola. Them" from ever being captured as one label.
+LABEL_CHARS = r"[^\s:\[\].?!][^:\[\].?!\n]{0,28}"
+
 
 def fold(text: str) -> str:
     """Lowercase and strip accents, so 'por qué' and 'por que' are one thing."""
@@ -71,15 +81,23 @@ def parse(transcript: str):
     Labels are learned by frequency, not by position: a speaker repeats dozens
     of times, a colon inside prose does not repeat behind the same token. Going
     by position fails on exports where the second speaker never starts a line.
+
+    A candidate label only counts at a real turn boundary (see LABEL_BOUNDARY):
+    start of line, after a sentence ends, or after 2+ spaces. Without that
+    boundary, a one-line export ("hola, ¿cómo andás? Them: bien.") lets a colon
+    inside prose get learned as a label, or the two-space shape
+    ("hola  Them: bien") reports garbage or zero-share speakers.
     """
     # Learn the speaker labels by frequency, not by position. A real label
     # repeats dozens of times; a colon inside prose does not repeat behind the
     # same token. Position alone fails on exports where the whole call sits on
     # one line and the second speaker never starts one.
+    candidate_pattern = re.compile(
+        LABEL_BOUNDARY + r"(?:\[)?(" + LABEL_CHARS + r")(?:\])?:\s", re.MULTILINE)
     candidates: dict[str, int] = {}
-    for match in re.finditer(r"(?:^|\s)(?:\[)?([^\s:\[\]][^:\[\]\n]{0,28})(?:\])?:\s", transcript):
+    for match in candidate_pattern.finditer(transcript):
         label = match.group(1).strip()
-        if not label or len(label.split()) > 4 or label.endswith((".", ",", ";")):
+        if not label or len(label.split()) > 4 or label.endswith((",", ";")):
             continue
         candidates[label] = candidates.get(label, 0) + 1
     if not candidates:
@@ -92,7 +110,7 @@ def parse(transcript: str):
         return []
 
     pattern = re.compile(
-        r"(?:^|\s)(?:\[)?(" + "|".join(re.escape(l) for l in labels) + r")(?:\])?:\s",
+        LABEL_BOUNDARY + r"(?:\[)?(" + "|".join(re.escape(l) for l in labels) + r")(?:\])?:\s",
         re.MULTILINE)
 
     turns = []
@@ -170,8 +188,10 @@ def count(turns, interviewer, patterns, products, guide_blocks):
                              if products else None),
         "closing_recap": recap,
         "guide_blocks_hit": guide_blocks,
-        "guide_blocks_note": ("approximate: matched by keyword overlap, so a long transcript "
-                              "over-reports. Report the blocks, never score the interviewer "
+        "guide_blocks_note": ("approximate: matched by keyword overlap, so it both "
+                              "over-reports (a long transcript touches a block's words by "
+                              "chance) and under-reports (a block covered in different words "
+                              "never matches). Report the blocks, never score the interviewer "
                               "on them: leaving the guide for a better thread is often right."),
         "leading_candidates": [q for q in my_questions
                                if any(h in fold(q) for h in patterns["LEADING_HINTS"])],
@@ -274,6 +294,14 @@ def main() -> int:
             "No speaker labels found. This file cannot be counted.\n"
             "Expected lines like 'Name: ...' or '[Name] ...'.\n"
             "Write the feedback without numbers and say the transcript had no labels. "
+            "Do not estimate.")
+
+    speakers = {t["speaker"] for t in turns}
+    if len(speakers) == 1:
+        raise SystemExit(
+            f"Only one speaker was found ('{next(iter(speakers))}'). This file cannot be "
+            "counted: the transcript needs both the interviewer and the interviewee labeled.\n"
+            "Write the feedback without numbers and say the transcript had a single speaker. "
             "Do not estimate.")
 
     products = [p.strip() for p in args.product.split(",") if p.strip()]

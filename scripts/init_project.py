@@ -27,8 +27,15 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import filecmp
+import re
 import shutil
 from pathlib import Path
+
+# --- Per-interview / per-observation files, materialised on demand ---------
+# The base name is the same ID the rest of the method already uses:
+# INT-004-ana-lopez-acme, OBS-002-store-floor. Validated so a typo does not
+# silently create a file under the wrong ID.
+BASE_NAME = re.compile(r"^(INT|OBS)-\d{3}-[a-z0-9-]+$")
 
 
 # --- What exists the moment you install ------------------------------------
@@ -72,6 +79,16 @@ PER_ITEM = {
     "interview-feedback": "interview-feedback.md",
     "observation-note": "observation-note.md",
     "notes": "notes.md",
+}
+
+# Where each per-item file lands, built from --name. Only the four items that
+# take a base name are here: 'notes' is the phase drawer, not per-interview,
+# and is not addressed through --add.
+PER_ITEM_PATHS = {
+    "interview-note": "4-field/{name}.md",
+    "interview-prep": "4-field/_prep/{name}-prep.md",
+    "interview-feedback": "4-field/feedback/{name}-feedback.md",
+    "observation-note": "4-field/{name}.md",
 }
 
 DIRECTORIES = [
@@ -241,12 +258,66 @@ def install(templates: Path, discovery: Path, project_name: str, language: str,
     return results
 
 
+# Two of state.yaml's steps are aggregates: their 'file' field lists more than
+# one path, each one already a LAZY step of its own. --add on the aggregate
+# name runs every concrete step it stands for, instead of failing with
+# "Unknown step" and making the user go read state.yaml to find the real ones.
+AGGREGATE_STEPS = {
+    "interview_capture": ["field_index", "interview_feedback", "evidence"],
+    "debrief": ["findings", "principles", "summary"],
+}
+
+# 'start' and 'design_challenge' both point at 1-desk-research/brief.md,
+# which is created at install, not via --add. There is nothing to materialise.
+INSTALLED_AT_INIT_STEPS = {"start", "design_challenge"}
+
+
 def add_step(templates: Path, discovery: Path, step: str,
-             force: bool, overwrite_modified: bool) -> tuple[str, str]:
+             force: bool, overwrite_modified: bool):
+    """Materialise one step's file. Returns (outcome, detail).
+
+    'aggregate' is a third outcome, on top of copy_one's four: detail is then
+    a list of (sub_step, outcome, detail) tuples, one per concrete step run.
+    """
+    if step in INSTALLED_AT_INIT_STEPS:
+        raise SystemExit(
+            f"'{step}' has no separate file to add: its output, "
+            "1-desk-research/brief.md, is created at install, not via --add. "
+            "Edit that file directly.")
+    if step in AGGREGATE_STEPS:
+        concrete = AGGREGATE_STEPS[step]
+        results = [(sub, *add_step(templates, discovery, sub, force, overwrite_modified))
+                   for sub in concrete]
+        return "aggregate", results
     if step not in LAZY:
         known = ", ".join(sorted(LAZY))
-        raise SystemExit(f"Unknown step '{step}'. Known steps: {known}")
+        aggregates = ", ".join(f"{k} (runs {', '.join(v)})" for k, v in sorted(AGGREGATE_STEPS.items()))
+        raise SystemExit(
+            f"Unknown step '{step}'. Known steps: {known}. "
+            f"Aggregate steps: {aggregates}.")
     template_name, relative = LAZY[step]
+    return copy_one(templates, discovery, template_name, relative,
+                    force, overwrite_modified)
+
+
+def add_item(templates: Path, discovery: Path, item: str, name: str,
+             force: bool, overwrite_modified: bool) -> tuple[str, str]:
+    """Materialise one per-interview or per-observation file.
+
+    Unlike a LAZY step, this one takes a name: INT-004-ana-lopez-acme,
+    OBS-002-store-floor. Never overwrites an existing file, same as --add
+    on a LAZY step (copy_one's own force / overwrite_modified rules apply).
+    """
+    if item not in PER_ITEM_PATHS:
+        known = ", ".join(sorted(PER_ITEM_PATHS))
+        raise SystemExit(f"Unknown item '{item}'. Known items: {known}")
+    if not BASE_NAME.match(name):
+        raise SystemExit(
+            f"'--name {name}' does not look like a base name. Expected "
+            f"'{BASE_NAME.pattern}', for example INT-004-ana-lopez-acme or "
+            "OBS-002-store-floor.")
+    template_name = PER_ITEM[item]
+    relative = PER_ITEM_PATHS[item].format(name=name)
     return copy_one(templates, discovery, template_name, relative,
                     force, overwrite_modified)
 
@@ -379,7 +450,15 @@ def main() -> int:
                              "'discovery-*' folder already in the project. Use 'discovery-<project>' "
                              "when one place holds more than one discovery.")
     parser.add_argument("--add", metavar="STEP",
-                        help="Materialise one phase's file. Run it when the step starts.")
+                        help="Materialise one phase's file (run it when the step starts), or "
+                             "one per-item file with --name: interview-note, interview-prep, "
+                             "interview-feedback, observation-note.")
+    parser.add_argument("--name", default=None,
+                        help="Base name for a per-item --add, e.g. INT-004-ana-lopez-acme "
+                             "or OBS-002-store-floor. Required when --add is a per-item type.")
+    parser.add_argument("--project-name", default=None,
+                        help="Project name stamped into state.yaml. Defaults to the project "
+                             "root's folder name.")
     parser.add_argument("--migrate", action="store_true",
                         help="Move an existing v1 or v2 folder into the v3 layout.")
     parser.add_argument("--force", action="store_true",
@@ -402,7 +481,26 @@ def main() -> int:
     today = dt.date.today().isoformat()
     version = detect_version(discovery)
 
-    # --- add one step's file ------------------------------------------------
+    # --- add one per-item file (interview note, prep sheet, feedback, ...) --
+    if args.add and args.add in PER_ITEM_PATHS:
+        if version != 3:
+            raise SystemExit(
+                f"{discovery} is not a v3 folder (detected: {version or 'nothing'}). "
+                "Run --migrate first.")
+        if not args.name:
+            raise SystemExit(f"--add {args.add} takes a base name: pass --name "
+                              "INT-004-ana-lopez-acme (or OBS-002-... for an observation).")
+        outcome, detail = add_item(templates, discovery, args.add, args.name,
+                                   args.force, args.overwrite_modified)
+        print({"created": f"Created {detail}",
+               "kept": f"Already there, kept as is: {detail}",
+               "protected": f"Edited already, not overwritten: {detail}",
+               "missing": f"Template missing from the bundle: {detail}"}[outcome])
+        print("Now write it in the project's language, filled with what the project "
+              "already knows. An empty template is not a finished step.")
+        return 1 if outcome == "missing" else 0
+
+    # --- add one step's file -------------------------------------------------
     if args.add:
         if version != 3:
             raise SystemExit(
@@ -410,6 +508,18 @@ def main() -> int:
                 "Run --migrate first.")
         outcome, detail = add_step(templates, discovery, args.add,
                                    args.force, args.overwrite_modified)
+        if outcome == "aggregate":
+            print(f"'{args.add}' is an aggregate step; ran each of its concrete steps:")
+            missing_any = False
+            for sub, sub_outcome, sub_detail in detail:
+                label = {"created": "created", "kept": "kept as is",
+                          "protected": "edited already, not overwritten",
+                          "missing": "template missing"}[sub_outcome]
+                print(f"  {sub}: {label} ({sub_detail})")
+                missing_any = missing_any or sub_outcome == "missing"
+            print("Now write each one in the project's language, filled with what the "
+                  "project already knows. An empty template is not a finished step.")
+            return 1 if missing_any else 0
         print({"created": f"Created {detail}",
                "kept": f"Already there, kept as is: {detail}",
                "protected": f"Edited already, not overwritten: {detail}",
@@ -440,8 +550,8 @@ def main() -> int:
             f"to v3. Creating on top of it would leave two layouts side by side.")
 
     make_directories(discovery)
-    results = install(templates, discovery, project_root.name, args.lang, today,
-                      args.force, args.overwrite_modified)
+    results = install(templates, discovery, args.project_name or project_root.name, args.lang,
+                      today, args.force, args.overwrite_modified)
 
     print(f"Discovery ready at {discovery}")
     report("Created", results.get("created"))

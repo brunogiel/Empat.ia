@@ -45,7 +45,7 @@ Documents:
 - `README.md`: the map of the folder and what to open now.
 - `1-desk-research/brief.md`: goal, maturity level, context, scope and the design challenge.
 - `3-guide/guide.md`: one page, what the interviewer holds during the interview.
-- `3-guide/guide.md`: per-profile variants as deltas against the base guide.
+- `3-guide/guide.md`: per-profile variants are a whole copy of the guide each, never deltas.
 - `5-debrief/findings.md`: what is emerging, distilled, pointing at evidence IDs.
 - `_engine/budgets.yaml`: line budget per file the user opens. `3-guide/guide.md` is a hard cap.
 - `_engine/state.yaml`: current step, status, available agents and recommended action.

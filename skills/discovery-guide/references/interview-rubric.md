@@ -65,3 +65,10 @@ The method's own sources disagree on the **arc** of an interview: one says go
 from general to specific, another says the opposite. Until that is settled, the
 rubric does not evaluate the arc. Judging it with the wrong rule is worse than
 not judging it.
+
+**Guide coverage is a keyword match, and it is wrong in both directions.** A
+long transcript touches a block's title words by chance and over-reports; a
+block that came up in different words than the guide's own title never matches
+and under-reports. It is reported as a hint, never scored, and this is an open
+issue, not a redesign: fixing keyword matching properly (semantic matching, or
+asking the interviewer by hand) is out of scope here.
