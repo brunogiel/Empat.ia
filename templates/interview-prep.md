@@ -1,5 +1,9 @@
 # Prep sheet — <name> · <date> · <time>
 
+**Before anything else: check whether the previous interview's retro (its note's "Guide / method
+learnings" section) proposed edits to the guide that are still not applied.** That is the Guide's
+"moment 2" of feedback — the lesson lands right before it gets used again, not after.
+
 **Disposable. Mark this one, never the master guide.** The master
 (`3-guide/guide.md`) is reused in every interview; this copy exists so you can
 cross things out live.

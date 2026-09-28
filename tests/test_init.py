@@ -121,6 +121,99 @@ class TestAddStep(TempProject):
                                 f"step '{step}' points at missing template {template}")
 
 
+class TestAddPerItem(TempProject):
+    """--add interview-note|interview-prep|interview-feedback|observation-note --name <base>,
+    the mechanism PER_ITEM declared but never wired up."""
+
+    def test_interview_note_lands_at_4_field_base(self):
+        self.init()
+        result = self.init("--add", "interview-note", "--name", "INT-004-ana-lopez-acme")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "4-field" / "INT-004-ana-lopez-acme.md").exists())
+
+    def test_interview_prep_lands_under_prep(self):
+        self.init()
+        result = self.init("--add", "interview-prep", "--name", "INT-004-ana-lopez-acme")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "4-field" / "_prep"
+                         / "INT-004-ana-lopez-acme-prep.md").exists())
+
+    def test_interview_feedback_lands_under_feedback(self):
+        self.init()
+        result = self.init("--add", "interview-feedback", "--name", "INT-004-ana-lopez-acme")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "4-field" / "feedback"
+                         / "INT-004-ana-lopez-acme-feedback.md").exists())
+
+    def test_observation_note_lands_at_4_field_base(self):
+        self.init()
+        result = self.init("--add", "observation-note", "--name", "OBS-002-store-floor")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "4-field" / "OBS-002-store-floor.md").exists())
+
+    def test_missing_name_fails_loudly(self):
+        self.init()
+        result = self.init("--add", "interview-note")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--name", result.stderr + result.stdout)
+
+    def test_bad_name_is_refused(self):
+        self.init()
+        result = self.init("--add", "interview-note", "--name", "ana-lopez")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("base name", (result.stderr + result.stdout).lower())
+
+    def test_never_overwrites_an_existing_item(self):
+        self.init()
+        self.init("--add", "interview-note", "--name", "INT-004-ana-lopez-acme")
+        note = self.discovery / "4-field" / "INT-004-ana-lopez-acme.md"
+        note.write_text("mine\n", encoding="utf-8")
+        self.init("--add", "interview-note", "--name", "INT-004-ana-lopez-acme")
+        self.assertEqual(note.read_text(encoding="utf-8"), "mine\n")
+
+
+class TestAggregateSteps(TempProject):
+    """interview_capture and debrief are aggregates in state.yaml: their 'file'
+    field lists more than one path, each already a concrete LAZY step."""
+
+    def test_interview_capture_runs_its_three_concrete_steps(self):
+        self.init()
+        result = self.init("--add", "interview_capture")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "4-field" / "0-index.md").exists())
+        self.assertTrue((self.discovery / "4-field" / "feedback" / "0-README.md").exists())
+        self.assertTrue((self.discovery / "_engine" / "evidence.md").exists())
+
+    def test_debrief_runs_its_three_concrete_steps(self):
+        self.init()
+        result = self.init("--add", "debrief")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "5-debrief" / "findings.md").exists())
+        self.assertTrue((self.discovery / "5-debrief" / "principles.md").exists())
+        self.assertTrue((self.discovery / "5-debrief" / "output" / "summary.md").exists())
+
+    def test_start_and_design_challenge_point_at_the_installed_brief(self):
+        self.init()
+        for step in ["start", "design_challenge"]:
+            with self.subTest(step=step):
+                result = self.init("--add", step)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("brief.md", result.stderr + result.stdout)
+
+
+class TestProjectName(TempProject):
+
+    def test_project_name_flag_is_stamped(self):
+        self.init("--project-name", "Acme Discovery")
+        state = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
+        self.assertIn('project_name: "Acme Discovery"', state)
+
+    def test_default_is_still_the_folder_name(self):
+        self.init()
+        state = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
+        self.assertIn(f'project_name: "{self.tmp.name}"', state)
+
+
 class TestForceIsSafe(TempProject):
     """The v2 foot-gun: --force used to replace hand-translated files with the
     English templates. A real project logged 'do not run --force: it overwrites
@@ -284,9 +377,10 @@ class TestRepoIsConsistent(unittest.TestCase):
                              "the guide template breaks its own hard budget")
 
     def test_no_file_still_points_at_the_v2_layout(self):
-        stale = ["field-kit/", "_system/", "_sources/", "interviews/"]
+        stale = ["field-kit/", "_system/", "_sources/", "interviews/",
+                 "_notes-template", "cheatsheet.md", "modules.md"]
         offenders = []
-        skip = {"CHANGELOG.md", "init_project.py", "test_init.py"}
+        skip = {"CHANGELOG.md", "init_project.py", "test_init.py", "test_consistency.py"}
         for path in REPO.rglob("*"):
             if not path.is_file() or path.suffix not in {".md", ".py", ".yaml"}:
                 continue
@@ -408,6 +502,72 @@ class CountFromTheStartMarker(unittest.TestCase):
         kept = interview_text(text)
         self.assertNotIn("audio glitch", kept)
         self.assertIn("Luis: answer", kept)
+
+
+class ParseOneLineExports(unittest.TestCase):
+    """The one-line export shapes recorders actually produce. Before the fix, a
+    bare '\\s' boundary let a colon inside prose get learned as a label, so
+    these either produced garbage speakers or reported one speaker at 0%/100%
+    interviewer share."""
+
+    def setUp(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        global parse
+        from count_interview import parse
+
+    def test_sentence_punctuation_separated_one_liner(self):
+        text = ("Me: hola, como andas? Them: bien, todo bien. "
+                "Me: contame, por que paso eso? Them: porque si, fue asi. "
+                "Me: y despues que hiciste? Them: segui como siempre.")
+        turns = parse(text)
+        self.assertEqual({t["speaker"] for t in turns}, {"Me", "Them"})
+        self.assertEqual(len(turns), 6)
+
+    def test_double_space_separated_one_liner(self):
+        text = "Me: hola  Them: bien  Me: contame mas  Them: listo  Me: ok gracias  Them: de nada"
+        turns = parse(text)
+        self.assertEqual({t["speaker"] for t in turns}, {"Me", "Them"})
+        self.assertEqual(len(turns), 6)
+
+    def test_normal_multiline_transcript_is_unchanged(self):
+        text = ("Ana: hi\nLuis: hello\nAna: how are you\nLuis: fine\n"
+                "Ana: tell me more\nLuis: sure thing\n")
+        turns = parse(text)
+        self.assertEqual({t["speaker"] for t in turns}, {"Ana", "Luis"})
+        self.assertEqual(len(turns), 6)
+
+    def test_single_speaker_result_errors(self):
+        transcript = REPO / "tests" / "_tmp_single_speaker.md"
+        transcript.write_text("Ana: hi\nAna: how are you\nAna: tell me more\n",
+                              encoding="utf-8")
+        try:
+            result = subprocess.run(
+                [sys.executable, str(REPO / "scripts" / "count_interview.py"),
+                 str(transcript), "--interviewer", "Ana"],
+                capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("one speaker", (result.stderr + result.stdout).lower())
+        finally:
+            transcript.unlink()
+
+
+class PatternsEsConcreteAnchors(unittest.TestCase):
+    """CONCRETE anchors must catch masculine/other forms too, not only the
+    feminine ones already listed."""
+
+    def test_masculine_and_other_last_time_forms(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from patterns_es import CONCRETE
+        for phrase in ["el ultimo", "el otro dia", "ayer", "la semana pasada"]:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, CONCRETE)
+
+    def test_contame_el_ultimo_reclamo_is_detected(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        from count_interview import fold
+        from patterns_es import CONCRETE
+        text = fold("contame el último reclamo")
+        self.assertTrue(any(n in text for n in CONCRETE))
 
 
 if __name__ == "__main__":

@@ -59,8 +59,10 @@ In `3-guide/guide.md`: one page, and it stays one page. Blocks with their timing
 opening question of each, the allowed follow-ups, the words not to say. Nothing else.
 This is the page you hold during the interview. The guide is what you read the night before.
 
-In `3-guide/guide.md`: per-profile variants as deltas against the base guide, never a full
-duplicated guide. Every block number a module references has to exist in `guide.md` today.
+**More than one profile? One whole guide per profile, never deltas.** Copy the file,
+`guide-owner.md`, `guide-operator.md`. Each one is complete on its own and keeps the same
+100-line hard cap; nobody running an interview should have to hold the base guide plus a delta
+sheet to know what to ask.
 
 ## What does NOT go here
 
@@ -102,8 +104,8 @@ thirteen recommendations, twelve get applied, and the one left out is usually th
 Before closing, check:
 
 - Does the guide have anything that belongs in another file?
-- Does `cheatsheet.md` fit on one page?
-- Can someone who is not you run this interview from these three files?
+- Does the guide fit its one-page hard budget?
+- Can someone who is not you run this interview from the guide and its prep sheet alone?
 
 Suggested action:
 
