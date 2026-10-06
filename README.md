@@ -109,7 +109,7 @@ someone else (we link their result). Every plan closes with the report.
 | **4 · The field** | Interviews and, when it applies, observation. One note per person, one per outing, plus feedback on how you are interviewing | 1-3 weeks | `4-field/` |
 | **5 · Debrief** | Cross everything into design principles | 3-5 hrs | `5-debrief/` |
 | **6 · Ideation** *(on demand)* | From the "How might we" questions to 3-5 concepts, chosen with criteria that trace back to the principles | 2-4 hrs | `6-ideation/` |
-| **7 · Prototype and validation** *(on demand)* | Put something in front of people and see what they do, not what they say | 1-2 weeks | `7-validation/` |
+| **7 · Prototype and validation** *(on demand)* | Put something in front of people and see what they do, not what they say. It is the second round of sessions, with its own task guide and its own debrief | 1-2 weeks | `7-validation/` |
 | **8 · Report** | The final write-up of the whole project, on one page for someone who read none of it | 1-2 hrs | `8-report/` |
 
 **Final deliverable**: a set of **design principles** traceable to interview quotes and evidence. Decision rules that you'll then use to guide:
