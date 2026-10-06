@@ -23,9 +23,16 @@ STATE = REPO / "templates" / "state.yaml"
 BUDGETS = REPO / "templates" / "budgets.yaml"
 STEPS_DIR = REPO / "workflows" / "user-discovery" / "steps"
 
-PHASES = ["1-desk-research", "2-profiling", "3-guide", "4-field", "5-debrief"]
+PHASES = ["1-desk-research", "2-profiling", "3-guide", "4-field", "5-debrief",
+          "6-ideation", "7-validation", "8-report"]
 ENGINE_EXEMPT = ("_engine/", "4-field/_prep/", "4-field/_raw/", "4-field/INT-",
-                 "4-field/OBS-", "notes.md")
+                 "4-field/OBS-", "7-validation/_prep/", "7-validation/_raw/",
+                 "7-validation/VAL-", "7-validation/feedback/", "notes.md")
+
+# Every template the user opens. Each one starts with an 'Owns:' line.
+OWNED_TEMPLATES = ["brief", "knowledge", "market", "profiles", "recruiting", "guide",
+                   "process", "findings", "principles", "summary", "concepts", "tasks",
+                   "validation-findings"]
 
 
 def state_steps():
@@ -128,13 +135,129 @@ class TestFilesAndBudgets(unittest.TestCase):
                                 f"budget for '{path}', which is not in any phase")
 
     def test_the_hard_budget_is_the_guide(self):
-        """The one file that must never grow is the master guide. It is the file
-        that reached 257 lines on the first external run."""
+        """The files that must never grow are the two scripts you hold in the room:
+        the master guide (it reached 257 lines on the first external run) and the
+        validation task script."""
         text = BUDGETS.read_text(encoding="utf-8")
         hard = re.findall(r"^  ([^\s#][^:]*):\n    lines: \d+\n    hard: true",
                           text, re.M)
-        self.assertEqual(hard, ["3-guide/guide.md"],
-                         f"hard budgets are {hard}; expected exactly the master guide")
+        self.assertEqual(sorted(hard), ["3-guide/guide.md", "7-validation/tasks.md"],
+                         f"hard budgets are {hard}; expected exactly the two guides")
+
+    def test_new_pieces_have_the_budgets_the_spec_gives(self):
+        text = BUDGETS.read_text(encoding="utf-8")
+        for path, lines, hard in [("6-ideation/concepts.md", 80, "false"),
+                                  ("7-validation/tasks.md", 100, "true"),
+                                  ("7-validation/findings.md", 120, "false"),
+                                  ("8-report/summary.md", 60, "false")]:
+            with self.subTest(path=path):
+                self.assertRegex(text, rf"  {re.escape(path)}:\n    lines: {lines}\n    hard: {hard}")
+
+    def test_shipped_templates_fit_their_budgets(self):
+        text = BUDGETS.read_text(encoding="utf-8")
+        for path, template in [("6-ideation/concepts.md", "concepts.md"),
+                               ("7-validation/tasks.md", "tasks.md"),
+                               ("7-validation/findings.md", "validation-findings.md"),
+                               ("8-report/summary.md", "summary.md")]:
+            with self.subTest(path=path):
+                lines = int(re.search(rf"  {re.escape(path)}:\n    lines: (\d+)", text).group(1))
+                body = (REPO / "templates" / template).read_text(encoding="utf-8")
+                self.assertLessEqual(len(body.splitlines()), lines)
+
+
+class TestPlan(unittest.TestCase):
+    """The map has eight pieces and the plan, not the folder number, orders them."""
+
+    def test_the_map_has_eight_phases(self):
+        phases = state_phase_steps()
+        self.assertEqual(sorted(phases), list(range(1, 9)))
+        self.assertEqual(phases[6], ["ideation"])
+        self.assertEqual(phases[7], ["validation_guide", "validation_capture",
+                                     "validation_debrief"])
+        self.assertEqual(phases[8], ["report"])
+
+    def test_plan_is_the_last_step_of_phase_1_and_has_a_gate(self):
+        self.assertEqual(state_phase_steps()[1][-1], "plan")
+        self.assertEqual(state_steps()["plan"]["gate"], "true")
+        self.assertEqual(state_steps()["plan"]["file"], "1-desk-research/brief.md")
+
+    def test_phases_6_and_7_are_on_demand_and_8_is_not(self):
+        steps = state_steps()
+        for name in ["ideation", "validation_guide", "validation_capture",
+                     "validation_debrief"]:
+            self.assertEqual(steps[name].get("on_demand"), "true", name)
+        self.assertNotIn("on_demand", steps["report"])
+
+    def test_default_plan_has_eight_entries(self):
+        text = STATE.read_text(encoding="utf-8")
+        entries = re.findall(r"^  - \{piece: ([\w-]+),\s+status: (\w+)", text, re.M)
+        self.assertEqual(len(entries), 8)
+        status = dict(entries)
+        for piece in ["desk-research", "profiling", "guide", "field", "debrief", "report"]:
+            self.assertEqual(status[piece], "planned")
+        self.assertEqual(status["ideation"], "skipped")
+        self.assertEqual(status["validation"], "skipped")
+        self.assertIn("THE ORDER IS THE PLAN'S, NOT THE FOLDER NUMBER'S", text)
+
+    def test_the_brief_closes_with_a_plan_section(self):
+        brief = (REPO / "templates" / "brief.md").read_text(encoding="utf-8")
+        self.assertEqual(len(re.findall(r"^## Plan$", brief, re.M)), 1)
+        self.assertTrue(brief.rstrip().splitlines()[-1].startswith("|"),
+                        "the plan is the last thing in the brief")
+
+    def test_the_plan_step_tells_the_guide_what_to_say(self):
+        step = (STEPS_DIR / "1e-plan.md").read_text(encoding="utf-8").lower()
+        self.assertIn("skipped", step)
+        self.assertIn("external", step)
+        self.assertIn("widget", step)
+        self.assertIn("decisions.md", step)
+
+    def test_new_pieces_have_steps_and_templates(self):
+        for name in ["1e-plan.md", "6a-ideation.md", "7a-validation-guide.md",
+                     "7b-validation-sessions.md", "7c-validation-debrief.md",
+                     "8a-report.md"]:
+            self.assertIn(name, step_files())
+        for name in ["concepts.md", "tasks.md", "validation-findings.md"]:
+            self.assertTrue((REPO / "templates" / name).exists(), name)
+
+
+class TestOneFileOneJob(unittest.TestCase):
+    """R19: every file the user opens writes only what is its own."""
+
+    def test_every_template_opens_with_an_owns_line(self):
+        missing = []
+        for name in OWNED_TEMPLATES:
+            text = (REPO / "templates" / f"{name}.md").read_text(encoding="utf-8")
+            if not re.search(r"^Owns: .+ Does not own: .+→", text, re.M):
+                missing.append(name)
+        self.assertEqual(missing, [], "templates with no Owns / Does not own line")
+
+    def test_profiles_keeps_only_the_interview_subject(self):
+        text = (REPO / "templates" / "profiles.md").read_text(encoding="utf-8")
+        self.assertNotIn("User vs", text)
+        self.assertNotIn("Coverage plan", text)
+        self.assertNotIn("Sample risks", text)
+
+    def test_moved_sections_have_a_new_home(self):
+        brief = (REPO / "templates" / "brief.md").read_text(encoding="utf-8")
+        self.assertIn("## Who is who", brief)
+        knowledge = (REPO / "templates" / "knowledge.md").read_text(encoding="utf-8")
+        self.assertIn("Who answers it", knowledge)
+        recruiting = (REPO / "templates" / "recruiting.md").read_text(encoding="utf-8")
+        self.assertIn("## Sample risks", recruiting)
+
+    def test_the_guide_template_carries_no_research_criteria(self):
+        text = (REPO / "templates" / "guide.md").read_text(encoding="utf-8").lower()
+        self.assertNotIn("coverage plan", text)
+        self.assertNotIn("learning question", text)
+
+    def test_the_skill_states_the_principle(self):
+        skill = (REPO / "skills" / "discovery-guide" / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("One file, one job", skill)
+
+    def test_the_editor_routes_by_the_owns_line(self):
+        editor = (REPO / "agents" / "editor.md").read_text(encoding="utf-8")
+        self.assertIn("Owns:", editor)
 
 
 class TestScriptMatchesState(unittest.TestCase):

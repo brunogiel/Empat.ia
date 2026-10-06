@@ -1,5 +1,7 @@
 # Context Guide
 
+Owns: where to go, who to observe and what to look for. Does not own: the observation notes → `4-field/OBS-*.md`; the interview questions → `3-guide/guide.md`.
+
 Research doesn't live in interviews alone. This document plans observation, immersion, experts, analogies and materials to understand the user's real ecosystem.
 
 ## Objective

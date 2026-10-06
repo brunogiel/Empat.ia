@@ -1,5 +1,7 @@
 # Users and Qualitative Sample
 
+Owns: the interview subject: focus user, criteria, segments, sample per round and extremes. Does not own: who is user, customer and payer → `1-desk-research/brief.md` (Who is who); who answers each learning question → `1-desk-research/knowledge.md`; how to reach them and sample risks → `recruiting.md`.
+
 This document defines who to interview. The sample isn't aiming for statistical representativeness: it's aiming for enough diversity to detect patterns, tensions and outliers.
 
 ## Base questions
@@ -9,17 +11,7 @@ This document defines who to interview. The sample isn't aiming for statistical 
 - Where in the value chain are they?
 - What are their use cases?
 - If solutions already exist, who are their users?
-- Who uses, who pays and who decides?
-
-## User vs. customer
-
-| Role | Who they are | What they want | What power they have | How we'll research them |
-|---|---|---|---|---|
-| User | Pending | Pending | Pending | Pending |
-| Customer / payer | Pending | Pending | Pending | Pending |
-| Decision-maker | Pending | Pending | Pending | Pending |
-| Influencer | Pending | Pending | Pending | Pending |
-| Operator | Pending | Pending | Pending | Pending |
+- Which of them do we interview? *(who uses, who pays and who decides is in the brief, under Who is who)*
 
 ## Possible segments
 
@@ -45,25 +37,16 @@ Look for the majority, but include extremes that teach non-obvious cases.
 | High extreme | Pending | Shows intense need or advanced use | 0 |
 | Low extreme | Pending | Shows rejection, barriers or workarounds | 0 |
 
-## Recommended sample
+## Criteria
 
-Default: 10-12 qualitative interviews when scope justifies it.
+How we choose who to interview, in one line each.
 
-| Profile | Quantity | Diversity criterion | Reason |
-|---|---:|---|---|
-| Pending | 0 | Pending | Pending |
+- Pending.
 
-## Sample risks
+## Sample per round
 
-- Only friends or acquaintances.
-- Only users who are easy to find.
-- Mixing very different profiles in a single guide.
-- Not interviewing the buyer when user and customer differ.
-- Not including extremes.
+Default: 10-12 qualitative interviews when scope justifies it. One table per round: a second round gets its own rows, it does not rewrite the first.
 
-## Coverage plan
-
-| Learning question | Profile that best answers it | Method |
-|---|---|---|
-| Pending | Pending | interview / observation / expert / intercept |
-
+| Round | Profile | Quantity | Diversity criterion | Reason |
+|---|---|---:|---|---|
+| 1 | Pending | 0 | Pending | Pending |

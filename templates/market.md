@@ -1,5 +1,7 @@
 # Market Research
 
+Owns: external context, with sources. Does not own: what we know about users → `knowledge.md`; who we interview → `2-profiling/profiles.md`.
+
 This document captures external context. It helps orient discovery better, not replace user interviews.
 
 ## Rules

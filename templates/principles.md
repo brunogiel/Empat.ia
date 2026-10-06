@@ -1,5 +1,7 @@
 # Design Principles
 
+Owns: the design principles and nothing else. Does not own: the patterns behind them → `findings.md`; working notes of the synthesis → `_engine/synthesis-log.md`; the final page → `8-report/summary.md`.
+
 This document holds the **design principles**, the central deliverable of the method: decision rules the team will use later for product, communication with users and strategy.
 
 The material that supports these principles — themes, patterns, weak signals, contradictions, prioritized insights, evidence gaps and open questions — lives in `findings.md`. The working notes behind the synthesis live in `_engine/synthesis-log.md`.

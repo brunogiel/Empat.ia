@@ -1,5 +1,7 @@
 # Field index
 
+Owns: the tracker of field interviews and observations. Does not own: the notes themselves → `4-field/INT-*.md`; evidence → `_engine/evidence.md`.
+
 Everything that happened in the field, in one table: interviews and
 observations. It answers three questions — what came in, what is still
 unprocessed, and where the sample is thin.

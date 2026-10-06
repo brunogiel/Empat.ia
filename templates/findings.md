@@ -1,5 +1,7 @@
 # Findings
 
+Owns: patterns, weak signals, contradictions and evidence gaps across interviews. Does not own: atomic evidence → `_engine/evidence.md`; the design principles → `principles.md`; the final page → `8-report/summary.md`.
+
 The distillation between atomic evidence (`_engine/evidence.md`) and the
 deliverable (`principles.md`): patterns live here before they become rules.
 Update it as interviews come in, not once at the end.

@@ -1,5 +1,7 @@
 # Recruitment
 
+Owns: how we reach the sample: criteria per profile, channels, messages, tracker and sample risks. Does not own: who the profiles are → `profiles.md`; the questions we ask → `3-guide/guide.md`.
+
 This document defines how we'll source interviews without biasing the sample too much.
 
 ## Recruitment objective
@@ -21,6 +23,16 @@ Pending.
 | LinkedIn | Pending | Professional | Digital bias | Pending |
 | Indirect acquaintances | Pending | Trust | Biased snowball | Pending |
 | Intercepts / field | Pending | Contextual freshness | Less depth | Pending |
+
+## Sample risks
+
+What can bias who we end up talking to.
+
+- Only friends or acquaintances.
+- Only users who are easy to find.
+- Mixing very different profiles in a single guide.
+- Not interviewing the buyer when user and customer differ.
+- Not including extremes.
 
 ## Incentive
 

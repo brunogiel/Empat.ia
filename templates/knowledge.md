@@ -1,5 +1,7 @@
 # Knowledge Base
 
+Owns: what we know, what we do not know, what we want to learn and who answers it. Does not own: external research → `market.md`; who we interview and the sample → `2-profiling/profiles.md`; the questions we ask → `3-guide/guide.md`.
+
 This document organizes early material without over-synthesizing. At this stage you preserve traceability: don't erase, don't merge distinct ideas and don't turn assumptions into insights.
 
 ## How to work in this stage
@@ -34,33 +36,18 @@ Real blanks. They are not problems to solve yet, they are open questions.
 
 ## What we want to learn
 
-Questions that guide discovery.
+Questions that guide discovery, by topic, each with who answers it and how.
+The last two columns are the coverage plan: they say which profile of
+`2-profiling/profiles.md` can answer the question.
 
-Group by topic:
-
-### Current behavior
-
-- Pending.
-
-### Motivations and incentives
-
-- Pending.
-
-### Pains and frustrations
-
-- Pending.
-
-### Decision process
-
-- Pending.
-
-### Tools, workarounds and alternatives
-
-- Pending.
-
-### Aspirations and ideal scenario
-
-- Pending.
+| Topic | Learning question | Who answers it | Method |
+|---|---|---|---|
+| Current behavior | Pending | Pending | interview / observation / expert / intercept |
+| Motivations and incentives | Pending | Pending | Pending |
+| Pains and frustrations | Pending | Pending | Pending |
+| Decision process | Pending | Pending | Pending |
+| Tools, workarounds and alternatives | Pending | Pending | Pending |
+| Aspirations and ideal scenario | Pending | Pending | Pending |
 
 ## Contradictions or tensions
 

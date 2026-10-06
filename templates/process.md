@@ -1,5 +1,7 @@
 # Field Checklist
 
+Owns: the checklist before, during and after each outing or call. Does not own: the questions → `guide.md`; logistics and incentives → `2-profiling/recruiting.md`.
+
 This document keeps you from improvising interviews. Use it before, during and after every field outing or call.
 
 ## Before

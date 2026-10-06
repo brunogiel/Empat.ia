@@ -1,5 +1,7 @@
 # Interview guide
 
+Owns: interview questions and blocks, nothing else. Does not own: research criteria and who answers what → `1-desk-research/knowledge.md`; the protocol → `process.md`; logistics → `2-profiling/recruiting.md`.
+
 The master guide. **It is never crossed out and never edited during an
 interview**: you carry a disposable copy, `4-field/_prep/INT-00X-<name>-<surname>-prep.md`,
 and you mark that one.

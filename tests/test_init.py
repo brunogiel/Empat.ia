@@ -10,6 +10,7 @@ claim the README makes about the folder; if one fails, the claim is false.
 No dependencies: standard library only, so CI is one line.
 """
 
+import re
 import shutil
 import subprocess
 import sys
@@ -77,6 +78,13 @@ class TestCleanInstall(TempProject):
             found = list((self.discovery / phase).rglob("*.md"))
             self.assertEqual(found, [], f"{phase} should be empty at install")
 
+    def test_phases_6_7_8_are_not_created_at_install(self):
+        """They are born with their first --add, so a project that skips them
+        never sees an empty folder."""
+        self.init()
+        for folder in ["6-ideation", "7-validation", "8-report"]:
+            self.assertFalse((self.discovery / folder).exists(), folder)
+
     def test_1_desk_research_sources_is_created(self):
         """Client material (briefs, decks, canvases, spreadsheets, whiteboards)
         needs a folder a human can see, distinct from _engine/sources/, which
@@ -121,6 +129,54 @@ class TestAddStep(TempProject):
                                 f"step '{step}' points at missing template {template}")
 
 
+class TestNewPieces(TempProject):
+    """R2 and R5: --add for the plan and the pieces 6, 7 and 8."""
+
+    def test_add_plan_creates_nothing_and_exits_zero(self):
+        self.init()
+        before = files_in(self.discovery)
+        result = self.init("--add", "plan")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("brief", result.stdout)
+        self.assertEqual(files_in(self.discovery), before)
+
+    def test_each_new_step_creates_only_its_file(self):
+        expected = {
+            "ideation": {"6-ideation/concepts.md"},
+            "validation_guide": {"7-validation/tasks.md"},
+            "validation_debrief": {"7-validation/findings.md"},
+            "report": {"8-report/summary.md"},
+            "validation_capture": {"7-validation/0-index.md", "_engine/evidence.md"},
+        }
+        for step, created in expected.items():
+            with self.subTest(step=step):
+                shutil.rmtree(self.discovery, ignore_errors=True)
+                self.init()
+                before = files_in(self.discovery)
+                result = self.init("--add", step)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(files_in(self.discovery) - before, created)
+
+    def test_validation_capture_keeps_an_existing_evidence_ledger(self):
+        self.init()
+        self.init("--add", "evidence")
+        ledger = self.discovery / "_engine" / "evidence.md"
+        ledger.write_text("mine\n", encoding="utf-8")
+        self.init("--add", "validation_capture")
+        self.assertEqual(ledger.read_text(encoding="utf-8"), "mine\n")
+
+    def test_lazy_state_and_budgets_declare_the_same_destinations(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+        import init_project  # noqa: E402
+        state = (REPO / "templates" / "state.yaml").read_text(encoding="utf-8")
+        budgets = (REPO / "templates" / "budgets.yaml").read_text(encoding="utf-8")
+        for step in ["ideation", "validation_guide", "validation_debrief", "report"]:
+            dest = init_project.LAZY[step][1]
+            with self.subTest(step=step):
+                self.assertIn(dest, state)
+                self.assertIn(dest, budgets)
+
+
 class TestAddPerItem(TempProject):
     """--add interview-note|interview-prep|interview-feedback|observation-note --name <base>,
     the mechanism PER_ITEM declared but never wired up."""
@@ -150,6 +206,40 @@ class TestAddPerItem(TempProject):
         result = self.init("--add", "observation-note", "--name", "OBS-002-store-floor")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((self.discovery / "4-field" / "OBS-002-store-floor.md").exists())
+
+    def test_validation_note_lands_in_7_validation(self):
+        self.init()
+        result = self.init("--add", "validation-note", "--name", "VAL-001-ana-lopez")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "7-validation" / "VAL-001-ana-lopez.md").exists())
+
+    def test_validation_prep_and_feedback_land_in_their_folders(self):
+        self.init()
+        self.init("--add", "validation-prep", "--name", "VAL-001-ana-lopez")
+        self.init("--add", "validation-feedback", "--name", "VAL-001-ana-lopez")
+        self.assertTrue((self.discovery / "7-validation" / "_prep"
+                         / "VAL-001-ana-lopez-prep.md").exists())
+        self.assertTrue((self.discovery / "7-validation" / "feedback"
+                         / "VAL-001-ana-lopez-feedback.md").exists())
+
+    def test_validation_note_refuses_an_interview_id(self):
+        self.init()
+        result = self.init("--add", "validation-note", "--name", "INT-001-x")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("VAL-", result.stderr + result.stdout)
+        self.assertFalse((self.discovery / "7-validation").exists())
+
+    def test_interview_note_refuses_a_validation_id(self):
+        self.init()
+        result = self.init("--add", "interview-note", "--name", "VAL-001-x")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("INT-", result.stderr + result.stdout)
+
+    def test_observation_note_refuses_an_interview_id(self):
+        self.init()
+        result = self.init("--add", "observation-note", "--name", "INT-001-x")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("OBS-", result.stderr + result.stdout)
 
     def test_missing_name_fails_loudly(self):
         self.init()
@@ -190,7 +280,8 @@ class TestAggregateSteps(TempProject):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((self.discovery / "5-debrief" / "findings.md").exists())
         self.assertTrue((self.discovery / "5-debrief" / "principles.md").exists())
-        self.assertTrue((self.discovery / "5-debrief" / "output" / "summary.md").exists())
+        self.assertFalse((self.discovery / "5-debrief" / "output" / "summary.md").exists(),
+                         "the summary moved to 8-report/ and is its own step")
 
     def test_start_and_design_challenge_point_at_the_installed_brief(self):
         self.init()
@@ -272,6 +363,75 @@ class TestVersionDetection(TempProject):
         result = self.init("--migrate")
         self.assertEqual(result.returncode, 0)
         self.assertIn("already v3", result.stdout)
+
+
+class TestMigrateV3ToReport(TempProject):
+    """R8: a v3 folder made before the report existed keeps its summary, and
+    the summary moves to 8-report/ without ever overwriting or deleting."""
+
+    OLD = "5-debrief/output/summary.md"
+    NEW = "8-report/summary.md"
+
+    def old_project(self):
+        """A v3 folder as it was: summary in 5-debrief/output/, no plan."""
+        self.init()
+        state = self.discovery / "_engine" / "state.yaml"
+        text = state.read_text(encoding="utf-8")
+        text = text[:text.index("# --- The plan")].rstrip("\n") + "\n"
+        text = text.replace("file: 5-debrief/findings.md + 5-debrief/principles.md",
+                            f"file: 5-debrief/findings.md + 5-debrief/principles.md + {self.OLD}")
+        state.write_text(text, encoding="utf-8")
+        (self.discovery / "5-debrief" / "output").mkdir(parents=True)
+        (self.discovery / self.OLD).write_text("# Mi resumen\n", encoding="utf-8")
+
+    def test_summary_moves_and_the_plan_is_added(self):
+        self.old_project()
+        before = len(files_in(self.discovery))
+        result = self.init("--migrate")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.discovery / self.OLD).exists())
+        self.assertEqual((self.discovery / self.NEW).read_text(encoding="utf-8"), "# Mi resumen\n")
+        self.assertEqual(len(files_in(self.discovery)), before)
+        state = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
+        self.assertIn(self.NEW, state)
+        self.assertNotIn(self.OLD, state)
+        self.assertEqual(len(re.findall(r"^  - \{piece:", state, re.M)), 8)
+
+    def test_running_it_twice_changes_nothing(self):
+        self.old_project()
+        self.init("--migrate")
+        snapshot = {f: (self.discovery / f).read_bytes() for f in files_in(self.discovery)}
+        result = self.init("--migrate")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("already v3", result.stdout)
+        after = {f: (self.discovery / f).read_bytes() for f in files_in(self.discovery)}
+        self.assertEqual(after, snapshot)
+
+    def test_it_never_overwrites_an_existing_report(self):
+        self.old_project()
+        (self.discovery / "8-report").mkdir()
+        (self.discovery / self.NEW).write_text("hand made\n", encoding="utf-8")
+        result = self.init("--migrate")
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual((self.discovery / self.NEW).read_text(encoding="utf-8"), "hand made\n")
+        self.assertEqual((self.discovery / self.OLD).read_text(encoding="utf-8"), "# Mi resumen\n")
+        self.assertIn("already exists", result.stdout)
+
+    def test_a_folder_without_a_summary_only_gets_the_plan(self):
+        self.old_project()
+        (self.discovery / self.OLD).unlink()
+        self.init("--migrate")
+        state = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
+        self.assertIn("plan:", state)
+        self.assertFalse((self.discovery / "8-report").exists())
+
+    def test_a_v2_folder_ends_in_the_new_layout_with_a_plan(self):
+        v2 = TestMigrationLosesNothing.build_v2_folder
+        v2(self)
+        self.init("--migrate")
+        state = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
+        self.assertIn("version: 3", state)
+        self.assertIn("plan:", state)
 
 
 class TestMigrationLosesNothing(TempProject):
