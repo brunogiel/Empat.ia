@@ -28,6 +28,10 @@ INSTALLED = {
     "1-desk-research/brief.md",
     "_engine/state.yaml",
     "_engine/budgets.yaml",
+    "2-profiling/0-README.md",
+    "3-guide/0-README.md",
+    "4-field/0-README.md",
+    "5-debrief/0-README.md",
 }
 
 
@@ -54,16 +58,18 @@ class TempProject(unittest.TestCase):
 
 class TestCleanInstall(TempProject):
 
-    def test_installs_exactly_six_files(self):
+    def test_installs_exactly_ten_files(self):
         """The whole bet of v3. v2 installed 21, all of them empty."""
         self.init("--lang", "es")
         self.assertEqual(files_in(self.discovery), INSTALLED)
 
-    def test_only_two_files_belong_to_the_user(self):
+    def test_only_six_files_belong_to_the_user(self):
         self.init()
         mine = {f for f in files_in(self.discovery)
                 if not f.startswith("_engine/") and f not in {"AGENTS.md", "CLAUDE.md"}}
-        self.assertEqual(mine, {"0-README.md", "1-desk-research/brief.md"})
+        self.assertEqual(mine, {"0-README.md", "1-desk-research/brief.md",
+                                "2-profiling/0-README.md", "3-guide/0-README.md",
+                                "4-field/0-README.md", "5-debrief/0-README.md"})
 
     def test_language_is_stamped_into_state(self):
         self.init("--lang", "es")
@@ -72,11 +78,12 @@ class TestCleanInstall(TempProject):
         self.assertIn("version: 3", state)
 
     def test_no_phase_folder_is_prefilled(self):
-        """Phases 2 to 5 have no files until you reach them."""
+        """Phases 2 to 5 hold only their own README until you reach them."""
         self.init()
         for phase in ["2-profiling", "3-guide", "4-field", "5-debrief"]:
-            found = list((self.discovery / phase).rglob("*.md"))
-            self.assertEqual(found, [], f"{phase} should be empty at install")
+            found = [str(p.relative_to(self.discovery / phase))
+                     for p in (self.discovery / phase).rglob("*.md")]
+            self.assertEqual(found, ["0-README.md"], f"{phase} should hold only its README")
 
     def test_phases_6_7_8_are_not_created_at_install(self):
         """They are born with their first --add, so a project that skips them
@@ -142,11 +149,12 @@ class TestNewPieces(TempProject):
 
     def test_each_new_step_creates_only_its_file(self):
         expected = {
-            "ideation": {"6-ideation/concepts.md"},
-            "validation_guide": {"7-validation/tasks.md"},
-            "validation_debrief": {"7-validation/findings.md"},
-            "report": {"8-report/summary.md"},
-            "validation_capture": {"7-validation/0-index.md", "_engine/evidence.md"},
+            "ideation": {"6-ideation/concepts.md", "6-ideation/0-README.md"},
+            "validation_guide": {"7-validation/tasks.md", "7-validation/0-README.md"},
+            "validation_debrief": {"7-validation/findings.md", "7-validation/0-README.md"},
+            "report": {"8-report/summary.md", "8-report/0-README.md"},
+            "validation_capture": {"7-validation/0-index.md", "7-validation/0-README.md",
+                                   "_engine/evidence.md"},
         }
         for step, created in expected.items():
             with self.subTest(step=step):
@@ -156,6 +164,24 @@ class TestNewPieces(TempProject):
                 result = self.init("--add", step)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(files_in(self.discovery) - before, created)
+
+    def test_a_late_phase_folder_is_born_with_its_readme(self):
+        """6, 7 and 8 are not created at install, but the first file in one
+        brings the folder's README, so it is never a mystery folder."""
+        self.init()
+        self.init("--add", "validation-note", "--name", "VAL-001-ana-lopez")
+        readme = self.discovery / "7-validation" / "0-README.md"
+        self.assertTrue(readme.exists())
+        self.assertIn("Validation", readme.read_text(encoding="utf-8"))
+
+    def test_a_late_phase_readme_you_edited_is_never_overwritten(self):
+        self.init()
+        self.init("--add", "report")
+        readme = self.discovery / "8-report" / "0-README.md"
+        readme.write_text("hecho a mano\n", encoding="utf-8")
+        (self.discovery / "8-report" / "summary.md").unlink()
+        self.init("--add", "report")
+        self.assertEqual(readme.read_text(encoding="utf-8"), "hecho a mano\n")
 
     def test_validation_capture_keeps_an_existing_evidence_ledger(self):
         self.init()

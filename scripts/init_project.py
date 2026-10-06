@@ -14,10 +14,12 @@ The folder is numbered by phase, and it grows as you go:
   8-report/          the final write-up of the whole project
   _engine/           state, assumptions, decisions, evidence, raw sources
 
-Only six files exist at install. Every other file is born when you ENTER its
-phase, written in the project's language. A file that does not exist yet is the
-design, not a missing piece. That includes the folders of phases 6, 7 and 8:
-they are born with their first --add.
+Ten files exist at install: the map, the brief, one short README in each of
+phases 2 to 5 (so no folder is a mystery), and four for the machine. Every other
+file is born when you ENTER its phase, written in the project's language. A file
+that does not exist yet is the design, not a missing piece. The folders of
+phases 6, 7 and 8 are born with their first --add, and each carries its own
+README from the first file.
 
 The ORDER of the work is the plan in the brief (and `plan:` in state.yaml), not
 the folder numbers.
@@ -51,9 +53,14 @@ ITEM_PREFIX = {"interview": "INT", "observation": "OBS", "validation": "VAL"}
 
 
 # --- What exists the moment you install ------------------------------------
-# Six files. Two of them are yours; four are for the machine.
+# Ten files. Six are yours: the map, the brief, and one README per phase folder
+# that would otherwise sit empty. Four are for the machine.
 INSTALL = {
     "0-readme.md": "0-README.md",
+    "phase-2-readme.md": "2-profiling/0-README.md",
+    "phase-3-readme.md": "3-guide/0-README.md",
+    "phase-4-readme.md": "4-field/0-README.md",
+    "phase-5-readme.md": "5-debrief/0-README.md",
     "agents-pointer.md": "AGENTS.md",
     "claude-pointer.md": "CLAUDE.md",
     "brief.md": "1-desk-research/brief.md",
@@ -113,6 +120,29 @@ PER_ITEM_PATHS = {
     "validation-prep": "7-validation/_prep/{name}-prep.md",
     "validation-feedback": "7-validation/feedback/{name}-feedback.md",
 }
+
+# Phases 6, 7 and 8 have no folder until their first file is born. When it is,
+# the folder gets its README in the same breath, so it is never an empty mystery.
+PHASE_READMES = {
+    "6-ideation": "phase-6-readme.md",
+    "7-validation": "phase-7-readme.md",
+    "8-report": "phase-8-readme.md",
+}
+
+
+def ensure_phase_readme(templates: Path, discovery: Path, relative: str) -> None:
+    """If `relative` lands in a phase 6, 7 or 8 folder, give that folder its README.
+
+    Never overwrites: a README you already edited, or wrote in your language, stays.
+    """
+    folder = relative.split("/")[0]
+    template = PHASE_READMES.get(folder)
+    if template and (templates / template).exists():
+        dest = discovery / folder / "0-README.md"
+        if not dest.exists():
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(templates / template, dest)
+
 
 DIRECTORIES = [
     "1-desk-research",
@@ -267,6 +297,7 @@ def copy_one(templates: Path, discovery: Path, template_name: str, relative: str
             return "protected", relative
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, dest)
+    ensure_phase_readme(templates, discovery, relative)
     return "created", relative
 
 
@@ -797,8 +828,8 @@ def main() -> int:
     report("Edited already, not overwritten", results.get("protected"))
     report("Missing templates (the bundle is incomplete)", results.get("missing"))
 
-    print(f"\nSix files, and only two are yours: 0-README.md and "
-          f"1-desk-research/brief.md.")
+    print(f"\nTen files, six of them yours: 0-README.md, 1-desk-research/brief.md and the "
+          f"short README in phases 2 to 5.")
     print(f"Everything else is born when you enter its phase. Write all of it in "
           f"'{args.lang}'.")
     return 1 if results.get("missing") else 0

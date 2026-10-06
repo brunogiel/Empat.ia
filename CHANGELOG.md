@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### Added: every phase folder says what it is for
+
+An empty folder tells you nothing, and a shared folder reaches people who never read the root
+README. Each phase folder now carries a short `0-README.md`: what the folder is for, what will
+appear in it, and what to check before putting something in it (`_raw/` holds personal data).
+
+- **Phases 2 to 5** get their README at install, so install is now ten files, six of them the
+  user's. The test that counted six counts ten.
+- **Phases 6, 7 and 8** keep being born with their first `--add`, so a project that skips them
+  never sees them. The README arrives with the first file, and never overwrites one you edited.
+- The Guide writes these READMEs in the project's language, in the same turn as the map.
+
 ### Added: the brief closes with a plan, and the map grows to eight pieces
 
 No real project followed the five phases in a straight line: some skipped the market, some

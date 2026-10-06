@@ -336,11 +336,13 @@ class TestScriptMatchesState(unittest.TestCase):
 
     def test_install_matches_what_the_docs_promise(self):
         _, install = lazy_map()
-        self.assertEqual(len(install), 6,
-                         "the README and the skill both say six files install")
+        self.assertEqual(len(install), 10,
+                         "the README and the skill both say ten files install")
         mine = [d for d in install.values()
                 if not d.startswith("_engine/") and d not in {"AGENTS.md", "CLAUDE.md"}]
-        self.assertEqual(sorted(mine), ["0-README.md", "1-desk-research/brief.md"])
+        self.assertEqual(sorted(mine), ["0-README.md", "1-desk-research/brief.md",
+                                        "2-profiling/0-README.md", "3-guide/0-README.md",
+                                        "4-field/0-README.md", "5-debrief/0-README.md"])
 
 
 class TestEditorCanDoItsJob(unittest.TestCase):

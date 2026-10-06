@@ -33,7 +33,7 @@ python3 tests/test_init.py && python3 tests/test_consistency.py
 python3 scripts/init_project.py --project-root /tmp/fresh --lang es
 ```
 
-The last line is the one that matters: a clean install has to produce six files
+The last line is the one that matters: a clean install has to produce ten files
 and nothing else. Two releases shipped without anyone running it.
 
 ## One rule about the changelog

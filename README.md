@@ -67,27 +67,29 @@ Then you invoke it with _"use Empat.ia"_ from any project.
 ## The discovery folder
 
 It is numbered by phase, so the order you see is the order you work in. And it
-**grows as you go**: six files exist at install, and only two of those are
-yours. Every other file is written when you reach its phase, in your language,
-already filled with what the project knows by then.
+**grows as you go**: ten files exist at install, and six of those are
+yours: the map, the brief, and one short README in each of phases 2 to 5 that
+says what the folder is for and what will appear in it. Every other file is
+written when you reach its phase, in your language, already filled with what the
+project knows by then.
 
 ```text
 discovery/
   0-README.md            the map: where am I, what do I open now
   1-desk-research/       brief.md  market.md  knowledge.md  sources/
-  2-profiling/           profiles.md  recruiting.md
-  3-guide/               guide.md  process.md
-  4-field/               0-index.md  0-observation-plan.md  feedback/
+  2-profiling/           0-README.md  profiles.md  recruiting.md
+  3-guide/               0-README.md  guide.md  process.md
+  4-field/               0-README.md  0-index.md  0-observation-plan.md  feedback/
                          INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
-  5-debrief/             findings.md  principles.md
-  6-ideation/            concepts.md                                (on demand)
-  7-validation/          tasks.md  0-index.md  findings.md  VAL-001-name-surname.md  (on demand)
-  8-report/              summary.md
+  5-debrief/             0-README.md  findings.md  principles.md
+  6-ideation/            0-README.md  concepts.md                  (on demand)
+  7-validation/          0-README.md  tasks.md  0-index.md  findings.md  VAL-001-name-surname.md  (on demand)
+  8-report/              0-README.md  summary.md
   _engine/               state, assumptions, decisions, evidence, budgets, sources, skills
   AGENTS.md  CLAUDE.md   two pointers so any assistant knows what this folder is
 ```
 
-A file that does not exist yet is the design, not a broken install. Files you
+Every phase folder says what it is for in its own `0-README.md`, so none is a mystery. A file that does not exist yet is the design, not a broken install. Files you
 open have a line budget: when one grows past it, the excess moves down to
 `_engine/` instead of turning the document you need in the room into something
 you cannot read. `3-guide/guide.md` has a hard cap of two printed pages, because

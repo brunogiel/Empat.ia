@@ -31,7 +31,8 @@ strategy.
 
 ## What to open now
 
-`1-desk-research/brief.md`. It is the only file with content besides this one.
+`1-desk-research/brief.md`. Every other phase folder has a short `0-README.md` that says what it
+is for and what will appear in it.
 
 Ask your assistant *"how's it going"* at any point and it will tell you where
 you are and what comes next.

@@ -84,12 +84,14 @@ create on top of an older layout, so you cannot end up with two structures side 
 file you already wrote in the user's language is never clobbered; overwriting one needs
 `--overwrite-modified`, and you ask before using it.
 
-After init the folder holds **six files, and only two of them are the user's**: `0-README.md` and
-`1-desk-research/brief.md`. Everything else is born when its step starts, and that includes the
-folders of phases 6, 7 and 8.
+After init the folder holds **ten files, and six of them are the user's**: `0-README.md`,
+`1-desk-research/brief.md` and a short `0-README.md` in each of phases 2 to 5, which says what the
+folder is for. Everything else is born when its step starts. The folders of phases 6, 7 and 8 are
+born with their first file, and each brings its own `0-README.md`.
 
-1. **Write `0-README.md` and `1-desk-research/brief.md` in the project's language, in this same
-   turn.** Do not hand back control with English scaffolding in a Spanish project. This is the
+1. **Write `0-README.md`, `1-desk-research/brief.md` and the phase READMEs (2 to 5) in the
+   project's language, in this same turn.** When a phase 6, 7 or 8 folder is born, translate its
+   README the same turn. Do not hand back control with English scaffolding in a Spanish project. This is the
    failure that produced v3: the method claimed to do it and never did.
 2. Pre-fill the brief with what the initial conversation gave you: project name, one-line
    description, the decision to unblock, tentative user, prior material, time window.

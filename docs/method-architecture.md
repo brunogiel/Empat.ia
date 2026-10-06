@@ -26,7 +26,7 @@ Valid statuses:
 
 The work lives in `discovery/`.
 
-It is numbered by phase, and it grows as the user goes. Six files exist at install and only two of them are the user's; every other file is born when its step starts, written in the project's language:
+It is numbered by phase, and it grows as the user goes. Ten files exist at install and six of them are the user's (the map, the brief, and a short README in each of phases 2 to 5); every other file is born when its step starts, written in the project's language:
 
 - **Zone 1**, the root and `3-guide/`: what the user opens. Line-budgeted, kept short.
 - **Zone 2**, `_engine/`: state, assumptions, decisions, evidence, budgets, project-level skills (`_engine/skills/`). The assistant's workspace.
