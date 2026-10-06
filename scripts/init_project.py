@@ -465,13 +465,127 @@ def default_plan_block(templates: Path) -> str:
     return text[start:]
 
 
-def upgrade_v3(templates: Path, discovery: Path) -> tuple[list, list]:
-    """Bring a v3 folder up to the layout with the plan and the report.
+def _block_lines(text: str, key_pattern: str) -> str | None:
+    """The lines of a two-space-indented key and its four-space children."""
+    m = re.search(rf"^  {key_pattern}:[ \t]*\n(?:    .*\n?)*", text, re.M)
+    return m.group(0).rstrip("\n") + "\n" if m else None
 
-    Moves 5-debrief/output/summary.md to 8-report/summary.md, repoints it in
-    state.yaml, and adds the default plan if state.yaml has none. Never deletes,
-    never overwrites: if the destination exists, the source stays where it is
-    and the report says so. Running it again changes nothing.
+
+def _section(text: str, start: str, end: str) -> tuple[int, int] | None:
+    i = text.find(start)
+    if i == -1:
+        return None
+    j = text.find(end, i + len(start))
+    return (i, len(text) if j == -1 else j)
+
+
+def upgrade_state(templates: Path, text: str, brief_has_plan: bool) -> tuple[str, list, list]:
+    """Add to an old state.yaml everything the new method needs, by text edit.
+
+    Nothing that exists is touched, so every status survives. Each piece is
+    added only if it is missing, so a second run changes nothing.
+    """
+    added: list[str] = []
+    eye: list[str] = []
+    tpl = (templates / "state.yaml").read_text(encoding="utf-8")
+
+    # Phases 6-8, and 'plan' as the last step of phase 1.
+    sec = _section(text, "\nphases:", "\nsteps:")
+    if sec:
+        block = text[sec[0]:sec[1]]
+        add = ""
+        for n in ("6", "7", "8"):
+            if not re.search(rf"^  {n}:", block, re.M):
+                add += _block_lines(tpl, n) or ""
+                added.append(f"_engine/state.yaml: phase {n} declared")
+        m = re.search(r"^(  1:\n(?:    .*\n)*?    steps: \[)([^\]]*)(\])", block, re.M)
+        if m and not re.search(r"\bplan\b", m.group(2)):
+            block = block[:m.start(2)] + m.group(2) + ", plan" + block[m.end(2):]
+            added.append("_engine/state.yaml: step 'plan' added to phase 1")
+        block = block.rstrip("\n") + "\n" + add
+        text = text[:sec[0]] + block + text[sec[1]:]
+    else:
+        eye.append("_engine/state.yaml has no phases block: the Guide declares phases 6-8 on the next session.")
+
+    # Steps.
+    sec = _section(text, "\nsteps:", "\ninterviews:")
+    if sec:
+        block = text[sec[0]:sec[1]]
+        add = ""
+        for step in ("plan", "ideation", "validation_guide", "validation_capture",
+                     "validation_debrief", "report"):
+            if not re.search(rf"^  {step}:", block, re.M):
+                add += _block_lines(tpl, step) or ""
+                added.append(f"_engine/state.yaml: step '{step}' declared")
+        if add:
+            block = block.rstrip("\n") + "\n" + add + "\n"
+            text = text[:sec[0]] + block + text[sec[1]:]
+    else:
+        eye.append("_engine/state.yaml has no steps block: the Guide declares the new steps on the next session.")
+
+    # The debrief no longer writes the summary: the report step does.
+    if f" + {OLD_SUMMARY}" in text:
+        text = text.replace(f" + {OLD_SUMMARY}", "")
+        added.append("_engine/state.yaml: summary taken out of the debrief step")
+
+    # validations counter.
+    if not re.search(r"^validations:", text, re.M):
+        m = re.search(r"^validations:\n(?:  .*\n)*", tpl, re.M)
+        text = text.rstrip("\n") + "\n\n# Validation sessions (VAL-00X, phase 7), counted apart from the interviews.\n" + m.group(0)
+        added.append("_engine/state.yaml: validations counter added")
+
+    # The plan.
+    if not re.search(r"^plan:", text, re.M):
+        if brief_has_plan:
+            text = text.rstrip("\n") + (
+                "\n\n# The brief already has a '## Plan'. The Guide builds this block from it;\n"
+                "# where the two disagree, the brief wins.\nplan: []\n")
+            added.append("_engine/state.yaml: empty plan: block (the brief already has a ## Plan)")
+            eye.append("The brief has its own '## Plan'. The default plan was NOT written: the Guide "
+                       "has to build 'plan:' from the brief, and the brief wins where they differ.")
+        else:
+            text = text.rstrip("\n") + "\n\n" + default_plan_block(templates)
+            added.append("_engine/state.yaml: default plan added (a starting point: "
+                         "the Guide proposes it and you approve it)")
+    return text, added, eye
+
+
+def upgrade_budgets(templates: Path, text: str) -> tuple[str, list]:
+    """Add the new budgets and repoint the summary's. Never changes a value."""
+    added: list[str] = []
+    if f"  {OLD_SUMMARY}:" in text and f"  {NEW_SUMMARY}:" not in text:
+        text = text.replace(f"  {OLD_SUMMARY}:", f"  {NEW_SUMMARY}:")
+        added.append(f"_engine/budgets.yaml: budget of {OLD_SUMMARY} repointed to {NEW_SUMMARY}")
+    tpl = (templates / "budgets.yaml").read_text(encoding="utf-8")
+    new = ""
+    for path in ("6-ideation/concepts.md", "7-validation/tasks.md", "7-validation/0-index.md",
+                 "7-validation/findings.md", "8-report/summary.md"):
+        if f"  {path}:" in text:
+            continue
+        m = re.search(rf"^  {re.escape(path)}:\n    lines: \d+\n    hard: \w+\n", tpl, re.M)
+        if m:
+            new += m.group(0)
+            added.append(f"_engine/budgets.yaml: budget added for {path}")
+    if new:
+        marker = "\n# Files with no line budget"
+        i = text.find(marker)
+        if i == -1:
+            text = text.rstrip("\n") + "\n\n" + new
+        else:
+            text = text[:i].rstrip("\n") + "\n\n" + new + text[i:]
+    return text, added
+
+
+def upgrade_v3(templates: Path, discovery: Path) -> tuple[list, list]:
+    """Bring a v3 folder made before the plan to the whole new version.
+
+    Moves 5-debrief/output/summary.md to 8-report/summary.md, and adds to
+    state.yaml and budgets.yaml whatever is missing: the plan step, phases 6-8
+    with their steps, the validations counter, the new budgets, and the plan.
+    Never deletes, never overwrites, never changes an existing status, never
+    touches a file the user writes (no Owns lines, no 0-README.md). If the
+    brief already has a '## Plan', the default plan is not written.
+    Running it again changes nothing.
     """
     moved: list[str] = []
     unrouted: list[str] = []
@@ -485,22 +599,35 @@ def upgrade_v3(templates: Path, discovery: Path) -> tuple[list, list]:
     elif source.exists():
         move(source, dest, moved, unrouted, OLD_SUMMARY)
 
+    brief = discovery / "1-desk-research" / "brief.md"
+    brief_has_plan = brief.exists() and bool(
+        re.search(r"^## Plan\s*$", brief.read_text(encoding="utf-8"), re.M))
+
     state_path = discovery / "_engine" / "state.yaml"
     if state_path.exists():
         text = state_path.read_text(encoding="utf-8")
         original = text
-        # The path in state.yaml follows the new layout, whether or not the file
-        # exists yet. The one exception is a conflict: both files exist, nothing
-        # moved, so state.yaml is left alone for the user to decide.
-        if not conflict and OLD_SUMMARY in text:
+        if not conflict and OLD_SUMMARY in text and f" + {OLD_SUMMARY}" not in text:
             text = text.replace(OLD_SUMMARY, NEW_SUMMARY)
             moved.append(f"_engine/state.yaml: {OLD_SUMMARY} repointed to {NEW_SUMMARY}")
-        if not re.search(r"^plan:", text, re.M):
-            text = text.rstrip("\n") + "\n\n" + default_plan_block(templates)
-            moved.append("_engine/state.yaml: default plan added (a starting point: "
-                         "the Guide proposes it and you approve it)")
+        text, added, eye = upgrade_state(templates, text, brief_has_plan)
+        moved += added
+        unrouted += eye
         if text != original:
             state_path.write_text(text, encoding="utf-8")
+
+    budgets_path = discovery / "_engine" / "budgets.yaml"
+    if budgets_path.exists():
+        text = budgets_path.read_text(encoding="utf-8")
+        text, added = upgrade_budgets(templates, text)
+        moved += added
+        if added:
+            budgets_path.write_text(text, encoding="utf-8")
+
+    if moved:
+        unrouted.append("Your own files were not touched: old files have no 'Owns:' line and "
+                        "0-README.md still shows the five phases. The editor proposes both at "
+                        "the next gate.")
     return moved, unrouted
 
 

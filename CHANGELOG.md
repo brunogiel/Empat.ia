@@ -30,6 +30,14 @@ with something to hand over. The method now matches that.
   moves to the brief ("Who is who"), the coverage plan to `knowledge.md` (a "who answers it"
   column) and the sample risks to `recruiting.md`. `--migrate` does not move sections of an
   existing project: the editor proposes it at the next gate.
+- **`--migrate` leaves an old v3 folder fully upgraded.** It adds to `state.yaml` the `plan` step,
+  phases 6-8 with their steps and the `validations:` counter, and to `budgets.yaml` the new
+  budgets (the summary's budget is repointed to `8-report/`). Existing statuses and values are
+  never changed. If the brief already has a `## Plan`, the default plan is not written: `plan:`
+  stays empty and the Guide builds it from the brief, which wins on conflict. User files are not
+  touched; the editor proposes the `Owns:` lines at the next gate.
+- The plan's `piece` is a phase or a step; progress is `done` over the rows that are not
+  `skipped`; the Guide checks `interviews.target` and `validations.target` against the plan.
 
 ### Changed
 

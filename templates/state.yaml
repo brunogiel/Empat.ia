@@ -220,14 +220,20 @@ validations:
 # The brief closes with a plan, and this block is its machine-readable twin.
 # An ordered list: THE ORDER IS THE PLAN'S, NOT THE FOLDER NUMBER'S.
 #
-#   piece   a phase name (desk-research, field, ...) or a step key
+#   piece   a phase name (desk-research, field, ...) or a step key. A step of a
+#           phase counts as its own row, so a project can plan 'validation_debrief'
+#           apart from 'validation'.
 #   status  planned | skipped | external | done
 #             skipped   we do not do it, and the assumption is logged in decisions.md
 #             external  someone outside does it; 'note' links their result
 #             done      finished
 #   owner   who does it
 #   note    one line: the assumption of a skipped piece, or the link of an
-#           external one
+#           external one ('link pending' is valid when there is none yet)
+#
+# Progress is done / the rows that are not skipped. The status line shows
+# Step {i}/{N}: N counts the rows that are not skipped, i is the first row that
+# is not done.
 #
 # This is a starting point. The Guide proposes it and the user decides; it is
 # never presented as already decided. The status line counts every piece that is

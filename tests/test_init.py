@@ -381,6 +381,9 @@ class TestMigrateV3ToReport(TempProject):
         text = text.replace("file: 5-debrief/findings.md + 5-debrief/principles.md",
                             f"file: 5-debrief/findings.md + 5-debrief/principles.md + {self.OLD}")
         state.write_text(text, encoding="utf-8")
+        brief = self.discovery / "1-desk-research" / "brief.md"
+        text = brief.read_text(encoding="utf-8")
+        brief.write_text(text[:text.index("## Plan")].rstrip("\n") + "\n", encoding="utf-8")
         (self.discovery / "5-debrief" / "output").mkdir(parents=True)
         (self.discovery / self.OLD).write_text("# Mi resumen\n", encoding="utf-8")
 
@@ -424,6 +427,89 @@ class TestMigrateV3ToReport(TempProject):
         state = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
         self.assertIn("plan:", state)
         self.assertFalse((self.discovery / "8-report").exists())
+
+    def make_really_old(self, with_brief_plan):
+        """A v3 folder from before this change: 5 phases, no plan step, an
+        old summary budget, statuses already in progress."""
+        self.init()
+        d = self.discovery
+        state = d / "_engine" / "state.yaml"
+        s = state.read_text(encoding="utf-8")
+        s = s[:s.index("# --- The plan")]
+        s = s[:s.index("\nvalidations:")].rstrip("\n") + "\n" if "\nvalidations:" in s else s
+        s = re.sub(r"  6:\n(?:    .*\n)+  7:\n(?:    .*\n)+  8:\n(?:    .*\n)+", "", s)
+        s = s.replace(", plan]", "]")
+        s = re.sub(r"  plan:\n(?:    .*\n|  #.*\n)+", "", s)
+        s = re.sub(r"  (ideation|validation_guide|validation_capture|validation_debrief|report):\n(?:    .*\n)+", "", s)
+        s = s.replace("\n  # The plan can run", "\n  # The plan can run")
+        s = s.replace("file: 5-debrief/findings.md + 5-debrief/principles.md",
+                      "file: 5-debrief/findings.md + 5-debrief/principles.md + 5-debrief/output/summary.md")
+        s = s.replace("current_step: start\ncurrent_status: not_started",
+                      "current_step: start\ncurrent_status: validated")
+        state.write_text(s, encoding="utf-8")
+        b = d / "_engine" / "budgets.yaml"
+        bt = b.read_text(encoding="utf-8")
+        for path in ["6-ideation/concepts.md", "7-validation/tasks.md", "7-validation/0-index.md",
+                     "7-validation/findings.md"]:
+            bt = re.sub(rf"  {re.escape(path)}:\n    lines: \d+\n    hard: \w+\n", "", bt)
+        bt = bt.replace("  8-report/summary.md:", "  5-debrief/output/summary.md:")
+        b.write_text(bt, encoding="utf-8")
+        brief = d / "1-desk-research" / "brief.md"
+        text = brief.read_text(encoding="utf-8")
+        text = text[:text.index("## Plan")].rstrip("\n") + "\n"
+        if with_brief_plan:
+            text += "\n## Plan\n\n1. interviews 5\n2. validation 5\n"
+        brief.write_text(text, encoding="utf-8")
+        (d / "5-debrief" / "output").mkdir(parents=True)
+        (d / "5-debrief" / "output" / "summary.md").write_text("# s\n", encoding="utf-8")
+
+    def test_full_migration_with_a_plan_in_the_brief_leaves_plan_empty(self):
+        self.make_really_old(True)
+        before = len(files_in(self.discovery))
+        brief_before = (self.discovery / "1-desk-research" / "brief.md").read_bytes()
+        result = self.init("--migrate")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        s = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
+        for n in "678":
+            self.assertRegex(s, rf"(?m)^  {n}:$")
+        self.assertRegex(s, r"(?m)^    steps: \[start, design_challenge, market_research, knowledge_base, plan\]")
+        for step in ["plan", "ideation", "validation_guide", "validation_capture",
+                     "validation_debrief", "report"]:
+            self.assertRegex(s, rf"(?m)^  {step}:$")
+        self.assertRegex(s, r"(?m)^validations:")
+        self.assertRegex(s, r"(?m)^plan: \[\]")
+        self.assertEqual(len(re.findall(r"^  - \{piece:", s, re.M)), 0)
+        self.assertIn("current_status: validated", s, "an existing status was changed")
+        self.assertNotIn("5-debrief/output/summary.md", s)
+        self.assertEqual(len(files_in(self.discovery)), before)
+        self.assertEqual((self.discovery / "1-desk-research" / "brief.md").read_bytes(), brief_before)
+        self.assertIn("Guide", result.stdout)
+        bud = (self.discovery / "_engine" / "budgets.yaml").read_text(encoding="utf-8")
+        for path in ["6-ideation/concepts.md", "7-validation/tasks.md", "8-report/summary.md"]:
+            self.assertIn(f"  {path}:", bud)
+        self.assertNotIn("5-debrief/output/summary.md", bud)
+
+    def test_full_migration_without_a_plan_in_the_brief_writes_the_default(self):
+        self.make_really_old(False)
+        self.init("--migrate")
+        s = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
+        self.assertEqual(len(re.findall(r"^  - \{piece:", s, re.M)), 8)
+        self.assertRegex(s, r"(?m)^validations:")
+
+    def test_full_migration_is_idempotent_and_the_result_is_consistent(self):
+        for with_plan in (True, False):
+            with self.subTest(with_plan=with_plan):
+                shutil.rmtree(self.discovery, ignore_errors=True)
+                self.make_really_old(with_plan)
+                self.init("--migrate")
+                snap = {f: (self.discovery / f).read_bytes() for f in files_in(self.discovery)}
+                result = self.init("--migrate")
+                self.assertIn("already v3", result.stdout)
+                self.assertEqual({f: (self.discovery / f).read_bytes()
+                                  for f in files_in(self.discovery)}, snap)
+                s = (self.discovery / "_engine" / "state.yaml").read_text(encoding="utf-8")
+                self.assertEqual(s.count("\nvalidations:"), 1)
+                self.assertEqual(len(re.findall(r"(?m)^  report:$", s)), 1)
 
     def test_a_v2_folder_ends_in_the_new_layout_with_a_plan(self):
         v2 = TestMigrationLosesNothing.build_v2_folder

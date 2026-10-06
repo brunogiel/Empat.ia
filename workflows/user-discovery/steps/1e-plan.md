@@ -61,6 +61,10 @@ Say it in the project's language, in plain words.
 - **External:** "Someone outside does this one; here we only link their result."
 - **Planned or done:** nothing to explain.
 
+A `piece` is a phase or a step: a step of a phase counts as its own row. An external piece
+with no link yet is valid: write "link pending" in `note`. If `plan:` is empty because the
+brief already had its own `## Plan`, build `plan:` from that section: the brief wins.
+
 A skipped piece gets its assumption in `note` and in `decisions.md`. An external
 piece gets its owner and the link to their material in `owner` and `note`. No
 folder is created for either. The status line counts an external piece, and an

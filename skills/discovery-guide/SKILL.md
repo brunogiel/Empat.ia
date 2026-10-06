@@ -271,7 +271,9 @@ plan first, with what the user tells you. Re-planning halfway is the same step.
   result. It counts in the status, and it never blocks.
 
 If `state.yaml` has no `plan:` block (a project made before it existed), do not break: offer to
-build the plan, and meanwhile follow the order of the phases.
+build the plan, and meanwhile follow the order of the phases. If `plan:` is empty because
+`--migrate` found a hand-written `## Plan` in the brief, build the block from that section.
+**The brief wins when it and `plan:` disagree**: update `plan:` to match it, not the reverse.
 
 ### Two named entry points
 
@@ -363,9 +365,16 @@ Last activity: {date + what was done}
 Next step: {recommended_action} → {recommended_reason}
 ```
 
-`i` is the position of the current piece in the plan, counting every piece that is not `skipped`.
-An `external` piece counts and never blocks. If `state.yaml` has no `plan:` block, count the
-phases in order instead.
+A `piece` in `plan:` is a phase or a step; a step of a phase counts as its own row. **Progress is
+`done` rows over the rows that are not `skipped`.** `N` is the count of rows that are not `skipped`
+and `i` is the first row that is not `done`. An `external` piece counts and never blocks, and it
+is valid without a link: its `note` says "link pending". If `state.yaml` has no `plan:` block, or
+it is empty, count the phases in order instead.
+
+**Check the targets against the plan.** Compare `interviews.target` and `validations.target` in
+`state.yaml` with what the plan says (for example, a plan of 5 interviews and 5 validation
+sessions against `interviews.target: 10`). If they do not match, say so and ask which one is
+right before going on.
 
 **Field signal.** From phase 4 on, if `interviews.done` is still 0 and more than
 `interviews.stale_after_days` have passed since `created_at`, say so before anything else and ask
