@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PROJECT NAME}}: the plan</title>
+<!--
+ONE-PAGER FOR THE PLAN CLOSE. Offered when the plan is approved, to align a client or a team
+before starting. The Guide writes it to share/YYYY-MM-DD-<slug>.html, in the project's
+language, only when the person says yes. Replace every {{...}} with text from the brief and
+from `plan:` in _engine/state.yaml. One page, one file, nothing external.
+
+NEVER INCLUDE: assumptions, co-pilot readings, internal notes, or quotes without consent.
+Delete this comment before saving.
+-->
+<style>
+  :root { --bg:#ffffff; --fg:#1d2330; --muted:#5b6475; --line:#d9dee7; --soft:#f4f6fa; --accent:#2457d6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14171f; --fg:#e8ebf2; --muted:#9aa3b5; --line:#2b3140; --soft:#1c2029; --accent:#7ea2ff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 28px 20px 40px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .meta { color: var(--muted); font-size: .85rem; margin: 0 0 16px; }
+  .challenge { background: var(--soft); border-left: 4px solid var(--accent); padding: 10px 14px; border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: .88rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+  .wrap { overflow-x: auto; }
+  footer { margin-top: 24px; color: var(--muted); font-size: .8rem; }
+  @media print { body { background:#fff; color:#000; } @page { margin: 14mm; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{PROJECT NAME}}: the plan</h1>
+  <p class="meta">{{DATE}} &middot; Agreed between {{THE PEOPLE INVOLVED}}</p>
+  <p class="challenge">{{THE DESIGN CHALLENGE, from the brief}}</p>
+  <div class="wrap">
+  <table>
+    <thead><tr><th>Step</th><th>Piece</th><th>Owner</th><th>Reviews or helps</th><th>How</th><th>Done when</th><th>When</th></tr></thead>
+    <tbody>
+      <!-- One row per plan row that is not skipped, in plan order. Repeat. -->
+      <tr><td>{{1}}</td><td>{{PIECE}}</td><td>{{OWNER}}</td><td>{{REVIEWERS}}</td><td>{{HOW}}</td><td>{{DONE WHEN}}</td><td>{{WHEN}}</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>{{ONE LINE: which pieces are left out and what that means, if any}}</p>
+  <footer>This plan is the agreement. If the method of a piece changes, we say so and update it.</footer>
+</main>
+</body>
+</html>

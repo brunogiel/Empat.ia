@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PROJECT NAME}}: where we are</title>
+<!--
+SHAREABLE SNAPSHOT. The Guide writes this file to share/YYYY-MM-DD-<slug>.html, in the
+project's language, only when the person says yes. Replace every {{...}} with text taken
+from the project files. Nothing is invented or copied from memory: this is a view.
+
+TAKEN FROM:  the challenge from 1-desk-research/brief.md; stage and progress from
+_engine/state.yaml; the plan, with owner and reviewers, from `plan:`; each piece's `how`
+as the methodology; done and pending from the plan statuses.
+
+NEVER INCLUDE: assumptions, co-pilot readings, internal notes, or any quote whose consent
+does not allow sharing. Keep it one file: no external fonts, images, scripts or links.
+Delete this comment before saving.
+-->
+<style>
+  :root { --bg:#ffffff; --fg:#1d2330; --muted:#5b6475; --line:#d9dee7; --soft:#f4f6fa; --accent:#2457d6; --ok:#1f7a4d; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14171f; --fg:#e8ebf2; --muted:#9aa3b5; --line:#2b3140; --soft:#1c2029; --accent:#7ea2ff; --ok:#5cc98f; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 1.7rem; line-height: 1.2; margin: 0 0 4px; }
+  h2 { font-size: 1.1rem; margin: 36px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .meta { color: var(--muted); font-size: .9rem; margin: 0 0 20px; }
+  .challenge { background: var(--soft); border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 4px; }
+  .bar { height: 10px; background: var(--soft); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .bar span { display:block; height:100%; width: {{PERCENT}}%; background: var(--accent); }
+  .piece { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin: 10px 0; }
+  .piece h3 { font-size: 1rem; margin: 0 0 4px; }
+  .tag { display:inline-block; font-size:.75rem; padding:1px 8px; border-radius:10px; border:1px solid var(--line); color:var(--muted); margin-left:6px; }
+  .tag.done { color: var(--ok); border-color: var(--ok); }
+  .piece p { margin: 4px 0; }
+  .label { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+  footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
+  @media print { body { background:#fff; color:#000; } main { padding: 0; } .piece { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{PROJECT NAME}}</h1>
+  <p class="meta">{{DATE}} &middot; {{CURRENT STAGE}} &middot; Step {{i}}/{{N}}</p>
+
+  <h2>The challenge</h2>
+  <p class="challenge">{{THE DESIGN CHALLENGE, from the brief}}</p>
+
+  <h2>Where we are</h2>
+  <p>{{ONE LINE: the current stage and what happens next}}</p>
+  <div class="bar" role="img" aria-label="Progress {{PERCENT}} percent"><span></span></div>
+  <p class="meta">{{done}} of {{N}} pieces done</p>
+
+  <h2>The plan, and how each piece works</h2>
+  <!-- One block per plan row that is not skipped, in plan order. Repeat. -->
+  <div class="piece">
+    <h3>{{PIECE}} <span class="tag done">{{done | in progress | pending | external}}</span></h3>
+    <p><span class="label">Owner</span> {{OWNER}} &middot; <span class="label">Reviews or helps</span> {{REVIEWERS}}</p>
+    <p><span class="label">How</span> {{HOW: the method in plain words}}</p>
+    <p><span class="label">Done when</span> {{DONE WHEN}}</p>
+  </div>
+
+  <h2>Done and still to do</h2>
+  <p><strong>Done:</strong> {{LIST}}</p>
+  <p><strong>Still to do:</strong> {{LIST}}</p>
+
+  <footer>Made with Empat.ia from the project files. A snapshot of {{DATE}}: it does not update itself.</footer>
+</main>
+</body>
+</html>

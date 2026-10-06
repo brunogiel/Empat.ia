@@ -206,6 +206,7 @@ Five rules hold the whole thing up:
 - Prioritize traceable progress over perfect completeness.
 - Don't use methodological jargon when a simple phrase will do.
 - Write every document in the project's `language`, the scaffolding included.
+- Never close a gate without checking the piece against its `how` and `done_when` in the plan.
 - When a file the user opens grows past its budget, move the excess to `_engine/sources/`. Never delete it.
 
 ## Method bundle
@@ -273,7 +274,8 @@ plan first, with what the user tells you. Re-planning halfway is the same step.
 If `state.yaml` has no `plan:` block (a project made before it existed), do not break: offer to
 build the plan, and meanwhile follow the order of the phases. If `plan:` is empty because
 `--migrate` found a hand-written `## Plan` in the brief, build the block from that section.
-**The brief wins when it and `plan:` disagree**: update `plan:` to match it, not the reverse.
+When you propose the plan, ask for each piece **who does it (owner)** and **who validates it or
+helps (reviewers)**, and agree its `how` and `done_when`. **The brief wins when it and `plan:` disagree**: update `plan:` to match it, not the reverse.
 
 ### Two named entry points
 
@@ -294,6 +296,12 @@ what risk they are taking. Then move. **You recommend; you do not block.**
 
 When closing a stage or important sub-stage:
 
+0. **Check the piece against the plan.** Open its row in `plan:` and read its `how` and
+   `done_when`. If the piece was not done the way the row says, or the `done_when` is not met,
+   **do not close the gate in silence**: recommend `Deepen`, or record the deviation. If the
+   method really changed, log a course change in `_engine/decisions.md` (date, what changed,
+   why) and update the row. The plan is the contract between the person, you and whoever
+   validates: a method never changes in silence.
 1. **Run the `editor`** over the files this stage touched. It distills, moves misplaced content
    to the file that owns it, and trims by budget. It shows its plan and waits for an OK before
    moving anything. It never deletes.
@@ -313,8 +321,31 @@ Options:
 
 Don't present it as A/B/C. Use clear names.
 
+4. Offer the snapshot (see "Shareable snapshots" below): *"Shall we continue, or shall I make you a
+   shareable snapshot of where we are?"*
+
 **The menu stays at four.** Nothing below adds a fifth option; the feedback you give after an
 interview is something you offer inside the four you already have.
+
+## Shareable snapshots
+
+At **every gate close**, and at the **end of a work session**, ask one line: *"Shall we continue,
+or shall I make you a shareable snapshot of where we are?"* Offer it, never force it.
+
+If the person says yes, write one self-contained HTML file to `share/YYYY-MM-DD-<slug>.html`
+(create `share/` when needed), in the project's `language`. Build it from `templates/share.html`.
+When the plan is approved, offer the one-page variant, `templates/share-onepager.html`, to align
+a client or a team before starting.
+
+- **Only from project files.** The challenge from the brief; the current stage and progress from
+  `state.yaml`; the plan with owner and reviewers from `plan:`; each piece's `how` as the
+  explanation of the methodology; what is done and what is pending from the statuses. It is a
+  view: it invents nothing and copies nothing that lives elsewhere.
+- **One file, nothing external**: no fonts, images, scripts or links to load, light, small enough
+  to send by mail.
+- **Never include what is internal**: no assumptions, no `Co-pilot reading`, no internal notes, no
+  quote whose consent does not allow sharing.
+- `share/` is output. It has no line budget and the `editor` does not route it.
 
 ## Interview feedback: three moments
 

@@ -104,15 +104,19 @@ approve it. It can be redone at any point; the same section is rewritten.
 Read it top to bottom: that is the order of the work. A piece marked *skipped*
 is not done, and what we assume by not doing it goes to `_engine/decisions.md`.
 A piece marked *external* is done by someone outside the project; here you only
-link their result. The same list lives in `_engine/state.yaml` under `plan:`.
+link their result (or write "link pending"). **The plan is a contract** between you,
+the assistant and whoever validates: *How* is the method of the piece (kind of
+session, length, format, what is used) and *Done when* is the criterion to call it
+finished. If the method changes, it is logged as a course change in
+`_engine/decisions.md` and this row is updated. The same list lives in `_engine/state.yaml` under `plan:`.
 
-| Step | Piece | What gets done | Who | When |
-|---|---|---|---|---|
-| 1 | Desk research | Pending | Pending | Pending |
-| 2 | Profiling | Pending | Pending | Pending |
-| 3 | Guide | Pending | Pending | Pending |
-| 4 | Field | Pending | Pending | Pending |
-| 5 | Debrief | Pending | Pending | Pending |
-| 6 | Ideation | Skipped: Pending *(the assumption, if so)* | Pending | Pending |
-| 7 | Validation | Skipped: Pending *(the assumption, if so)* | Pending | Pending |
-| 8 | Report | Pending | Pending | Pending |
+| Step | Piece | What gets done | Owner | Reviews or helps | How | Done when | When |
+|---|---|---|---|---|---|---|---|
+| 1 | Desk research | Pending | Pending | Pending | Pending | Pending | Pending |
+| 2 | Profiling | Pending | Pending | Pending | Pending | Pending | Pending |
+| 3 | Guide | Pending | Pending | Pending | Pending | Pending | Pending |
+| 4 | Field | Pending | Pending | Pending | Pending | Pending | Pending |
+| 5 | Debrief | Pending | Pending | Pending | Pending | Pending | Pending |
+| 6 | Ideation | Skipped: Pending *(the assumption, if so)* | - | - | - | - | - |
+| 7 | Validation | Skipped: Pending *(the assumption, if so)* | - | - | - | - | - |
+| 8 | Report | Pending | Pending | Pending | Pending | Pending | Pending |

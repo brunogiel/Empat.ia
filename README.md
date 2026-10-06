@@ -99,7 +99,7 @@ The brief closes with a **plan**: which pieces this project uses, in what order,
 and who does each one. **The order is the plan's, not the folder numbers'**: the
 numbers only name the folders. Phases 6 and 7 are on demand, and a piece can be
 marked as skipped (we write down what we assume by not doing it) or as done by
-someone else (we link their result). Every plan closes with the report.
+someone else (we link their result). Every plan closes with the report. Each piece carries who does it, who validates it, how it is done and when it counts as done: the plan is the contract, and the Guide checks a piece against it before closing its gate. At any gate, you can ask for a shareable one-file HTML snapshot of where the project is.
 
 | Phase | What happens | Estimated time | What it leaves behind |
 |---|---|---|---|

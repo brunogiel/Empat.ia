@@ -221,6 +221,66 @@ class TestPlan(unittest.TestCase):
             self.assertTrue((REPO / "templates" / name).exists(), name)
 
 
+class TestPlanIsAContract(unittest.TestCase):
+    """R22-R23: every plan row says who, how and when it is done."""
+
+    def test_every_default_plan_row_has_the_contract_fields(self):
+        text = STATE.read_text(encoding="utf-8")
+        rows = re.findall(r"^  - \{piece:.*\}$", text, re.M)
+        self.assertEqual(len(rows), 8)
+        for row in rows:
+            for field in ["owner:", "reviewers:", "how:", "done_when:"]:
+                with self.subTest(row=row[:30], field=field):
+                    self.assertIn(field, row)
+
+    def test_the_brief_plan_table_has_the_four_new_columns(self):
+        brief = (REPO / "templates" / "brief.md").read_text(encoding="utf-8")
+        header = next(l for l in brief.splitlines() if l.startswith("| Step |"))
+        for col in ["Owner", "Reviews or helps", "How", "Done when"]:
+            self.assertIn(col, header)
+
+    def test_the_gate_checks_the_piece_against_how_and_done_when(self):
+        skill = (REPO / "skills" / "discovery-guide" / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("`how` and `done_when`", skill)
+        self.assertIn("course change", skill)
+        step = (STEPS_DIR / "1e-plan.md").read_text(encoding="utf-8")
+        self.assertIn("owner", step)
+        self.assertIn("reviewers", step)
+
+
+class TestShareable(unittest.TestCase):
+    """R24: the snapshot is one file that loads nothing from outside."""
+
+    FILES = ["share.html", "share-onepager.html"]
+
+    def test_the_templates_exist_and_load_nothing_external(self):
+        for name in self.FILES:
+            body = (REPO / "templates" / name).read_text(encoding="utf-8")
+            with self.subTest(name=name):
+                self.assertNotIn("http", body)
+                self.assertNotRegex(body, r"(?i)<link\b|<script\b|@import|url\(|<img\b|<iframe\b")
+                self.assertIn("prefers-color-scheme: dark", body)
+                self.assertIn("@media print", body)
+
+    def test_the_guide_offers_the_snapshot_at_gates_and_session_end(self):
+        skill = (REPO / "skills" / "discovery-guide" / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("shareable snapshot", skill)
+        self.assertIn("every gate close", skill)
+        self.assertIn("end of a work session", skill)
+        self.assertIn("share/YYYY-MM-DD-<slug>.html", skill)
+
+    def test_the_snapshot_never_carries_internal_material(self):
+        skill = (REPO / "skills" / "discovery-guide" / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("no assumptions", skill)
+        self.assertIn("consent", skill)
+
+    def test_share_is_not_routed_or_budgeted(self):
+        self.assertNotIn("share/", BUDGETS.read_text(encoding="utf-8").split("budgets:")[1]
+                         .split("# Files with no line budget")[0])
+        editor = (REPO / "agents" / "editor.md").read_text(encoding="utf-8")
+        self.assertIn("`share/`", editor)
+
+
 class TestOneFileOneJob(unittest.TestCase):
     """R19: every file the user opens writes only what is its own."""
 

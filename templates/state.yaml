@@ -228,6 +228,10 @@ validations:
 #             external  someone outside does it; 'note' links their result
 #             done      finished
 #   owner   who does it
+#   reviewers  who validates it or helps; a list, and it can be empty
+#   how     the method of the piece in one line: kind of session, length, format,
+#           what is used
+#   done_when  the criterion to call the piece finished
 #   note    one line: the assumption of a skipped piece, or the link of an
 #           external one ('link pending' is valid when there is none yet)
 #
@@ -235,15 +239,20 @@ validations:
 # Step {i}/{N}: N counts the rows that are not skipped, i is the first row that
 # is not done.
 #
+# THE PLAN IS THE CONTRACT between the person, the assistant and whoever
+# validates. Before a gate closes, the Guide checks the piece against its 'how'
+# and 'done_when'. If the method changes, the change is logged in
+# _engine/decisions.md as a course change and the row is updated here.
+#
 # This is a starting point. The Guide proposes it and the user decides; it is
 # never presented as already decided. The status line counts every piece that is
 # not skipped, and an external piece counts but never blocks.
 plan:
-  - {piece: desk-research, status: planned, owner: "", note: ""}
-  - {piece: profiling,     status: planned, owner: "", note: ""}
-  - {piece: guide,         status: planned, owner: "", note: ""}
-  - {piece: field,         status: planned, owner: "", note: ""}
-  - {piece: debrief,       status: planned, owner: "", note: ""}
-  - {piece: ideation,      status: skipped, owner: "", note: ""}
-  - {piece: validation,    status: skipped, owner: "", note: ""}
-  - {piece: report,        status: planned, owner: "", note: ""}
+  - {piece: desk-research, status: planned, owner: "", reviewers: [], how: "Brief, market scan and knowledge base, written with the assistant", done_when: "The challenge is agreed and the open questions are listed", note: ""}
+  - {piece: profiling, status: planned, owner: "", reviewers: [], how: "Profiles and recruiting plan, written with the assistant", done_when: "The sample is chosen and the first contacts are made", note: ""}
+  - {piece: guide, status: planned, owner: "", reviewers: [], how: "Interview guide of up to two pages, reviewed before the first interview", done_when: "Someone else could run an interview from it", note: ""}
+  - {piece: field, status: planned, owner: "", reviewers: [], how: "45-60 minute interviews, recorded with consent, one note each", done_when: "The agreed number of interviews is done and processed", note: ""}
+  - {piece: debrief, status: planned, owner: "", reviewers: [], how: "Cross the evidence into patterns and design principles", done_when: "Every principle traces to evidence", note: ""}
+  - {piece: ideation, status: skipped, owner: "", reviewers: [], how: "", done_when: "", note: ""}
+  - {piece: validation, status: skipped, owner: "", reviewers: [], how: "", done_when: "", note: ""}
+  - {piece: report, status: planned, owner: "", reviewers: [], how: "One-page report of the whole project", done_when: "The page is checked against its sources and is ready to share", note: ""}

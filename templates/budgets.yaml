@@ -115,6 +115,9 @@ budgets:
 #
 # 4-field/notes.md — the drawer. The editor empties it at every gate.
 #
+# share/ — the shareable snapshots (HTML). Output, not a working file: no budget,
+#   and the editor never routes it.
+#
 # 1-desk-research/sources/ — client material as-is (briefs, decks, canvases,
 #   spreadsheets, whiteboards). It exists so a human can see what the method
 #   was fed; the editor never trims it.

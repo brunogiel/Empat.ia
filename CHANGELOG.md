@@ -30,6 +30,16 @@ with something to hand over. The method now matches that.
   moves to the brief ("Who is who"), the coverage plan to `knowledge.md` (a "who answers it"
   column) and the sample risks to `recruiting.md`. `--migrate` does not move sections of an
   existing project: the editor proposes it at the next gate.
+- **The plan is a contract.** Each row of `plan:` and each row of the brief's `## Plan` table
+  carries `owner`, `reviewers` (who validates or helps), `how` (the method in one line) and
+  `done_when`. The Guide asks for them when it proposes the plan, checks a piece against its
+  `how` and `done_when` before closing its gate (recommending `Deepen` or logging the deviation
+  rather than closing in silence), and logs any change of method as a course change in
+  `_engine/decisions.md`.
+- **Shareable snapshots.** At every gate close and at the end of a session the Guide offers a
+  single self-contained HTML in `share/YYYY-MM-DD-<slug>.html`, built only from project files
+  (`templates/share.html`, plus a one-pager for the plan close). It never carries assumptions,
+  co-pilot readings or quotes without consent. `share/` has no budget and is not routed.
 - **`--migrate` leaves an old v3 folder fully upgraded.** It adds to `state.yaml` the `plan` step,
   phases 6-8 with their steps and the `validations:` counter, and to `budgets.yaml` the new
   budgets (the summary's budget is repointed to `8-report/`). Existing statuses and values are

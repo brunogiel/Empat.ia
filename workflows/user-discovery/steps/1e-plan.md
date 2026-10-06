@@ -45,12 +45,32 @@ brief.
 2. **[LATENT]** Show it. If the host can show inline visuals, show it as a widget
    with one box per piece, in order, each with its status and its owner. If not,
    show it as a table.
-3. **[LATENT]** Ask for approval. Change what the user changes.
-4. **[DET]** Write the `plan:` block in `_engine/state.yaml` and the `## Plan`
+3. **[LATENT]** For every piece, ask the person two things if the brief does not say: **who
+   does it (owner)** and **who validates it or helps (reviewers)**. Then ask or propose the
+   **how** (kind of session, length, format, what is used) and the **done when** (the criterion
+   to call it finished). Do not leave them blank.
+4. **[LATENT]** Ask for approval. Change what the user changes.
+5. **[DET]** Write the `plan:` block in `_engine/state.yaml` and the `## Plan`
    section of the brief. Both say the same thing.
-5. **[DET]** For every piece that is `skipped` or `external`, log it in
+6. **[DET]** For every piece that is `skipped` or `external`, log it in
    `_engine/decisions.md` as an assumption: what we assume by not doing it, or who
    does it and where their result lives.
+
+## The plan is the contract
+
+Every row carries `owner`, `reviewers`, `how` and `done_when`, in the `plan:` block and in the
+brief's table. They are the agreement between the person, the assistant and whoever validates.
+
+- **Before closing the gate of a piece**, check the piece against its `how` and `done_when`.
+  If they are not met, do not close it in silence: recommend `Deepen` or log the deviation.
+- **If the method of a piece changes** (a different kind of session, another length, someone
+  else running it), log it in `_engine/decisions.md` as a course change: date, what changed,
+  why. Then update the row. A method never changes in silence.
+
+## The one-pager
+
+When the plan is approved, offer a one-page shareable version to align a client or a team before
+starting (see "Shareable snapshots" in the Guide's `SKILL.md`). It uses `templates/share-onepager.html`.
 
 ## What you tell the user about each state
 

@@ -56,6 +56,8 @@ Job 4 is what keeps the drawer from becoming the problem it was meant to solve. 
 
 Two rules the table does not cover. Nothing ever moves **into** `3-guide/guide.md`: it holds questions and nothing else. And nothing moves **out of** a `-prep.md` back into the master guide: the prep sheet is disposable, the master is not.
 
+`share/` holds the shareable snapshots the Guide writes. It is output: it has no line budget, and the editor never trims, routes or edits anything in it.
+
 ## Hard rules
 
 - **Never deletes.** It moves, and leaves a pointer (a markdown link to the new destination) where the content used to be.
