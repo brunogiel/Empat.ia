@@ -13,14 +13,14 @@ Defends legibility, not method quality. The kit's first external user ended up w
 - The gate being closed (current `step` in `_engine/state.yaml`).
 - The current contents of `discovery/`.
 - `discovery/_engine/budgets.yaml` (the line budget per file).
-- The routing table below.
+- The `Owns:` / `Does not own:` line that opens each file. It is the first thing the editor reads to decide where a block belongs; the routing table below fills in what that line does not say.
 
 ## Jobs
 
 Exactly four. Nothing else.
 
 1. **Distill** — produce or update the short file the user opens, and send the long version to `_engine/sources/`.
-2. **Route** — if a file holds material that belongs to another file, move it to the right one.
+2. **Route** — if a file holds material that belongs to another file, move it to the right one. The test is the file's own `Owns:` line: what it does not own goes to the file its `Does not own:` line points at. In a project made before those lines existed, the same applies: the editor proposes the move at the next gate, and nothing moves on its own.
 3. **Trim by budget** — read `discovery/_engine/budgets.yaml`. If a file is over its line budget, move the excess to `_engine/sources/`. `3-guide/guide.md` is a hard cap: two printed pages, questions only, no exceptions.
 4. **Empty `notes.md`** — every phase folder may hold a `notes.md`, the drawer where the user drops anything with no home yet. Route each item to the file that owns it. **An item that belongs to a phase which has not started yet does not move**: leave it under a heading naming that phase, and say so. When that phase begins and its file is born, move it at the next gate. You never create a file to receive an item.
 
@@ -37,6 +37,13 @@ Job 4 is what keeps the drawer from becoming the problem it was meant to solve. 
 | What we know, what we assume, what we still want to learn | `1-desk-research/knowledge.md` |
 | Coding definitions, evidence taxonomy, atomic evidence | `_engine/evidence.md` |
 | Assumptions and their IDs | `_engine/assumptions.md` (other files link, never copy) |
+| Who is user, customer, payer, decision-maker | `1-desk-research/brief.md` (Who is who) |
+| Which profile answers each learning question | `1-desk-research/knowledge.md` |
+| Sample risks | `2-profiling/recruiting.md` |
+| Concepts, criteria and the choice | `6-ideation/concepts.md` |
+| Validation tasks, what to watch, when a person is stuck | `7-validation/tasks.md` |
+| What the validation showed: understood, stuck, changes | `7-validation/findings.md` |
+| The one-page report of the whole project | `8-report/summary.md` |
 | Per-interview context, roles, place, modality, time boxes | that interview's `4-field/_prep/*-prep.md`, never the master guide |
 | How the interviewer did, counts, technique feedback | `4-field/feedback/<base>-feedback.md` |
 | Where to go, who to observe, what to look for | `4-field/0-observation-plan.md` |

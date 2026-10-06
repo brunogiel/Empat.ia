@@ -17,6 +17,22 @@ This is the symmetric partner of the interview-guides stage: that stage builds t
 
 Process **interview by interview**. Don't cross patterns here: that is phase 5, the debrief.
 
+## Validation sessions (`VAL-00X`)
+
+The same flow processes a session where a person used a prototype, with these differences:
+
+- The ID is `VAL-00X`, and the files live in `discovery/7-validation/`: the note
+  `7-validation/<base>.md`, the prep sheet in `_prep/`, the recording or transcript in `_raw/`,
+  the feedback in `feedback/`. Create them with `--add validation-note|validation-prep|validation-feedback --name <base>`.
+  The script refuses `INT-` for these and `VAL-` for interviews.
+- Evidence rows are `VAL-00X-NN`, numbered within the session. Record what the person **did**
+  (where they stopped, went back, asked for help) before what they said.
+- The guide to compare against is `7-validation/tasks.md`; its task blocks (`### 3. Task 1: …`)
+  are the blocks `count_interview.py --guide` reports.
+- The counter is `validations: {target, done, unprocessed}` in `_engine/state.yaml`, apart from
+  `interviews`. If the block is missing, add it. The index is `7-validation/0-index.md`.
+- The retro proposes edits to `tasks.md`, never applies them, same as the master guide.
+
 ## Inputs (ask only what's missing, keep it to the minimum)
 
 1. **The raw material.** A transcript, recording, or notes. Either the user drops it in `discovery/4-field/_raw/`, or they point you to where it lives (a file, a tool you can read). If you can't read it, ask them to paste or drop it.
@@ -69,8 +85,9 @@ Process **interview by interview**. Don't cross patterns here: that is phase 5, 
    - The entry is about the interviewer, not the interviewee. No insights here.
    - **If someone else ran the interview**, technique feedback naming them does not go into this
      file, which the team reads. Say it in conversation; write it only if they ask.
-9. **[DET] Update `interviews.done` and `interviews.unprocessed`** in `_engine/state.yaml`. The
-   Guide reads `unprocessed` before offering Advance into the debrief.
+9. **[DET] Update `interviews.done` and `interviews.unprocessed`** in `_engine/state.yaml` (for a
+   `VAL-` session, `validations.done` and `validations.unprocessed`). The Guide reads
+   `unprocessed` before offering Advance into the debrief.
 10. **[DET] Gate.** Close with a recommendation: `Advance` (enough material to cross patterns), `Deepen` (key interviews missing), `Question` (sampling or capture bias), or `Council` (strong contradictions). Update `_engine/state.yaml` if the method's state file exists.
 
 ## Hard rules

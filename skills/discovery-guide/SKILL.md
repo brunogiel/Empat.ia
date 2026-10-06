@@ -75,7 +75,9 @@ the conversation: the whole scaffolding is written in that language. A project w
 with English templates ends up half and half, and the files nobody touched stay in English forever.
 
 If the folder already exists in the v1 or v2 layout, run the same script with `--migrate`. It
-moves files, never deletes them, and reports anything it could not route. The script refuses to
+moves files, never deletes them, and reports anything it could not route. On a v3 folder made
+before the plan existed, `--migrate` moves `5-debrief/output/summary.md` to `8-report/summary.md`
+(never over a file that is already there) and adds the default `plan:` block to `state.yaml`. The script refuses to
 create on top of an older layout, so you cannot end up with two structures side by side.
 
 **`--force` is safe now and that is deliberate.** It only re-copies files nobody has touched. A
@@ -83,7 +85,8 @@ file you already wrote in the user's language is never clobbered; overwriting on
 `--overwrite-modified`, and you ask before using it.
 
 After init the folder holds **six files, and only two of them are the user's**: `0-README.md` and
-`1-desk-research/brief.md`. Everything else is born when its step starts.
+`1-desk-research/brief.md`. Everything else is born when its step starts, and that includes the
+folders of phases 6, 7 and 8.
 
 1. **Write `0-README.md` and `1-desk-research/brief.md` in the project's language, in this same
    turn.** Do not hand back control with English scaffolding in a Spanish project. This is the
@@ -94,7 +97,8 @@ After init the folder holds **six files, and only two of them are the user's**: 
    (for example: "the tentative user is X, unvalidated").
 4. Update `_engine/state.yaml`: `current_phase: 1`, `current_step: start`,
    `current_status: capturing`, `recommended_action: Deepen`.
-5. Show the state and the next recommended action.
+5. Show the state and the next recommended action. The brief closes with a plan: when the
+   challenge is clear, run step `1e-plan.md` and propose which pieces this project uses.
 
 ## Creating a file when its step starts
 
@@ -113,7 +117,10 @@ saying so plainly is part of the job.
 
 **Per-interview and per-observation files work the same way, but take a name.** Use
 `--add interview-note|interview-prep|interview-feedback|observation-note --name <base>`, where
-`<base>` is the interview or observation ID: `INT-004-ana-lopez-acme`, `OBS-002-store-floor`.
+`<base>` is the interview, observation or validation ID: `INT-004-ana-lopez-acme`,
+`OBS-002-store-floor`, `VAL-001-ben-ito`. The prefix has to match the type: `interview-*` takes
+`INT-`, `observation-*` takes `OBS-`, `validation-*` (`validation-note`, `validation-prep`,
+`validation-feedback`) takes `VAL-`. The script refuses a mismatch.
 
 ```bash
 python3 {skill-root}/scripts/init_project.py --project-root {project-root} \
@@ -136,7 +143,11 @@ discovery/
   3-guide/                   guide.md  process.md
   4-field/                   0-index.md  0-observation-plan.md  feedback/
                              INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
-  5-debrief/                 findings.md  principles.md  output/summary.md
+  5-debrief/                 findings.md  principles.md
+  6-ideation/                concepts.md                     (on demand, born with its first --add)
+  7-validation/              tasks.md  0-index.md  findings.md
+                             VAL-001-name-surname.md  _prep/  _raw/  feedback/   (on demand)
+  8-report/                  summary.md                      (born with its first --add)
   _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md
                              evidence.md  synthesis-log.md  sources/  skills/
   {phase}/notes.md           the drawer, born on demand. The editor empties it at each gate
@@ -149,6 +160,10 @@ discovery/
 - **`4-field/feedback/`** holds interview feedback: one file per interview,
   `INT-00X-name-surname-feedback.md`, plus a `0-README.md` explaining how to
   read them. No longer a single accumulating log.
+- **`7-validation/`** holds sessions with a prototype: `VAL-00X-name-surname.md`, a prep sheet in
+  `_prep/`, the recording in `_raw/`, and feedback in `feedback/`. Their evidence is `VAL-00X-NN`.
+- **`8-report/summary.md`** is the final one-page report of the whole project. Before this piece
+  existed it lived in `5-debrief/output/`; `--migrate` moves it.
 - **`_engine/skills/`** holds project-level wrapper skills, when the project
   needs one (for example, one that fetches transcripts from the team's
   recorder). They belong to the assistant, not the human, so they never go in
@@ -158,7 +173,11 @@ The folder can be called `discovery-<project>/` instead, when one place holds mo
 discovery. The script finds a single renamed folder on its own and takes `--folder` otherwise.
 Wherever this file says `discovery/`, read the project's folder.
 
-Four rules hold the whole thing up:
+Five rules hold the whole thing up:
+
+- **The plan sets the order, not the folder numbers.** The brief closes with a `## Plan` section,
+  and `state.yaml` mirrors it under `plan:`: an ordered list of `{piece, status, owner, note}`.
+  The numbers only name the folders and never move.
 
 - **State lives in `_engine/state.yaml` and nowhere else.** Never write the current step into a
   second document. Two state files always end up disagreeing, and the user believes the wrong one.
@@ -174,6 +193,7 @@ Four rules hold the whole thing up:
 ## Hard principles
 
 - Do not invent business data.
+- **One file, one job.** Every template opens with a line `Owns: … / Does not own: … → file`. If what you are about to write is not that file's job, write it in the file that owns it, or in the phase's `notes.md` if no file owns it yet. Never write the same thing in two places: the other file links, it does not copy. The `editor` routes by that line.
 - Do not skip stages without showing state and recommendation.
 - Do not talk about "canvas": use discovery documents.
 - In early stages, preserve content even if it's redundant.
@@ -211,13 +231,21 @@ Order:
 2. `1b-design-challenge.md`
 3. `1c-market-research.md`
 4. `1d-knowledge-base.md`
-5. `2a-profiles.md`
-6. `2b-recruiting.md`
-7. `3a-guide.md`
-8. `3b-process.md`
-9. `4a-interview-capture.md`
-10. `4b-observation.md`
-11. `5a-debrief.md`
+5. `1e-plan.md`
+6. `2a-profiles.md`
+7. `2b-recruiting.md`
+8. `3a-guide.md`
+9. `3b-process.md`
+10. `4a-interview-capture.md`
+11. `4b-observation.md`
+12. `5a-debrief.md`
+13. `6a-ideation.md` (on demand)
+14. `7a-validation-guide.md` (on demand)
+15. `7b-validation-sessions.md` (on demand)
+16. `7c-validation-debrief.md` (on demand)
+17. `8a-report.md`
+
+This is the order of the files, not the order of the work. The order of the work is the plan.
 
 Valid statuses:
 
@@ -227,17 +255,34 @@ Valid statuses:
 - `validated`
 - `advanced_with_assumptions`
 
-Eleven step files, five phases. The user sees the five; you read the eleven. Granularity is
-cheap where an agent reads it and expensive where a person does.
+Seventeen step files, eight phases. The user sees the phases; you read the steps. Granularity is
+cheap where an agent reads it and expensive where a person does. Phases 6 and 7 are on demand;
+phase 8, the report, is not: every plan closes with it.
+
+### The plan sets the order
+
+The brief closes with a plan (`1e-plan.md`): which pieces this project uses, in what order, and
+who does each one. Each piece is `planned`, `skipped`, `external` or `done`. **The plan can run at
+any moment**, not only at the end of phase 1: if the project enters in the middle, you build the
+plan first, with what the user tells you. Re-planning halfway is the same step.
+
+- `skipped`: no folder, and the assumption goes to `_engine/decisions.md`.
+- `external`: someone else does it. No folder; the plan row carries the owner and a link to their
+  result. It counts in the status, and it never blocks.
+
+If `state.yaml` has no `plan:` block (a project made before it existed), do not break: offer to
+build the plan, and meanwhile follow the order of the phases.
 
 ### Two named entry points
 
-The method runs end to end, but most people arrive wanting one piece. Recognise these and take
-them there without a fight:
+The method runs end to end, but most people arrive wanting one piece. These are ready-made
+plans. Recognise them and take them there without a fight:
 
-- **"I just want the guide"** → phases 1 to 3 at the minimum: the brief, who they will talk to,
-  and the guide. Skip market research and the council unless the user asks.
-- **"I already did the interviews"** → start at phase 4, capture what they have, then phase 5.
+- **"I just want the guide"** → a plan with phases 1 to 3 and the report; the rest `skipped`. The
+  brief, who they will talk to, and the guide. Skip market research and the council unless the
+  user asks.
+- **"I already did the interviews"** → a plan that marks phases 1 to 3 `skipped`, then phases 4,
+  5 and the report. Capture what they have, then the debrief.
 
 Mark every skipped step `advanced_with_assumptions` and write the assumption it stands on, so
 the gap is visible instead of gone. Say in one line what that phase would have given them and
@@ -309,15 +354,20 @@ When the user asks "how's it going", "status", "where are we", "summary", or sim
 
 ```text
 Project: {project_name}
-Current stage: {N}/10 ({step_name})
+Current stage: Step {i}/{len(plan without skipped)} ({piece})
 Progress: ▓▓▓▓░░░░░░ {percent}%
 
 Interviews: {done}/{target}
+Validations: {done}/{target}   (only if the plan has validation)
 Last activity: {date + what was done}
 Next step: {recommended_action} → {recommended_reason}
 ```
 
-**Field signal.** From stage 07 on, if `interviews.done` is still 0 and more than
+`i` is the position of the current piece in the plan, counting every piece that is not `skipped`.
+An `external` piece counts and never blocks. If `state.yaml` has no `plan:` block, count the
+phases in order instead.
+
+**Field signal.** From phase 4 on, if `interviews.done` is still 0 and more than
 `interviews.stale_after_days` have passed since `created_at`, say so before anything else and ask
 one question: what is blocking the first interview. Preparation is not evidence. A project can
 produce two thousand lines of documents and zero field data, and the state file is the only place
@@ -409,8 +459,9 @@ When interviews are done, the user can dump all the raw material in `discovery/4
 6. Extract atomic evidence into `discovery/_engine/evidence.md`.
 7. Distill what is emerging into `discovery/5-debrief/findings.md`, pointing at evidence IDs. No principles there yet.
 8. Use `discovery/5-debrief/principles.md` only after you have traceable evidence.
+9. If the plan has ideation or validation, they follow in `6-ideation/` and `7-validation/`. The project closes with `8-report/summary.md`.
 
-The final deliverable of the project is the **design principles** in `5-debrief/principles.md`. Insights, patterns, HMW, and top quotes are material that supports the principles, not the final output. Each principle has to be traceable to specific facts or quotes in `_engine/evidence.md`. If a principle can't be traced, it's not a principle: it's an opinion.
+The central deliverable of the method is the **design principles** in `5-debrief/principles.md`. Insights, patterns, HMW, and top quotes are material that supports the principles, not the final output. Each principle has to be traceable to specific facts or quotes in `_engine/evidence.md`. If a principle can't be traced, it's not a principle: it's an opinion.
 
 ## Success metrics
 

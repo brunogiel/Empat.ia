@@ -15,7 +15,7 @@ Empat.ia is a co-pilot that guides you through an empathic design process follow
 
 - It walks you through building **design principles** traceable to evidence. That is the central deliverable.
 - It creates a `discovery/` folder inside your project, split in three zones: what you open, what the assistant keeps, and the raw material underneath.
-- It guides you step by step through 10 stages, from initial alignment to evidence-based synthesis.
+- It guides you through up to eight pieces, from initial alignment to a final report, in the order of a plan you approve.
 - It separates facts, assumptions, and inferences. It doesn't let you confuse them.
 - It turns raw interview material into traceable atomic evidence before writing insights and principles.
 - It offers you a council of agents (economist, sociologist, philosopher, artist, SME owner, cab driver, and others) when a decision needs more pressure.
@@ -79,7 +79,10 @@ discovery/
   3-guide/               guide.md  process.md
   4-field/               0-index.md  0-observation-plan.md  feedback/
                          INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
-  5-debrief/             findings.md  principles.md  output/summary.md
+  5-debrief/             findings.md  principles.md
+  6-ideation/            concepts.md                                (on demand)
+  7-validation/          tasks.md  0-index.md  findings.md  VAL-001-name-surname.md  (on demand)
+  8-report/              summary.md
   _engine/               state, assumptions, decisions, evidence, budgets, sources, skills
   AGENTS.md  CLAUDE.md   two pointers so any assistant knows what this folder is
 ```
@@ -90,7 +93,13 @@ open have a line budget: when one grows past it, the excess moves down to
 you cannot read. `3-guide/guide.md` has a hard cap of two printed pages, because
 that is the file that broke first.
 
-## The five phases
+## The eight pieces
+
+The brief closes with a **plan**: which pieces this project uses, in what order,
+and who does each one. **The order is the plan's, not the folder numbers'**: the
+numbers only name the folders. Phases 6 and 7 are on demand, and a piece can be
+marked as skipped (we write down what we assume by not doing it) or as done by
+someone else (we link their result). Every plan closes with the report.
 
 | Phase | What happens | Estimated time | What it leaves behind |
 |---|---|---|---|
@@ -98,7 +107,10 @@ that is the file that broke first.
 | **2 · Profiling** | Who you need to talk to, and how you reach them. Recruiting starts here because it is the only step that takes days, not hours | 2-5 days | `2-profiling/` |
 | **3 · The guide** | The instrument: the questions, and how your team works in the room | 1-2 hrs | `3-guide/` |
 | **4 · The field** | Interviews and, when it applies, observation. One note per person, one per outing, plus feedback on how you are interviewing | 1-3 weeks | `4-field/` |
-| **5 · Debrief** | Cross everything into design principles, and one page you can hand to someone who read none of it | 3-5 hrs | `5-debrief/` |
+| **5 · Debrief** | Cross everything into design principles | 3-5 hrs | `5-debrief/` |
+| **6 · Ideation** *(on demand)* | From the "How might we" questions to 3-5 concepts, chosen with criteria that trace back to the principles | 2-4 hrs | `6-ideation/` |
+| **7 · Prototype and validation** *(on demand)* | Put something in front of people and see what they do, not what they say | 1-2 weeks | `7-validation/` |
+| **8 · Report** | The final write-up of the whole project, on one page for someone who read none of it | 1-2 hrs | `8-report/` |
 
 **Final deliverable**: a set of **design principles** traceable to interview quotes and evidence. Decision rules that you'll then use to guide:
 
@@ -106,7 +118,7 @@ that is the file that broke first.
 - **User communication**: what words to use, what to promise, what not to promise, how to speak to different profiles.
 - **Strategy**: where to bet, which segment to prioritize, which opportunities are worth pursuing and which aren't.
 
-The principles come with patterns, insights, top quotes, and "How might we..." (HMW) questions that open the next ideation phase. The principles are what you keep when the method ends.
+The principles come with patterns, insights, top quotes, and "How might we..." (HMW) questions that open the ideation phase. The principles are what you keep when the method ends.
 
 Each phase closes with a gate: the Guide tells you what you have, what you are
 still assuming, and what it would cost to move on. **It recommends; it does not
@@ -114,23 +126,9 @@ block.** If you decide to advance on assumptions, it records the assumption and
 moves.
 
 You do not have to run the whole thing. Say _"I just want the guide"_ and it
-takes you through phases 1 to 3 at the minimum, or _"I already did the
-interviews"_ and it starts at phase 4. Skipped phases are recorded as what you
-are assuming by skipping them, so the gap stays visible instead of disappearing.
-
-## What comes next
-
-The method ends at design principles, and that is on purpose: the How Might We
-questions it produces are the handoff, not the finish line. Two phases are
-planned and not built yet.
-
-| Coming | What it would cover |
-|---|---|
-| **Ideation** | Take the How Might We questions into concepts: diverge, cluster, choose with criteria that trace back to the principles instead of to taste |
-| **Testing** | Put a concept in front of the same people, and learn from what they do with it rather than from what they say about it |
-
-Until they exist, phase 5 hands you the questions and says so plainly. It does
-not pretend the work is over.
+builds a plan with phases 1 to 3, or _"I already did the interviews"_ and it
+builds one that starts at phase 4. Skipped phases are recorded as what you are
+assuming by skipping them, so the gap stays visible instead of disappearing.
 
 ## The Guide's four actions
 

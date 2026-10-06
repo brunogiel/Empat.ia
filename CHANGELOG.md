@@ -2,6 +2,47 @@
 
 ## Unreleased
 
+### Added: the brief closes with a plan, and the map grows to eight pieces
+
+No real project followed the five phases in a straight line: some skipped the market, some
+entered after the interviews were done, some ran a round of validation, and all of them ended
+with something to hand over. The method now matches that.
+
+- **The brief closes with a `## Plan`**: which pieces the project uses, in what order, who does
+  each, and when. `state.yaml` mirrors it under `plan:` as an ordered list of
+  `{piece, status, owner, note}`, with status `planned`, `skipped`, `external` or `done`. **The
+  order is the plan's, not the folder numbers'.** The step is `1e-plan.md` and it can run at any
+  moment, including first, for a project that enters in the middle. A skipped or external piece
+  is logged as an assumption. The default plan has the eight pieces, with 6 and 7 skipped.
+- **Three new pieces**: `6-ideation/` (from the How Might We questions to three to five
+  concepts, minimal), `7-validation/` (a task script, sessions `VAL-00X` with evidence
+  `VAL-00X-NN`, and its own debrief) and `8-report/` (the final write-up). Phases 6 and 7 are on
+  demand; the report is not. Their folders are not created at install: each is born with its
+  first `--add`. `--add` takes `ideation`, `validation_guide`, `validation_capture`,
+  `validation_debrief` and `report`, plus `validation-note|prep|feedback --name VAL-...`.
+- **The ID prefix is checked by type**: `interview-*` needs `INT-`, `observation-*` needs
+  `OBS-`, `validation-*` needs `VAL-`.
+- `process-interview` also processes validation sessions and keeps a `validations` counter apart
+  from `interviews`. `7-validation/tasks.md` is a second hard budget (100 lines), like the
+  master guide.
+- **One file, one job.** Every template opens with an `Owns:` / `Does not own:` line, and the
+  editor routes by it. `profiles.md` keeps only the interview subject: the user vs. customer table
+  moves to the brief ("Who is who"), the coverage plan to `knowledge.md` (a "who answers it"
+  column) and the sample risks to `recruiting.md`. `--migrate` does not move sections of an
+  existing project: the editor proposes it at the next gate.
+
+### Changed
+
+- **The one-page summary moves from `5-debrief/output/summary.md` to `8-report/summary.md`**, and
+  now covers every round that ran, field and validation. `--add summary` is now `--add report`.
+  **Migration:** run `init_project.py --migrate` on an existing v3 folder. It moves the file,
+  repoints it in `state.yaml`, adds the default plan, never overwrites an existing
+  `8-report/summary.md` and never deletes. Running it twice changes nothing.
+- The Guide's status shows `Step {i}/{pieces in the plan, skipped excluded}`, not "N/10".
+- Ideation and testing are no longer "coming": they exist, in minimal form.
+
+### Earlier in this release
+
 First real run of the method, second round of fixes.
 
 ### Changed
