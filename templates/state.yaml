@@ -60,14 +60,19 @@ editor: on
 # knows. Nothing is created at install except phase 1's brief.
 #
 # 'on_demand: true' means the file is born only if the project needs it. A project
-# that runs no observation never sees an observation file.
+# that runs no observation never sees an observation file. Phases 6 and 7 are
+# on demand as a whole. Phase 8 is not: every plan closes with the report.
+#
+# The ORDER of the work comes from the 'plan:' block at the bottom, not from the
+# folder numbers. The numbers are names that stay put; the plan says which pieces
+# this project uses, in what order, and who does each one.
 # ---------------------------------------------------------------------------
 
 phases:
   1:
     name: desk-research
     folder: 1-desk-research
-    steps: [start, design_challenge, market_research, knowledge_base]
+    steps: [start, design_challenge, market_research, knowledge_base, plan]
   2:
     name: profiling
     folder: 2-profiling
@@ -84,6 +89,18 @@ phases:
     name: debrief
     folder: 5-debrief
     steps: [debrief]
+  6:
+    name: ideation
+    folder: 6-ideation
+    steps: [ideation]
+  7:
+    name: validation
+    folder: 7-validation
+    steps: [validation_guide, validation_capture, validation_debrief]
+  8:
+    name: report
+    folder: 8-report
+    steps: [report]
 
 steps:
   start:
@@ -105,6 +122,14 @@ steps:
     phase: 1
     status: not_started
     file: 1-desk-research/knowledge.md
+    gate: true
+  # The plan can run at any moment, not only at the end of phase 1: a project
+  # that enters in the middle runs it first, and re-planning is the same step.
+  # It writes the '## Plan' section of the brief and the 'plan:' block below.
+  plan:
+    phase: 1
+    status: not_started
+    file: 1-desk-research/brief.md
     gate: true
   profiles:
     phase: 2
@@ -140,7 +165,36 @@ steps:
   debrief:
     phase: 5
     status: not_started
-    file: 5-debrief/findings.md + 5-debrief/principles.md + 5-debrief/output/summary.md
+    file: 5-debrief/findings.md + 5-debrief/principles.md
+    gate: true
+  ideation:
+    phase: 6
+    status: not_started
+    file: 6-ideation/concepts.md
+    gate: true
+    on_demand: true
+  validation_guide:
+    phase: 7
+    status: not_started
+    file: 7-validation/tasks.md
+    gate: true
+    on_demand: true
+  validation_capture:
+    phase: 7
+    status: not_started
+    file: 7-validation/0-index.md + _engine/evidence.md
+    gate: true
+    on_demand: true
+  validation_debrief:
+    phase: 7
+    status: not_started
+    file: 7-validation/findings.md
+    gate: true
+    on_demand: true
+  report:
+    phase: 8
+    status: not_started
+    file: 8-report/summary.md
     gate: true
 
 interviews:
@@ -155,3 +209,35 @@ interviews:
   # offering Advance into phase 5. Synthesising over unprocessed material is
   # the one thing the method already forbids.
   unprocessed: 0
+
+# Validation sessions (VAL-00X, phase 7), counted apart from the interviews above.
+validations:
+  target: 0
+  done: 0
+  unprocessed: 0
+
+# --- The plan ---------------------------------------------------------------
+# The brief closes with a plan, and this block is its machine-readable twin.
+# An ordered list: THE ORDER IS THE PLAN'S, NOT THE FOLDER NUMBER'S.
+#
+#   piece   a phase name (desk-research, field, ...) or a step key
+#   status  planned | skipped | external | done
+#             skipped   we do not do it, and the assumption is logged in decisions.md
+#             external  someone outside does it; 'note' links their result
+#             done      finished
+#   owner   who does it
+#   note    one line: the assumption of a skipped piece, or the link of an
+#           external one
+#
+# This is a starting point. The Guide proposes it and the user decides; it is
+# never presented as already decided. The status line counts every piece that is
+# not skipped, and an external piece counts but never blocks.
+plan:
+  - {piece: desk-research, status: planned, owner: "", note: ""}
+  - {piece: profiling,     status: planned, owner: "", note: ""}
+  - {piece: guide,         status: planned, owner: "", note: ""}
+  - {piece: field,         status: planned, owner: "", note: ""}
+  - {piece: debrief,       status: planned, owner: "", note: ""}
+  - {piece: ideation,      status: skipped, owner: "", note: ""}
+  - {piece: validation,    status: skipped, owner: "", note: ""}
+  - {piece: report,        status: planned, owner: "", note: ""}

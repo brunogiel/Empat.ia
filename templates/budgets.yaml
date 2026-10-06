@@ -72,8 +72,26 @@ budgets:
   5-debrief/principles.md:
     lines: 120
     hard: false
-  5-debrief/output/summary.md:
+
+  6-ideation/concepts.md:
     lines: 80
+    hard: false
+
+  # The second hard budget. Same reason as the master guide: this is the script
+  # you hold while someone uses the prototype, so it has to fit in one glance.
+  7-validation/tasks.md:
+    lines: 100
+    hard: true
+  7-validation/0-index.md:
+    lines: 80
+    hard: false
+  7-validation/findings.md:
+    lines: 120
+    hard: false
+
+  # The final write-up of the whole project: the field rounds and the validation.
+  8-report/summary.md:
+    lines: 60
     hard: false
 
 # Files with no line budget, on purpose.
@@ -84,6 +102,10 @@ budgets:
 #   ran 284 lines against a 123-line master guide, and it worked, because every
 #   block carried a priority mark and a time box. That is the requirement instead
 #   of a line count. See the structural rule below.
+#
+# 7-validation/_prep/*-prep.md — the same disposable sheet, for a validation session.
+#
+# 7-validation/VAL-*.md, feedback/ and _raw/ — one per session, as long as the session was.
 #
 # 4-field/INT-*.md and OBS-*.md — your evidence. It is as long as the interview was.
 #

@@ -17,8 +17,12 @@ user has not reached. Create one with
 `python3 <method-root>/scripts/init_project.py --project-root . --add <step>`,
 then write it. The step names are the keys under `steps:` in `state.yaml`.
 
-**The five phases.** `1-desk-research/` · `2-profiling/` · `3-guide/` ·
-`4-field/` · `5-debrief/`. The deliverable is `5-debrief/principles.md`.
+**The eight pieces.** `1-desk-research/` · `2-profiling/` · `3-guide/` ·
+`4-field/` · `5-debrief/` · `6-ideation/` · `7-validation/` · `8-report/`.
+Phases 6 and 7 are on demand. The order of the work is the `## Plan` section of
+`1-desk-research/brief.md` (mirrored in `state.yaml` under `plan:`), not the
+folder numbers. The deliverable is `5-debrief/principles.md`; the final
+write-up is `8-report/summary.md`.
 
 **Do not edit `_engine/` by hand** beyond `state.yaml`, and do not rewrite
 `3-guide/guide.md` during fieldwork: it is the master guide, reused across every

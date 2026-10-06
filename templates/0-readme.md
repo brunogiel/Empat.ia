@@ -8,7 +8,7 @@ design, not a broken install: each file is written when you reach its phase, in
 your language, already filled with what the project knows by then. A blank form
 handed to you on day one helps nobody.
 
-## The five phases
+## The eight pieces
 
 | Phase | What happens | What it leaves behind |
 |---|---|---|
@@ -16,7 +16,14 @@ handed to you on day one helps nobody.
 | **2 · Profiling** | Decide who you need to talk to, and how you will reach them | `2-profiling/` |
 | **3 · The guide** | Build the instrument: the questions, and how you will work in the room | `3-guide/` |
 | **4 · The field** | Interviews and observation. One note per person, one per outing | `4-field/` |
-| **5 · Debrief** | Cross everything into design principles, and one page you can share | `5-debrief/` |
+| **5 · Debrief** | Cross everything into design principles | `5-debrief/` |
+| **6 · Ideation** *(on demand)* | From the How Might We questions to three to five concepts | `6-ideation/` |
+| **7 · Validation** *(on demand)* | Put a prototype in front of people and watch what they do, not what they say | `7-validation/` |
+| **8 · Report** | The final write-up of the whole project, on one page you can share | `8-report/` |
+
+You do not walk them in number order by default. The brief closes with a **plan**
+(`## Plan`) that says which pieces this project uses, in what order, and who does
+each one. The order is the plan's, not the folder numbers'.
 
 The deliverable is **design principles**: short decision rules, traceable to
 something a real person said, that you use later for product, communication and
