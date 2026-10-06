@@ -4,6 +4,7 @@ Main workflow for Design with Empathy and AI.
 
 Rules:
 
+- The order of the work is the plan in `discovery/1-desk-research/brief.md` (mirrored in `state.yaml` under `plan:`), not the folder numbers.
 - Read only the active step.
 - Update `discovery/_engine/state.yaml`.
 - Update `discovery/1-desk-research/brief.md`.

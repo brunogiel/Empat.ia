@@ -49,7 +49,7 @@ created at install except phase 1's brief.
 In `3-guide/guide.md`:
 
 - Write the questions the way you will say them out loud.
-- Map each learning objective to questions. Keep that table: it is what makes the guide readable later.
+- Map each learning objective to questions in your head. The objectives and who answers them live in `1-desk-research/knowledge.md`, not in the guide.
 - One line of intent per block, no more.
 - Review forbidden questions and rewordings.
 

@@ -26,6 +26,9 @@ created at install except phase 1's brief.
 ## Documents to touch
 
 - `discovery/2-profiling/profiles.md`
+- `discovery/1-desk-research/brief.md` (Who is who)
+- `discovery/1-desk-research/knowledge.md` (who answers it)
+- `discovery/2-profiling/recruiting.md` (sample risks)
 - `discovery/_engine/state.yaml`
 - `discovery/_engine/assumptions.md`
 - `discovery/_engine/decisions.md`
@@ -37,7 +40,7 @@ created at install except phase 1's brief.
 - Clear diversity criteria.
 - Quantity per profile.
 - Reason for each profile.
-- Distinguishes user, customer, payer, decision-maker, and operator.
+- Names who is user, customer, payer and decision-maker in the brief (Who is who), not here.
 - Includes mainstream and extremes when useful.
 - Considers real accessibility for recruiting.
 
@@ -45,11 +48,14 @@ created at install except phase 1's brief.
 
 Fill out:
 
-- User vs customer table.
 - Possible segments.
+- Focus user and the criteria.
 - Extremes and mainstream.
-- Recommended sample.
-- Coverage plan per learning question.
+- Sample per round.
+
+Not here: the user vs customer table goes in the brief (Who is who), the
+coverage plan per learning question in `knowledge.md` (the "who answers it"
+column), and the sample risks in `recruiting.md`.
 
 ## Council
 
