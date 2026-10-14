@@ -44,7 +44,10 @@ TIMESTAMP = re.compile(r"\b\d{1,2}:\d{2}(?::\d{2})?\b")
 LABEL_BOUNDARY = r"(?:^|(?<=[.?!\u2026])\s+|(?<=  ))"
 # The label itself cannot contain sentence-ending punctuation: that is what
 # stopped "sí.  Me" or "hola. Them" from ever being captured as one label.
-LABEL_CHARS = r"[^\s:\[\].?!][^:\[\].?!\n]{0,28}"
+# Up to ~50 characters and 6 words, because recorder exports name the other
+# side "System audio (Name Surname)": a shorter limit dropped every
+# one of their turns into the interviewer's and reported a share near 90%.
+LABEL_CHARS = r"[^\s:\[\].?!][^:\[\].?!\n]{0,48}"
 
 
 def fold(text: str) -> str:
@@ -54,14 +57,20 @@ def fold(text: str) -> str:
 
 
 def load_patterns(path: str | None):
+    """Pattern lists, by name. A custom file may define only some of them: the
+    ones it leaves out (HOW, CONTRAST) count as empty, so a translated copy
+    written before they existed keeps working."""
     if path:
         namespace: dict = {}
         exec(Path(path).read_text(encoding="utf-8"), namespace)
-        return namespace
-    from patterns_es import (LANGUAGE, WHY, CONCRETE, RECAP,
-                             CLOSED_OPENERS, LEADING_HINTS)
-    return dict(LANGUAGE=LANGUAGE, WHY=WHY, CONCRETE=CONCRETE, RECAP=RECAP,
-                CLOSED_OPENERS=CLOSED_OPENERS, LEADING_HINTS=LEADING_HINTS)
+    else:
+        import patterns_es as namespace
+        namespace = vars(namespace)
+    patterns = {name: list(namespace.get(name, []))
+                for name in ("WHY", "CONCRETE", "HOW", "CONTRAST", "RECAP",
+                             "CLOSED_OPENERS", "LEADING_HINTS")}
+    patterns["LANGUAGE"] = namespace.get("LANGUAGE", "und")
+    return patterns
 
 
 def parse(transcript: str):
@@ -97,7 +106,7 @@ def parse(transcript: str):
     candidates: dict[str, int] = {}
     for match in candidate_pattern.finditer(transcript):
         label = match.group(1).strip()
-        if not label or len(label.split()) > 4 or label.endswith((",", ";")):
+        if not label or len(label.split()) > 6 or label.endswith((",", ";")):
             continue
         candidates[label] = candidates.get(label, 0) + 1
     if not candidates:
@@ -133,6 +142,13 @@ def questions_in(text: str):
     return [part.strip() for part in re.split(r"(?<=\?)\s*", text) if part.strip().endswith("?")]
 
 
+def sentences_in(text: str):
+    """Sentences, split on . ? ! and the inverted opener, each keeping its own
+    end mark so a caller can tell a question from a statement."""
+    text = text.replace("\u00bf", "")
+    return [part.strip() for part in re.split(r"(?<=[.?!])\s+", text) if part.strip()]
+
+
 def count(turns, interviewer, patterns, products, guide_blocks):
     mine = [t for t in turns if t["speaker"].lower() == interviewer.lower()]
     theirs = [t for t in turns if t["speaker"].lower() != interviewer.lower()]
@@ -153,9 +169,31 @@ def count(turns, interviewer, patterns, products, guide_blocks):
     def hits(needles, turns_):
         return sum(fold(t["text"]).count(n) for t in turns_ for n in needles)
 
+    # Going deeper has more than one form, and "why" is only one of them (and
+    # the one that invites justifying instead of telling). Anchors and hows are
+    # often imperatives ("contame la ultima vez que..."), so they are counted per
+    # SENTENCE of the interviewer. A why only counts inside a question: "porque
+    # es asi" in a statement is an explanation, not a request for one.
+    my_sentences = [x for t in mine for x in sentences_in(t["text"])]
+
+    def sentence_hits(needles, question_only=False):
+        return sum(1 for x in my_sentences
+                   if (not question_only or x.endswith("?"))
+                   and any(n in fold(x) for n in needles))
+
     # Chained whys: consecutive interviewer turns that both ask why.
-    asked_why = [any(n in fold(t["text"]) for n in patterns["WHY"]) for t in mine]
+    asked_why = [any(x.endswith("?") and any(n in fold(x) for n in patterns["WHY"])
+                     for x in sentences_in(t["text"])) for t in mine]
     chains = sum(1 for i in range(1, len(asked_why)) if asked_why[i] and asked_why[i - 1])
+
+    why_q = sentence_hits(patterns["WHY"], question_only=True)
+    how_q = sentence_hits(patterns["HOW"])
+    contrast_q = sentence_hits(patterns["CONTRAST"])
+    anchor_q = sentence_hits(patterns["CONCRETE"])
+    everything = patterns["HOW"] + patterns["CONTRAST"] + patterns["CONCRETE"]
+    deeper_q = sum(1 for x in my_sentences
+                   if any(n in fold(x) for n in everything)
+                   or (x.endswith("?") and any(n in fold(x) for n in patterns["WHY"])))
 
     # Recap: an interviewer turn inside the last tenth of the conversation.
     tail = mine[-max(1, len(mine) // 10):]
@@ -181,7 +219,19 @@ def count(turns, interviewer, patterns, products, guide_blocks):
         "questions_total": len(my_questions),
         "questions_closed": len(closed),
         "questions_closed_note": "approximate: pattern matching cannot settle this reliably",
-        "why_count": hits(patterns["WHY"], mine),
+        "probes": {
+            "deeper_questions": deeper_q,
+            "per_interviewee_turn": round(deeper_q / len(theirs), 2) if theirs else None,
+            "anchor_in_concrete": anchor_q,
+            "ask_how_or_signal": how_q,
+            "contrast_or_more": contrast_q,
+            "why_direct": why_q,
+            "why_chains": chains,
+            "note": ("counted per sentence of the interviewer, each sentence once. 'Why' is one form of going "
+                     "deeper, not the measure of it: fewer whys is fine when the anchors "
+                     "and the hows go up. Pattern counts, approximate: check a few by hand."),
+        },
+        "why_count": why_q,
         "why_chains": chains,
         "concrete_anchors": hits(patterns["CONCRETE"], mine),
         "product_mentions": (sum(fold(t["text"]).count(fold(p)) for t in mine for p in products)

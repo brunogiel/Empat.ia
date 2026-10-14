@@ -69,7 +69,7 @@ The same flow processes a session where a person used a prototype, with these di
    If the user reflected out loud during or after the call (their own debrief), capture that verbatim into this section, it's often the sharpest input.
 7. **[DET] Count what is countable.** Run
    `python3 {method-root}/scripts/count_interview.py <transcript> --interviewer "<name>" --guide <master guide> --product "<your product terms>"`.
-   It returns words per speaker, questions, whys and chains, concrete anchors, product mentions,
+   It returns words per speaker, questions, the probes (questions that went deeper in any form, split into anchors, hows, contrasts and the direct why, with chains), product mentions,
    whether there was a closing recap, and which guide blocks came up. **No transcript, or no
    speaker labels: skip this and say so. Never estimate a number.**
 8. **[DET] Create the feedback file** with

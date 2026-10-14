@@ -9,17 +9,47 @@ and "porque" all hit the same entry.
 
 LANGUAGE = "es"
 
-# Asking why. Anything that pushes for the reason behind an answer.
+# Asking why, in its direct form. Counted only inside questions, so the
+# conjunction in "porque es asi" never counts. This is the form that invites
+# the interviewee to justify instead of tell; it is reported on its own to see
+# whether it goes DOWN while the anchors and the hows go up.
+# "para que" is left out on purpose: without the accent it is also the
+# conjunction ("para que encuentres..."), and the counter folds accents away.
 WHY = [
     "por que",
-    "porque",
     "a que se debe",
-    "contame mas",
-    "conta mas",
-    "como es eso",
-    "en que sentido",
     "que te llevo a",
     "que hizo que",
+]
+
+# Asking for the how, the signal, or the meaning: another way of going deeper
+# that does not ask for a justification.
+HOW = [
+    "como te das cuenta",
+    "como te diste cuenta",
+    "como lo sabes",
+    "como lo supiste",
+    "como es eso",
+    "como fue",
+    "como lo haces",
+    "como lo hiciste",
+    "que seria",
+    "en que sentido",
+    "contame mas",
+    "conta mas",
+    "me contas",
+]
+
+# Opening the door wider or asking for the other side.
+CONTRAST = [
+    "de bueno",
+    "de malo",
+    "algo mas",
+    "que mas",
+    "alguna otra",
+    "otra cosa",
+    "distinto",
+    "diferente",
 ]
 
 # Anchoring in a concrete episode instead of a generality. Both the feminine

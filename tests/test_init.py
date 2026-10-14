@@ -842,5 +842,63 @@ class PatternsEsConcreteAnchors(unittest.TestCase):
         self.assertTrue(any(n in text for n in CONCRETE))
 
 
+class RecorderLabelsAndProbes(unittest.TestCase):
+    """Recorder exports name the other side 'System audio (Name Surname)'. The
+    label limit used to be 28 characters and 4 words, so every one of their
+    turns fell into the interviewer's and the share read ~90%. And 'why' was
+    counted by the word, so an interviewer who probes with 'how do you know' or
+    'what is good and bad about it' read as someone who never asks why."""
+
+    TRANSCRIPT = (
+        "Microphone: Contame como fue la ultima vez que buscaste.\n\n"
+        "System audio (Ana Perez): Entre en LinkedIn porque me llegaban alertas.\n\n"
+        "Microphone: Como te das cuenta que una empresa te sirve?\n\n"
+        "System audio (Ana Perez): Miro quien trabaja ahi, porque me importa.\n\n"
+        "Microphone: Que tiene de bueno y que tiene de malo?\n\n"
+        "System audio (Ana Perez): Lo bueno es la gente.\n\n"
+        "Microphone: Por que preferis preguntarle a una persona?\n\n"
+        "System audio (Ana Perez): Porque es mas real.\n")
+
+    def setUp(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+
+    def _run(self):
+        import count_interview as ci
+        turns = ci.parse(self.TRANSCRIPT)
+        return turns, ci.count(turns, "Microphone", ci.load_patterns(None), [], None)
+
+    def test_long_recorder_label_is_its_own_speaker(self):
+        turns, result = self._run()
+        self.assertEqual({t["speaker"] for t in turns},
+                         {"Microphone", "System audio (Ana Perez)"})
+        self.assertEqual(result["turns"], {"interviewer": 4, "interviewee": 4})
+        self.assertLess(result["interviewer_share"], 0.6)
+
+    def test_answers_with_porque_are_not_counted_as_whys(self):
+        _, result = self._run()
+        self.assertEqual(result["probes"]["why_direct"], 1)
+
+    def test_other_forms_of_going_deeper_are_counted(self):
+        _, result = self._run()
+        probes = result["probes"]
+        self.assertGreaterEqual(probes["ask_how_or_signal"], 1)
+        self.assertGreaterEqual(probes["contrast_or_more"], 1)
+        self.assertGreaterEqual(probes["anchor_in_concrete"], 1)
+        self.assertEqual(probes["deeper_questions"], 4)
+
+    def test_custom_patterns_without_new_lists_still_load(self):
+        import count_interview as ci
+        path = REPO / "tests" / "_tmp_patterns.py"
+        path.write_text('LANGUAGE = "xx"\nWHY = ["why"]\nCONCRETE = ["last time"]\n'
+                        'RECAP = []\nCLOSED_OPENERS = []\nLEADING_HINTS = []\n', encoding="utf-8")
+        try:
+            patterns = ci.load_patterns(str(path))
+        finally:
+            path.unlink()
+        self.assertEqual(patterns["HOW"], [])
+        self.assertEqual(patterns["CONTRAST"], [])
+
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

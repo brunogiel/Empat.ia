@@ -6,9 +6,12 @@
 |---|---|---|
 | Share of the talking that was yours | Pending | — |
 | Average length of their answers | Pending | — |
-| Times you asked why | Pending | — |
-| Chained whys | Pending | — |
+| Questions that went deeper (all forms) | Pending | — |
+| Of those, per answer of theirs | Pending | — |
 | Anchors in a concrete last time | Pending | — |
+| Asked for the how or the signal | Pending | — |
+| Contrast or "anything else" | Pending | — |
+| Asked why, direct | Pending | — |
 | Mentions of your own product | Pending | — |
 | Closing recap | Pending | — |
 | Guide blocks touched | Pending of 8 | — |

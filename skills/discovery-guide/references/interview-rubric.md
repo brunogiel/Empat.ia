@@ -17,11 +17,19 @@ uncounted, never estimated.**
 |---|---|---|
 | Let them talk | "Talking more than listening" is a named mistake | Share of words that were the interviewer's |
 | Answers longer than a word | An open question is one that "requires a longer explanation than one word" | Mean length of the interviewee's answers |
-| Asked why | "Always ask why", and chaining it across consecutive answers | Occurrences, and how many were chained |
+| Went deeper | Probing past the first answer. "Always ask why" is one form, not the whole habit, and the direct "why" invites justifying more than telling | Questions that went deeper in any form, once each, and the same per answer of theirs |
 | Anchored in a concrete last time | "How do you do it" gives an opinion; "tell me about the last time" gives a fact | Occurrences of last-time markers |
+| Asked for the how or the signal | "How did you notice?" and "what would that be?" get at the criterion without asking for a justification | Occurrences |
+| Contrast or "anything else" | Asking for the good and the bad, or for what else, opens the answer without leading it | Occurrences |
+| Asked why, direct | The literal "why" asks the person to rationalize. Reported on its own to see whether it goes down while the anchors and the hows go up | Occurrences, and how many were chained |
 | Did not pitch the solution | "Would you use my app if it did X?" is a named error, distinct from a closed question | Mentions of the project's own product |
 | Closed with a recap | Giving back what you understood makes them articulate their own why, and confirms you got it | Present or absent |
 | Guide coverage | — | Which blocks were touched, **reported only** |
+
+The probe rows are pattern counts: approximate, and the Guide checks a few by hand before
+quoting one. **Never conclude that more is better.** A single literal "why" in an hour is not a
+sign of an interviewer who does not probe, and the number says nothing about whether the
+answer was true.
 
 ## Read, not measured
 

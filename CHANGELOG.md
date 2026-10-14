@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+### Fixed: the interview counter read "why" by the word, and lost the other side's turns
+
+The first real interview run through `count_interview.py` came back with a 89% interviewer
+share and 26 "whys". Both were wrong, for two different reasons.
+
+- **Long speaker labels.** Recorder exports name the other side `System audio (Name Surname)`.
+  The label limit was 28 characters and 4 words, so every one of their turns folded into the
+  interviewer's. The limit is now ~50 characters and 6 words (the frequency check still guards
+  against a colon in prose).
+- **"Why" was the whole measure.** The list counted `porque`, the conjunction, so the
+  interviewee's own answers read as questions, and it ignored every other way of probing. The
+  report now has a `probes` block: questions that went deeper in any form (once each, and per
+  answer of theirs), split into anchors in a concrete last time, asked for the how or the
+  signal, contrast or "anything else", and the direct why, kept on its own with its chains.
+  `why_count` and `why_chains` stay in the output, now over questions only.
+- **Feedback template and rubric** carry the new rows, with what not to conclude from them.
+- `HOW` and `CONTRAST` are new pattern lists. A custom `--patterns` file that does not define
+  them keeps working (they count as empty).
+
 ### Added: every phase folder says what it is for
 
 An empty folder tells you nothing, and a shared folder reaches people who never read the root
