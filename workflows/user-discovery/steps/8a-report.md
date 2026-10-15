@@ -14,6 +14,9 @@ none of it. Every plan closes with it, whatever pieces it used.
   no internal notes, no project logistics.
 - A skipped piece gets one line: what we assume by not doing it.
 - A piece done by someone else gets a link to their result.
+- **No codes.** The report is for a human. It never uses internal IDs (hypothesis codes such as
+  A-023, evidence IDs such as INT-004-07): it states the idea in words. IDs stay in the internal
+  files (evidence log, notes), where they trace each claim.
 
 ## First, the file of this step
 
@@ -58,6 +61,7 @@ already there.
 - Someone who read nothing else can say what was found and what happens next.
 - Nothing in it is missing from the sources it summarises.
 - No quote lacks consent.
+- No internal ID appears anywhere in the page.
 
 ## Gate
 

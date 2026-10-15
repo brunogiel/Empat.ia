@@ -22,6 +22,8 @@ Usage
   python3 count_interview.py TRANSCRIPT --interviewer "Bruno"
   python3 count_interview.py T.md --interviewer Bruno --product "Empatia,la app"
   python3 count_interview.py T.md --interviewer Bruno --guide discovery/3-guide/guide.md
+  python3 count_interview.py T.md --interviewer Bruno --skip-until-first-interviewee
+  python3 count_interview.py T.md --interviewer Bruno --start-line 40
 """
 
 from __future__ import annotations
@@ -48,6 +50,37 @@ LABEL_BOUNDARY = r"(?:^|(?<=[.?!\u2026])\s+|(?<=  ))"
 # side "System audio (Name Surname)": a shorter limit dropped every
 # one of their turns into the interviewer's and reported a share near 90%.
 LABEL_CHARS = r"[^\s:\[\].?!][^:\[\].?!\n]{0,48}"
+
+
+# Interviewee verbosity, read from the mean words per answer. PROVISIONAL: the
+# seed calibration is two real interviews (about 30 words per answer was a
+# normal talker, about 55 and up a very talkative one). Adjust the lower edges
+# here as more interviews are counted; nothing else in the file depends on them.
+# Each entry is (label, lowest mean answer length that earns it), checked from
+# the top. There is deliberately no "terse" label: a normal talker is never
+# called brief, and "brief" is only for answers of a few words.
+VERBOSITY_CALIBRATING = True
+VERBOSITY_BANDS = (
+    ("very talkative", 55.0),
+    ("talkative", 45.0),
+    ("normal", 15.0),
+    ("brief", 0.0),
+)
+VERBOSITY_NOTE = (
+    "Read the interviewer's talk share together with this label. With a very talkative "
+    "person the interviewer talks little by default, so a low share proves little. With "
+    "a normal one the interviewer has to probe more to get the same depth. Bands are "
+    "provisional (calibrating).")
+
+
+def verbosity_label(mean_answer_words):
+    """Label for the interviewee, or None when there is no answer to measure."""
+    if mean_answer_words is None:
+        return None
+    for label, lowest in VERBOSITY_BANDS:
+        if mean_answer_words >= lowest:
+            return label
+    return VERBOSITY_BANDS[-1][0]
 
 
 def fold(text: str) -> str:
@@ -216,6 +249,12 @@ def count(turns, interviewer, patterns, products, guide_blocks):
         "words_by_speaker": {"interviewer": words_mine, "interviewee": words_theirs},
         "interviewer_share": round(words_mine / total, 3) if total else None,
         "mean_answer_words": round(words_theirs / len(theirs), 1) if theirs else None,
+        "interviewee_verbosity": {
+            "label": verbosity_label(round(words_theirs / len(theirs), 1) if theirs else None),
+            "status": "calibrating" if VERBOSITY_CALIBRATING else "calibrated",
+            "bands": {label: f">= {lowest:g} words per answer" for label, lowest in VERBOSITY_BANDS},
+            "note": VERBOSITY_NOTE,
+        },
         "questions_total": len(my_questions),
         "questions_closed": len(closed),
         "questions_closed_note": "approximate: pattern matching cannot settle this reliably",
@@ -318,6 +357,24 @@ def is_noise(line: str) -> bool:
     return False
 
 
+def trim_start(transcript: str, start_line: int | None) -> str:
+    """Drop the lines before `start_line` (1-based, counted in the file as written)."""
+    if not start_line or start_line <= 1:
+        return transcript
+    return "\n".join(transcript.splitlines()[start_line - 1:])
+
+
+def skip_until_first_interviewee(turns, interviewer):
+    """Meeting recorders start before the participant joins, so the file can open
+    with the interviewer talking to someone else. Counting from the first turn of
+    anyone who is not the interviewer keeps that chatter out of the share.
+    Returns (turns, number of leading interviewer turns dropped)."""
+    for i, turn in enumerate(turns):
+        if turn["speaker"].lower() != interviewer.lower():
+            return turns[i:], i
+    return turns, 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Count an interview transcript.")
     parser.add_argument("transcript")
@@ -329,6 +386,12 @@ def main() -> int:
                         help="Master guide, to report which blocks came up.")
     parser.add_argument("--patterns", default=None,
                         help="Patterns module for another language. Defaults to Spanish.")
+    parser.add_argument("--skip-until-first-interviewee", action="store_true",
+                        help="Start counting at the first turn of anyone who is not the "
+                             "interviewer. For recordings that open with pre-meeting chatter.")
+    parser.add_argument("--start-line", type=int, default=None, metavar="N",
+                        help="Start counting at line N of the file (1-based). For chatter "
+                             "that the first-interviewee rule cannot tell apart.")
     args = parser.parse_args()
 
     path = Path(args.transcript)
@@ -337,7 +400,11 @@ def main() -> int:
 
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     patterns = load_patterns(args.patterns)
-    turns = parse(interview_text(path.read_text(encoding="utf-8", errors="ignore")))
+    raw = trim_start(path.read_text(encoding="utf-8", errors="ignore"), args.start_line)
+    turns = parse(interview_text(raw))
+    skipped = 0
+    if args.skip_until_first_interviewee:
+        turns, skipped = skip_until_first_interviewee(turns, args.interviewer)
 
     if not turns:
         raise SystemExit(
@@ -357,6 +424,9 @@ def main() -> int:
     products = [p.strip() for p in args.product.split(",") if p.strip()]
     result = count(turns, args.interviewer, patterns, products,
                    guide_coverage(args.guide, turns))
+    if args.skip_until_first_interviewee or args.start_line:
+        result["start"] = {"start_line": args.start_line,
+                           "skipped_leading_interviewer_turns": skipped}
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0
 

@@ -1,6 +1,39 @@
 # Changelog
 
-## Unreleased
+## 3.1.0 - 2026-10-15
+
+### Added: interview feedback judges whether the information came out
+
+Lessons from real fieldwork, applied to the method.
+
+- **The talk share is read against how talkative the interviewee was.** `count_interview.py`
+  adds `interviewee_verbosity` to its JSON: a label (brief, normal, talkative, very talkative)
+  from the mean words per answer, marked `calibrating`, with a note that the interviewer's share
+  must be read together with it. The band edges are named constants at the top of the script
+  (seed calibration: about 30 words per answer is normal, 55 and up is very talkative). A person of
+  normal verbosity is never called brief.
+- **Recordings that open with chatter.** `--skip-until-first-interviewee` starts counting at the
+  first turn of anyone who is not the interviewer; `--start-line N` starts at a given line.
+- **The feedback is judged on the information, not on the guide.** The rubric, the Guide, the
+  `process-interview` skill, the feedback templates and the qualitative researcher say the same
+  thing: changed wording, double questions and detours are not faults; a follow-up never asked or
+  cards left unplaced are. Mean answer length, number of questions, depth probes and anchoring in
+  a concrete episode stay.
+- **The interviewer receives an HTML page.** New `interview-feedback.html` template (self-contained,
+  light and dark, works at phone width) with the verbosity scale, the numbers against the previous
+  interview, what worked, information that did not come out and a checklist for the next
+  session. Create it with `--add interview-feedback-html --name <base>` (and
+  `validation-feedback-html`). The markdown feedback is internal.
+- **No codes in reports for people.** Feedback, the final report and the shareable snapshots state
+  ideas in words; hypothesis and evidence IDs stay in the internal files.
+- **Card sorting leaves a record.** The field process asks for a photo or screenshot of the final
+  board before the call ends, pasted into the meeting notes, and treats cards or columns added
+  live as a comparison caveat, not an error.
+- **A drawer for the weeks in the field.** `4-field/notes.md` is born at install, so install is now
+  eleven files, seven of them the user's. It holds the researcher's own emerging ideas, marked as
+  readings and never as evidence; the editor empties it at the gate into the debrief.
+
+### Earlier in this release
 
 ### Fixed: the interview counter read "why" by the word, and lost the other side's turns
 

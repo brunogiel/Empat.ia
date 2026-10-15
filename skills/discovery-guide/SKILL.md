@@ -84,12 +84,12 @@ create on top of an older layout, so you cannot end up with two structures side 
 file you already wrote in the user's language is never clobbered; overwriting one needs
 `--overwrite-modified`, and you ask before using it.
 
-After init the folder holds **ten files, and six of them are the user's**: `0-README.md`,
-`1-desk-research/brief.md` and a short `0-README.md` in each of phases 2 to 5, which says what the
-folder is for. Everything else is born when its step starts. The folders of phases 6, 7 and 8 are
+After init the folder holds **eleven files, and seven of them are the user's**: `0-README.md`,
+`1-desk-research/brief.md`, a short `0-README.md` in each of phases 2 to 5, which says what the
+folder is for, and `4-field/notes.md`, the field drawer for your own ideas during fieldwork. Everything else is born when its step starts. The folders of phases 6, 7 and 8 are
 born with their first file, and each brings its own `0-README.md`.
 
-1. **Write `0-README.md`, `1-desk-research/brief.md` and the phase READMEs (2 to 5) in the
+1. **Write `0-README.md`, `1-desk-research/brief.md` and the phase READMEs (2 to 5) and `4-field/notes.md` in the
    project's language, in this same turn.** When a phase 6, 7 or 8 folder is born, translate its
    README the same turn. Do not hand back control with English scaffolding in a Spanish project. This is the
    failure that produced v3: the method claimed to do it and never did.
@@ -152,7 +152,8 @@ discovery/
   8-report/                  summary.md                      (born with its first --add)
   _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md
                              evidence.md  synthesis-log.md  sources/  skills/
-  {phase}/notes.md           the drawer, born on demand. The editor empties it at each gate
+  {phase}/notes.md           the drawer, born on demand (4-field/notes.md is born at install).
+                             The editor empties it at each gate
 ```
 
 - **`1-desk-research/sources/`** holds client material as-is (briefs, decks,
@@ -195,6 +196,10 @@ Five rules hold the whole thing up:
 ## Hard principles
 
 - Do not invent business data.
+- **No codes in reports.** A report meant for a human (the interviewer's feedback, the final
+  report, anything in `share/`) never carries internal IDs: no hypothesis codes (A-023), no
+  evidence IDs (INT-004-07). It states the idea in words. IDs stay in the internal files (the
+  evidence log, the notes, the assumptions), where they trace things.
 - **One file, one job.** Every template opens with a line `Owns: … / Does not own: … → file`. If what you are about to write is not that file's job, write it in the file that owns it, or in the phase's `notes.md` if no file owns it yet. Never write the same thing in two places: the other file links, it does not copy. The `editor` routes by that line.
 - Do not skip stages without showing state and recommendation.
 - Do not talk about "canvas": use discovery documents.
@@ -378,6 +383,14 @@ Two rules on the feedback itself:
 - **Separate measured from read.** Counts come from a script over the transcript and are
   reproducible; judgement is judgement and the user can argue with it. Never blend them, and
   never score a criterion out of ten.
+- **Judge whether the information came out, not whether the guide was followed.** Never list
+  changed wording, a double question or a deviation as a fault. List information that did not
+  come out (a follow-up never asked, cards left unplaced). Keep the metrics: mean answer length,
+  number of questions, depth probes, anchoring in a concrete episode.
+- **Read the talk share against the interviewee's verbosity** (`interviewee_verbosity` in the
+  counter's JSON, bands provisional). A normal talker is never "brief".
+- **The interviewer receives an HTML page**, from `--add interview-feedback-html --name <base>`.
+  The markdown file is internal. Neither uses internal codes: see "No codes in reports" below.
 - **Coverage is reported, never scored.** Leaving the guide to follow a good thread is often the
   right call. Ask whether the detour earned its place; do not mark it wrong for low coverage.
 - **If someone else ran the interview**, technique feedback naming them is not written into a

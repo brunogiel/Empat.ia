@@ -46,6 +46,27 @@ This document keeps you from improvising interviews. Use it before, during and a
 - [ ] Don't finish their sentences.
 - [ ] Don't validate a solution.
 
+## Card sorting and other screen-shared exercises
+
+If the interviewer shares the screen for a card sort (or any board), the meeting recorder may
+capture the voices but not the screen. So the board's final state would be lost.
+
+- [ ] **Before ending the call**, take a photo or screenshot of the final board, with the cards
+      where the person left them.
+- [ ] Paste it into the meeting notes for that interview (or export it from the board tool and
+      save it next to the transcript in `4-field/_raw/`).
+- [ ] If the interviewer **adds cards or columns live**, write it down in the notes as a
+      **comparison caveat** ("this person saw one card more than the others"), not as an
+      error. The sorts stay comparable once you know what each person actually saw.
+- [ ] Ask the follow-up for every card the person placed (why there?) and for every card left
+      unplaced. Unplaced cards are information that did not come out.
+
+## During the weeks in the field
+
+Your own ideas will arrive between interviews. Write them in `4-field/notes.md`, marked as your
+readings, never in an interview note and never as evidence. They are emptied at the gate into the
+debrief.
+
 ## After, within 24 hours
 
 - [ ] Save audio/video/notes with date, profile and anonymous name.
@@ -53,6 +74,9 @@ This document keeps you from improvising interviews. Use it before, during and a
 - [ ] Write down interviewer observations, separated from what the user said.
 - [ ] Note moments of tension, surprise or emotion.
 - [ ] Record new questions.
+- [ ] If the recording opens with the interviewer talking to someone else before the person joined,
+      note the line where the interview really starts (the counter takes `--start-line N` or
+      `--skip-until-first-interviewee`).
 - [ ] Update the recruitment tracker.
 - [ ] Mark sample gaps.
 
@@ -67,6 +91,13 @@ Example:
 ```text
 2026-05-11_logistics-sme_e01_notes.md
 ```
+
+## Feedback on how it went
+
+The feedback on the interviewer is judged on whether the information came out, not on literal
+adherence to the guide. Changed wording, double questions and detours are not faults; a follow-up
+never asked or cards left unplaced are. It is delivered as an HTML page; the markdown file is
+internal. Neither carries internal codes.
 
 ## Mistakes to avoid
 

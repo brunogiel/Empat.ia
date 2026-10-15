@@ -5,7 +5,7 @@ Owns: the one-page report of the whole project. Does not own: any new claim, or 
 The whole project on one page, for someone who read none of it. It covers every
 round that ran: the field and, when there was one, the ideation and the
 validation. It is the only shareable artefact of the method: no raw quotes
-without consent, no internal notes, no logistics. Everything here is a shorter
+without consent, no internal notes, no logistics, no codes (state ideas in words). Everything here is a shorter
 view of the principles, the evidence and the findings files. A skipped piece
 gets one line saying what we assume by not doing it; a piece done by someone
 else gets a link.

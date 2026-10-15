@@ -10,6 +10,8 @@ What lives here:
 - `_prep/`: the one-page sheet you carry into each interview. Disposable.
 - `_raw/`: transcripts, audio, photos and signed consents. **This is personal data.** Check who
   has access to this folder before you put anything in it.
+- `notes.md`: the drawer for your own ideas during the field. Every line there is your reading,
+  not evidence; the editor empties it when the debrief starts.
 - `feedback/`: your own feedback on how each interview went, one file per interview.
 
 Patterns across interviews do not go here: they live in `5-debrief/`. An empty folder is not a gap:

@@ -14,8 +14,8 @@ The folder is numbered by phase, and it grows as you go:
   8-report/          the final write-up of the whole project
   _engine/           state, assumptions, decisions, evidence, raw sources
 
-Ten files exist at install: the map, the brief, one short README in each of
-phases 2 to 5 (so no folder is a mystery), and four for the machine. Every other
+Eleven files exist at install: the map, the brief, one short README in each of
+phases 2 to 5 (so no folder is a mystery), the field drawer, and four for the machine. Every other
 file is born when you ENTER its phase, written in the project's language. A file
 that does not exist yet is the design, not a missing piece. The folders of
 phases 6, 7 and 8 are born with their first --add, and each carries its own
@@ -53,14 +53,16 @@ ITEM_PREFIX = {"interview": "INT", "observation": "OBS", "validation": "VAL"}
 
 
 # --- What exists the moment you install ------------------------------------
-# Ten files. Six are yours: the map, the brief, and one README per phase folder
-# that would otherwise sit empty. Four are for the machine.
+# Eleven files. Seven are yours: the map, the brief, one README per phase folder
+# that would otherwise sit empty, and the field drawer (4-field/notes.md), where
+# the researcher's own ideas go during fieldwork. Four are for the machine.
 INSTALL = {
     "0-readme.md": "0-README.md",
     "phase-2-readme.md": "2-profiling/0-README.md",
     "phase-3-readme.md": "3-guide/0-README.md",
     "phase-4-readme.md": "4-field/0-README.md",
     "phase-5-readme.md": "5-debrief/0-README.md",
+    "field-notes.md": "4-field/notes.md",
     "agents-pointer.md": "AGENTS.md",
     "claude-pointer.md": "CLAUDE.md",
     "brief.md": "1-desk-research/brief.md",
@@ -105,6 +107,9 @@ PER_ITEM = {
     "validation-note": "interview-note.md",
     "validation-prep": "interview-prep.md",
     "validation-feedback": "interview-feedback.md",
+    # The HTML page the feedback is delivered as; the markdown file is internal.
+    "interview-feedback-html": "interview-feedback.html",
+    "validation-feedback-html": "interview-feedback.html",
     "notes": "notes.md",
 }
 
@@ -119,6 +124,8 @@ PER_ITEM_PATHS = {
     "validation-note": "7-validation/{name}.md",
     "validation-prep": "7-validation/_prep/{name}-prep.md",
     "validation-feedback": "7-validation/feedback/{name}-feedback.md",
+    "interview-feedback-html": "4-field/feedback/{name}-feedback.html",
+    "validation-feedback-html": "7-validation/feedback/{name}-feedback.html",
 }
 
 # Phases 6, 7 and 8 have no folder until their first file is born. When it is,
@@ -705,8 +712,9 @@ def main() -> int:
     parser.add_argument("--add", metavar="STEP",
                         help="Materialise one phase's file (run it when the step starts), or "
                              "one per-item file with --name: interview-note, interview-prep, "
-                             "interview-feedback, observation-note, validation-note, "
-                             "validation-prep, validation-feedback.")
+                             "interview-feedback, interview-feedback-html, observation-note, "
+                             "validation-note, validation-prep, validation-feedback, "
+                             "validation-feedback-html.")
     parser.add_argument("--name", default=None,
                         help="Base name for a per-item --add, e.g. INT-004-ana-lopez-acme, "
                              "OBS-002-store-floor or VAL-001-ben-ito (the prefix has to match "
@@ -828,8 +836,8 @@ def main() -> int:
     report("Edited already, not overwritten", results.get("protected"))
     report("Missing templates (the bundle is incomplete)", results.get("missing"))
 
-    print(f"\nTen files, six of them yours: 0-README.md, 1-desk-research/brief.md and the "
-          f"short README in phases 2 to 5.")
+    print(f"\nEleven files, seven of them yours: 0-README.md, 1-desk-research/brief.md, the "
+          f"short README in phases 2 to 5 and 4-field/notes.md (the field drawer).")
     print(f"Everything else is born when you enter its phase. Write all of it in "
           f"'{args.lang}'.")
     return 1 if results.get("missing") else 0

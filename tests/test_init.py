@@ -10,6 +10,7 @@ claim the README makes about the folder; if one fails, the claim is false.
 No dependencies: standard library only, so CI is one line.
 """
 
+import json
 import re
 import shutil
 import subprocess
@@ -31,6 +32,7 @@ INSTALLED = {
     "2-profiling/0-README.md",
     "3-guide/0-README.md",
     "4-field/0-README.md",
+    "4-field/notes.md",
     "5-debrief/0-README.md",
 }
 
@@ -58,18 +60,19 @@ class TempProject(unittest.TestCase):
 
 class TestCleanInstall(TempProject):
 
-    def test_installs_exactly_ten_files(self):
+    def test_installs_exactly_eleven_files(self):
         """The whole bet of v3. v2 installed 21, all of them empty."""
         self.init("--lang", "es")
         self.assertEqual(files_in(self.discovery), INSTALLED)
 
-    def test_only_six_files_belong_to_the_user(self):
+    def test_only_seven_files_belong_to_the_user(self):
         self.init()
         mine = {f for f in files_in(self.discovery)
                 if not f.startswith("_engine/") and f not in {"AGENTS.md", "CLAUDE.md"}}
         self.assertEqual(mine, {"0-README.md", "1-desk-research/brief.md",
                                 "2-profiling/0-README.md", "3-guide/0-README.md",
-                                "4-field/0-README.md", "5-debrief/0-README.md"})
+                                "4-field/0-README.md", "4-field/notes.md",
+                                "5-debrief/0-README.md"})
 
     def test_language_is_stamped_into_state(self):
         self.init("--lang", "es")
@@ -78,12 +81,15 @@ class TestCleanInstall(TempProject):
         self.assertIn("version: 3", state)
 
     def test_no_phase_folder_is_prefilled(self):
-        """Phases 2 to 5 hold only their own README until you reach them."""
+        """Phases 2 to 5 hold only their own README until you reach them. The one
+        exception is the field drawer, which is where the researcher's ideas go
+        while the interviews run."""
         self.init()
         for phase in ["2-profiling", "3-guide", "4-field", "5-debrief"]:
-            found = [str(p.relative_to(self.discovery / phase))
-                     for p in (self.discovery / phase).rglob("*.md")]
-            self.assertEqual(found, ["0-README.md"], f"{phase} should hold only its README")
+            found = sorted(str(p.relative_to(self.discovery / phase))
+                           for p in (self.discovery / phase).rglob("*.md"))
+            expected = ["0-README.md", "notes.md"] if phase == "4-field" else ["0-README.md"]
+            self.assertEqual(found, expected, f"{phase} holds more than it should at install")
 
     def test_phases_6_7_8_are_not_created_at_install(self):
         """They are born with their first --add, so a project that skips them
@@ -898,6 +904,116 @@ class RecorderLabelsAndProbes(unittest.TestCase):
         self.assertEqual(patterns["HOW"], [])
         self.assertEqual(patterns["CONTRAST"], [])
 
+
+
+class FeedbackHtmlTemplate(TempProject):
+    """The interviewer receives an HTML page; the markdown file stays internal."""
+
+    def test_add_creates_the_html_next_to_the_markdown(self):
+        self.init()
+        result = self.init("--add", "interview-feedback-html", "--name", "INT-001-ana-lopez")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.discovery / "4-field" / "feedback" /
+                         "INT-001-ana-lopez-feedback.html").exists())
+
+    def test_template_is_self_contained_and_themed(self):
+        text = (REPO / "templates" / "interview-feedback.html").read_text(encoding="utf-8")
+        self.assertIn("prefers-color-scheme: dark", text)
+        self.assertIn('name="viewport"', text)
+        urls = set(re.findall(r'(?:src|href)="(https?://[^"]+)"', text))
+        self.assertTrue(all("fonts.g" in u for u in urls), urls)
+        self.assertNotIn("<script", text)
+        for section in ("verbosity", "against the previous interview", "What worked",
+                        "did not come out", "next session"):
+            self.assertIn(section.lower(), text.lower())
+
+    def test_no_internal_codes_in_the_human_template(self):
+        text = (REPO / "templates" / "interview-feedback.html").read_text(encoding="utf-8")
+        self.assertIsNone(re.search(r"\bA-\d{3}\b|\bINT-\d{3}-\d{2}\b", text))
+
+
+class VerbosityAndStart(unittest.TestCase):
+    """The talk share only means something next to how much the other person
+    talks, and recordings can open with chatter that is not the interview."""
+
+    def setUp(self):
+        sys.path.insert(0, str(REPO / "scripts"))
+
+    @staticmethod
+    def _talk(n_words):
+        return " ".join(["word"] * n_words)
+
+    def _transcript(self, answer_words, chatter=False):
+        lines = []
+        if chatter:
+            lines += ["Me: Hi, can you hear me? Give me a second to set up.",
+                      "Me: Sorry, one more minute before we start.",
+                      "Them: Hi, I just joined."]
+        for i in range(4):
+            lines.append(f"Me: Tell me about the last time number {i}?")
+            lines.append(f"Them: {self._talk(answer_words)}.")
+        return "\n".join(lines) + "\n"
+
+    def _count(self, text, skip=False):
+        import count_interview as ci
+        turns = ci.parse(text)
+        if skip:
+            turns, _ = ci.skip_until_first_interviewee(turns, "Me")
+        return ci.count(turns, "Me", ci.load_patterns(None), [], None)
+
+    def test_labels_follow_the_bands(self):
+        import count_interview as ci
+        self.assertEqual(ci.verbosity_label(8), "brief")
+        self.assertEqual(ci.verbosity_label(29), "normal")
+        self.assertEqual(ci.verbosity_label(30), "normal")
+        self.assertEqual(ci.verbosity_label(56), "very talkative")
+        self.assertIsNone(ci.verbosity_label(None))
+
+    def test_a_normal_talker_is_never_called_brief(self):
+        import count_interview as ci
+        for words in range(15, 45):
+            self.assertNotEqual(ci.verbosity_label(words), "brief", words)
+
+    def test_the_json_carries_label_status_and_the_reading_note(self):
+        result = self._count(self._transcript(29))
+        verbosity = result["interviewee_verbosity"]
+        self.assertEqual(verbosity["label"], "normal")
+        self.assertEqual(verbosity["status"], "calibrating")
+        self.assertIn("together with this label", verbosity["note"])
+        self.assertEqual(self._count(self._transcript(56))["interviewee_verbosity"]["label"],
+                         "very talkative")
+
+    def test_skip_until_first_interviewee_drops_the_chatter(self):
+        text = self._transcript(29, chatter=True)
+        with_chatter = self._count(text)
+        without = self._count(text, skip=True)
+        self.assertGreater(with_chatter["words_by_speaker"]["interviewer"],
+                           without["words_by_speaker"]["interviewer"])
+        self.assertEqual(without["words_by_speaker"]["interviewer"],
+                         self._count(self._transcript(29))["words_by_speaker"]["interviewer"])
+
+    def test_cli_flags_start_counting_later(self):
+        transcript = REPO / "tests" / "_tmp_start.md"
+        transcript.write_text(self._transcript(29, chatter=True), encoding="utf-8")
+        script = str(REPO / "scripts" / "count_interview.py")
+        try:
+            plain = json.loads(subprocess.run(
+                [sys.executable, script, str(transcript), "--interviewer", "Me"],
+                capture_output=True, text=True).stdout)
+            skipped = json.loads(subprocess.run(
+                [sys.executable, script, str(transcript), "--interviewer", "Me",
+                 "--skip-until-first-interviewee"], capture_output=True, text=True).stdout)
+            by_line = json.loads(subprocess.run(
+                [sys.executable, script, str(transcript), "--interviewer", "Me",
+                 "--start-line", "3"], capture_output=True, text=True).stdout)
+        finally:
+            transcript.unlink()
+        self.assertNotIn("start", plain)
+        self.assertEqual(skipped["start"]["skipped_leading_interviewer_turns"], 1)
+        self.assertEqual(by_line["start"]["start_line"], 3)
+        self.assertEqual(skipped["words_by_speaker"]["interviewer"],
+                         by_line["words_by_speaker"]["interviewer"])
+        self.assertLess(skipped["interviewer_share"], plain["interviewer_share"])
 
 
 if __name__ == "__main__":

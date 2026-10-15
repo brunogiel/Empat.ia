@@ -69,7 +69,10 @@ The same flow processes a session where a person used a prototype, with these di
    If the user reflected out loud during or after the call (their own debrief), capture that verbatim into this section, it's often the sharpest input.
 7. **[DET] Count what is countable.** Run
    `python3 {method-root}/scripts/count_interview.py <transcript> --interviewer "<name>" --guide <master guide> --product "<your product terms>"`.
-   It returns words per speaker, questions, the probes (questions that went deeper in any form, split into anchors, hows, contrasts and the direct why, with chains), product mentions,
+   If the recording opens with the interviewer talking to someone else before the participant
+   joins, add `--skip-until-first-interviewee` (or `--start-line N`) so counting starts at the
+   right place. The JSON also gives `interviewee_verbosity` (a provisional label from the mean
+   answer length): the talk share is read together with it, never alone. It returns words per speaker, questions, the probes (questions that went deeper in any form, split into anchors, hows, contrasts and the direct why, with chains), product mentions,
    whether there was a closing recap, and which guide blocks came up. **No transcript, or no
    speaker labels: skip this and say so. Never estimate a number.**
 8. **[DET] Create the feedback file** with
@@ -79,6 +82,14 @@ The same flow processes a session where a person used a prototype, with these di
    folder's README, not a per-interview file).
    **[LATENT] Write it**, using `references/interview-rubric.md`. Keep **Measured** and **Read**
    under separate headings: the first is reproducible, the second is judgement the user can argue with.
+   - **Judge whether the information came out, not whether the guide was followed to the letter.**
+     Do not flag changed wording, double questions or deviations as faults; flag information
+     that did not come out (a follow-up never asked, cards left unplaced). Keep the metrics:
+     mean answer length, number of questions, depth probes, anchoring in a concrete episode.
+   - **Read the talk share against the interviewee's verbosity.** Never call a normal talker "brief".
+   - **Deliver it as an HTML page**: after the markdown file, run
+     `python3 {method-root}/scripts/init_project.py --project-root . --add interview-feedback-html --name <base>`
+     and fill it in words. The markdown file is internal. No internal codes in either.
    - **Coverage is reported, never scored.** Leaving the guide for a better thread is often the
      right call; ask whether the detour earned its place.
    - **Never score a criterion out of ten.**
@@ -104,7 +115,8 @@ The same flow processes a session where a person used a prototype, with these di
 - One transcript in `discovery/4-field/_raw/<base>-transcript.md`.
 - A structured note in `discovery/4-field/<base>.md` (1:1 with the template), including the **Guide / method learnings** retro.
 - New rows in `_engine/evidence.md`, traceable, IDed `INT-00X-NN` / `OBS-00X-NN`.
-- A feedback file in `discovery/4-field/feedback/<base>-feedback.md`.
+- A feedback file in `discovery/4-field/feedback/<base>-feedback.md` (internal) and its HTML page
+  `<base>-feedback.html`, the version the interviewer receives.
 - An updated `discovery/4-field/0-index.md` (status + gaps).
 - A gate recommendation. No master guide edited unless the user approved it.
 

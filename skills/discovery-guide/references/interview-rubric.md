@@ -7,6 +7,38 @@ is not copied into the user's folder. One feedback file per interview goes to
 Every criterion below comes from the method's own sources, and each one says
 where it comes from. None of them was invented for this file.
 
+## The yardstick: did the information come out?
+
+The feedback is judged on whether the information we came for came out, **not on literal
+adherence to the guide**. Do not flag changed wording, double questions or deviations from the
+guide as faults. Flag information that did not come out: a follow-up that was never asked (for
+example, after a card sort), cards left unplaced, a topic that stayed at the surface. Say what is
+missing, in words.
+
+The metrics below stay because they describe the conversation, not obedience: how long the
+answers were (verbosity), how many questions, how many probes went deeper, and whether the
+answers rested on a concrete episode.
+
+## Reading the talk share: the interviewee's verbosity first
+
+The talk share means nothing alone. The counter gives `mean_answer_words` and a label for the
+interviewee, `interviewee_verbosity`, with provisional bands (seed calibration: about 30 words per
+answer is normal, about 55 and up is very talkative):
+
+| Label | Mean words per answer |
+|---|---|
+| brief | below 15 |
+| normal | 15 to 44 |
+| talkative | 45 to 54 |
+| very talkative | 55 and up |
+
+With a very talkative person the interviewer talks little by default, so a low share proves
+little. With a normal one the interviewer has to probe more to get the same depth. Never call a
+normal-verbosity person "brief" or "terse". The bands are marked *calibrating* in the JSON and
+are constants at the top of `scripts/count_interview.py`, to adjust as more interviews are
+counted. A recording that opens with the interviewer talking to someone else before the
+participant joins is counted with `--skip-until-first-interviewee` (or `--start-line N`).
+
 ## Measured, not judged
 
 These come from `scripts/count_interview.py` over the transcript. Run it twice,
@@ -15,7 +47,7 @@ uncounted, never estimated.**
 
 | Criterion | Where it comes from | What is counted |
 |---|---|---|
-| Let them talk | "Talking more than listening" is a named mistake | Share of words that were the interviewer's |
+| Let them talk | "Talking more than listening" is a named mistake | Share of words that were the interviewer's, **read against the interviewee's verbosity label** |
 | Answers longer than a word | An open question is one that "requires a longer explanation than one word" | Mean length of the interviewee's answers |
 | Went deeper | Probing past the first answer. "Always ask why" is one form, not the whole habit, and the direct "why" invites justifying more than telling | Questions that went deeper in any form, once each, and the same per answer of theirs |
 | Anchored in a concrete last time | "How do you do it" gives an opinion; "tell me about the last time" gives a fact | Occurrences of last-time markers |
@@ -24,7 +56,7 @@ uncounted, never estimated.**
 | Asked why, direct | The literal "why" asks the person to rationalize. Reported on its own to see whether it goes down while the anchors and the hows go up | Occurrences, and how many were chained |
 | Did not pitch the solution | "Would you use my app if it did X?" is a named error, distinct from a closed question | Mentions of the project's own product |
 | Closed with a recap | Giving back what you understood makes them articulate their own why, and confirms you got it | Present or absent |
-| Guide coverage | — | Which blocks were touched, **reported only** |
+| Guide coverage | — | Which blocks were touched, **reported only**, never a fault |
 
 The probe rows are pattern counts: approximate, and the Guide checks a few by hand before
 quoting one. **Never conclude that more is better.** A single literal "why" in an hour is not a
@@ -39,7 +71,8 @@ These are judgement. Say so, and let the user argue.
 |---|---|
 | Did not lead the answer | "Do you think an app would solve that?" is open, well formed, and still carries the answer. Form does not reveal it |
 | Did not judge, played naive | "What the user says *is*"; the interviewer asks rather than corrects |
-| The detour earned its place | Leaving the guide is often right. Only reading the conversation tells you which it was |
+| The detour earned its place | Leaving the guide is often right. Only reading the conversation tells you which it was. A detour is never a fault by itself: what counts is whether the information came out |
+| Information that did not come out | Needs the guide's purpose next to the conversation: which question, card or follow-up never happened |
 | Roles held | Reported when two people were in the room: one leads, one takes notes, no swapping |
 
 ## The criterion that matters most
@@ -66,6 +99,11 @@ was skipped?
 - Store insights. Those belong in the interview note and in
   `5-debrief/findings.md`.
 - Write technique feedback naming a third person into a file the team reads.
+- Flag changed wording, double questions or deviations from the guide as faults.
+- Put internal codes (hypothesis IDs, evidence IDs) in the report the interviewer receives. The
+  idea goes in words; the IDs stay in the internal files.
+- Deliver the markdown file as the feedback. The interviewer receives an HTML page
+  (`--add interview-feedback-html --name <base>`); the markdown file is internal.
 
 ## Still open
 

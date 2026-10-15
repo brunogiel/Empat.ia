@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{NAME}}: how the interview went</title>
+<!--
+FEEDBACK PAGE FOR THE INTERVIEWER. This is the version the interviewer receives; the markdown
+file (`<base>-feedback.md`) is internal. The Guide fills it from the markdown file and from
+`count_interview.py`, in the project's language, and saves it next to it as
+`<base>-feedback.html`. One page, one file, nothing external except the optional Google Fonts line.
+
+Rules for what goes in:
+- Judged on whether the information came out, not on literal adherence to the guide. Changed
+  wording, double questions and detours are never listed as faults.
+- Words, not codes: no hypothesis IDs, no evidence IDs. State the idea in words.
+- No score out of ten. Counts are counts; the reading is labelled as a reading.
+- Never call a normal-verbosity interviewee "brief" or "terse".
+- If someone else ran the interview, do not write technique feedback naming them unless they asked.
+
+Replace every {{...}} and delete this comment before saving.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#ffffff; --fg:#1d2330; --muted:#5b6475; --line:#d9dee7; --soft:#f4f6fa;
+          --accent:#2457d6; --good:#1c7a4a; --gap:#a35a00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14171f; --fg:#e8ebf2; --muted:#9aa3b5; --line:#2b3140; --soft:#1c2029;
+            --accent:#7ea2ff; --good:#5fcf94; --gap:#f0a95a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:16px/1.55 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 1.45rem; margin: 0 0 4px; }
+  h2 { font-size: 1.1rem; margin: 28px 0 8px; }
+  .meta { color: var(--muted); font-size: .85rem; margin: 0 0 16px; }
+  .lead { background: var(--soft); border-left: 4px solid var(--accent); padding: 10px 14px; border-radius: 4px; }
+  .scale { display: flex; gap: 4px; margin: 10px 0 4px; }
+  .scale span { flex: 1; text-align: center; padding: 6px 2px; font-size: .78rem; background: var(--soft);
+                border: 1px solid var(--line); border-radius: 4px; color: var(--muted); }
+  .scale span.here { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+  .scale-note { font-size: .85rem; color: var(--muted); margin: 0 0 8px; }
+  .wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  ul { padding-left: 1.2rem; margin: 6px 0; }
+  li { margin: 6px 0; }
+  .worked li::marker { color: var(--good); }
+  .missing li::marker { color: var(--gap); }
+  .check { list-style: none; padding-left: 0; }
+  .check li::before { content: "\2610\00a0"; }
+  footer { margin-top: 28px; color: var(--muted); font-size: .8rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{NAME}}: how the interview went</h1>
+  <p class="meta">{{DATE}} &middot; Interview {{N}} of {{TOTAL}} &middot; for {{INTERVIEWER}}</p>
+  <p class="lead">{{ONE SENTENCE: did the information we came for come out, and what is the main thing to carry into the next session}}</p>
+
+  <h2>How talkative this person was</h2>
+  <!-- Put class="here" on exactly one span. The bands are provisional (calibrating). -->
+  <div class="scale" aria-label="Interviewee verbosity scale">
+    <span>brief</span><span>normal</span><span>talkative</span><span class="here">very talkative</span>
+  </div>
+  <p class="scale-note">{{N}} words per answer on average. Bands are provisional. Read your own talk share
+  next to this: with a very talkative person you talk little almost without trying; with a person of
+  normal verbosity you have to probe more to get the same depth.</p>
+
+  <h2>The numbers, against the previous interview</h2>
+  <div class="wrap">
+  <table>
+    <thead><tr><th>What was counted</th><th class="num">This one</th><th class="num">Previous</th></tr></thead>
+    <tbody>
+      <tr><td>Mean words per answer (their verbosity)</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
+      <tr><td>Share of the talking that was yours</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
+      <tr><td>Questions asked</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
+      <tr><td>Questions that went deeper</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
+      <tr><td>Anchored in a concrete last time</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="scale-note">Counted from the transcript by a script; the same file gives the same numbers.
+  {{WHAT COULD NOT BE COUNTED, if anything}}</p>
+
+  <h2>What worked</h2>
+  <ul class="worked">
+    <li>{{A MOVE THAT MADE INFORMATION COME OUT, and what it produced}}</li>
+  </ul>
+
+  <h2>Information that did not come out</h2>
+  <ul class="missing">
+    <li>{{WHAT WE NEEDED AND DID NOT GET, in words: a follow-up never asked, cards left unplaced, a story without its concrete example}}</li>
+  </ul>
+
+  <h2>For the next session</h2>
+  <ul class="check">
+    <li>{{ONE CONCRETE THING TO DO}}</li>
+  </ul>
+
+  <footer>This page judges whether the information came out, not whether the guide was followed word for word.</footer>
+</main>
+</body>
+</html>
