@@ -331,6 +331,10 @@ Don't present it as A/B/C. Use clear names.
 4. Offer the snapshot (see "Shareable snapshots" below): *"Shall we continue, or shall I make you a
    shareable snapshot of where we are?"*
 
+**Human checkpoint is mandatory.** At every gate, and at each debrief sub-stage (5a.0 to 5a.4), the checker filters and the researcher decides. Show what the researcher needs to see, then wait for their pick among the four. Never advance on the checker's verdict alone.
+
+**The standard checker.** Deterministic first: `scripts/verify_quotes.py` finds each quote in the interviewee's own channel. Then, where there is interpretation: ±6 lines of context on every quote that leaves, "does the quote support the claim?" with seeded errors as a control, qualitative-to-quantitative on everything that leaves, and a devil's advocate before sharing. Log it all in `5-debrief/verification-log.md`. A literal pass alone gives false security. The steps in `5a-debrief.md` spell out the sub-stages and the fan-out table.
+
 **The menu stays at four.** Nothing below adds a fifth option; the feedback you give after an
 interview is something you offer inside the four you already have.
 
@@ -352,6 +356,7 @@ a client or a team before starting.
   to send by mail.
 - **Never include what is internal**: no assumptions, no `Co-pilot reading`, no internal notes, no
   quote whose consent does not allow sharing.
+- **Before sharing anything that leaves the team**, the qualitative-to-quantitative check and the devil's advocate must have run (see "The standard checker"). Write for the client in design-thinking language: "what we saw suggests", "in these cases", "to test".
 - `share/` is output. It has no line budget and the `editor` does not route it.
 
 ## Interview feedback: three moments
@@ -468,6 +473,8 @@ Criteria for proposing:
 - Propose `sme-owner` when the project touches SMEs, shops, local providers, family businesses, or B2B sales to small teams.
 - Propose `philosopher` when the conceptual or ethical framing is loose, or when there are too many invisible assumptions.
 - Propose `cab-driver` when the council or the discussion is getting too abstract, expert, or aligned. Useful for grounding things in concrete scenes, bringing analogies, and using simple language.
+
+**Lateral guests and contrarian.** During the debrief (patterns and insights), offer lateral guests (the "lateral guests" variant in `agents/council.md`): restricted to sheets or patterns, isolated, they generate and never judge, and only what traces to evidence survives. Offer a devil's advocate before anything is shared. Propose both; the user decides.
 
 Suggested mix for a good council: combine a technical-analytical profile (economist, growth, technologist), a human-qualitative profile (qualitative-researcher, sociologist, uxer), a divergent or critical profile (artist, philosopher), and optionally a non-expert lateral perspective (cab-driver). That forces useful disagreement.
 

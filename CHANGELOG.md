@@ -1,5 +1,29 @@
 # Changelog
 
+## 3.2.0 - 2026-10-16
+
+### Added: the debrief runs in stages, with a standard checker
+
+Lessons from a real debrief, applied to the method.
+
+- **`5a-debrief.md` is split into sub-stages with a gate each:** 5a.0 analysis guide (optional, with a
+  refuter), 5a.1 evidence (one case sheet per person, run in isolation; card sorting read as
+  triangulation), 5a.2 patterns (inductive affinity before mapping to the research questions;
+  mandatory axes of divergence; optional lateral guests), 5a.3 insights (one author; laterals and a
+  devil's advocate), 5a.4 principles, HMW, coverage matrix and the validation-round guide.
+- **A human checkpoint at every gate.** The checker filters; the researcher sees the evidence and
+  decides: Advance, Deepen, Question or Council. The Guide no longer advances on the checker's verdict.
+- **The standard checker:** `verify_quotes.py` first (deterministic), then ±6 lines of context on
+  every quote that leaves, "does the quote support the claim?" with seeded errors as a control,
+  qualitative-to-quantitative on everything that leaves, a devil's advocate before sharing, and a
+  `verification-log.md`.
+- **Fan-out table per sub-stage** (agents, tier, input, isolation) with a serial fallback for
+  platforms without subagents.
+- **Council variant "lateral guests":** restricted input, isolated, a role with a restriction and a
+  quota, they generate and never judge; the orchestrator crosses and keeps only what traces back.
+- **The report and anything shared** pass the qualitative-to-quantitative and devil's-advocate
+  checks first, and are written in design-thinking language ("suggests", "to test").
+
 ## 3.1.0 - 2026-10-15
 
 ### Added: interview feedback judges whether the information came out

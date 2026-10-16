@@ -154,7 +154,7 @@ steps:
   interview_capture:
     phase: 4
     status: not_started
-    file: 4-field/0-index.md + 4-field/feedback/0-README.md + _engine/evidence.md
+    file: 4-field/0-index.md + 4-field/feedback/0-README.md + _engine/evidence.md + 4-field/card-sort.md
     gate: true
   observation:
     phase: 4
@@ -165,7 +165,7 @@ steps:
   debrief:
     phase: 5
     status: not_started
-    file: 5-debrief/findings.md + 5-debrief/principles.md
+    file: 5-debrief/findings.md + 5-debrief/principles.md + 5-debrief/analysis-guide.md + 5-debrief/coverage-matrix.md + 5-debrief/verification-log.md + 5-debrief/cases/_case-sheet.json + 5-debrief/cases/_instructions.md
     gate: true
   ideation:
     phase: 6

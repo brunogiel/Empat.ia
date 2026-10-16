@@ -1,0 +1,65 @@
+{
+  "id": "INT-00X",
+  "alias": "Participant label (no real name if the sheet can be forwarded)",
+  "profile": "seniority, area or any attribute from 2-profiling/profiles.md",
+  "situation": "current situation relevant to the topic",
+  "journey": [
+    {
+      "stage": "becomes aware / evaluates / decides to act / goes through the process / offer / decides",
+      "what_they_do": "",
+      "sources": ["people", "the product studied", "search", "..."],
+      "product_studied": "absent / present / decisive",
+      "quote": "",
+      "line": 0
+    }
+  ],
+  "real_episodes": [
+    {
+      "who_or_what": "",
+      "type": "",
+      "when": "",
+      "channel": "",
+      "how_far": "looked / started / went through / dropped / completed",
+      "why_it_went_on_or_stopped": "",
+      "quote": "",
+      "line": 0
+    }
+  ],
+  "product_studied": {
+    "when_it_enters": "",
+    "what_for": "",
+    "condition": "e.g. only when the thing is unfamiliar",
+    "how_much_it_matters": "decisive / some / little / none / no evidence",
+    "what_they_look_for": [],
+    "what_puts_them_off_or_they_do_not_believe": [],
+    "quotes": [{"quote": "", "line": 0}]
+  },
+  "what_matters": [{"theme": "", "why": "", "quote": "", "line": 0, "led_by_interviewer": false}],
+  "phrases": [{"quote": "", "line": 0}],
+  "axes": {
+    "axis_name": {"position": "side A / side B / depends / no evidence", "quote": "", "line": 0}
+  },
+  "card_sort": {
+    "header": {"prompt_said": "exact words, with line", "deck_size": 0, "columns": [], "source": "photo / recording capture / reconstructed", "top3_done": false},
+    "detail": [
+      {
+        "card": "",
+        "column": "",
+        "state": "placed with a reason / placed silently / not placed",
+        "quote": "",
+        "line": 0,
+        "meaning_given_by": "participant / interviewer",
+        "moment": "while placing / while reviewing"
+      }
+    ],
+    "own_vocabulary": [],
+    "added_live": [],
+    "co_placement": [],
+    "missing_from_deck": []
+  },
+  "refuter": [{"quote": "", "line": 0, "why_it_contradicts": ""}],
+  "cautions": [],
+  "questions_to_return_to": [
+    {"question": "", "why": "what stayed open or ambiguous, with line", "for": "this person / next round / the guide"}
+  ]
+}

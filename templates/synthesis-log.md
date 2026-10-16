@@ -32,8 +32,10 @@ Source: `4-field/0-index.md` and `_engine/evidence.md`.
 
 ## Person by person
 
-Duplicate this block per interview or observation. Cross-interview patterns do
-not belong here: they go to `5-debrief/findings.md`.
+One case sheet per person already lives in `5-debrief/cases/{ID}.json` (shape in
+`case-sheet.json`). Do not duplicate it here: list the sheet and note only what
+the sheet cannot hold. Cross-interview patterns do not belong here: they go to
+`5-debrief/findings.md`.
 
 ### INT-001
 
@@ -41,6 +43,7 @@ not belong here: they go to `5-debrief/findings.md`.
 - Date: Pending.
 - Context: Pending.
 - Status in `0-index.md`: Pending.
+- Case sheet: `5-debrief/cases/INT-001.json` (profile, journey, quotes, refuter, questions to return to live there).
 - Evidence IDs: INT-001-..
 - Strong quotes: Pending.
 - Interviewer observations *(separate from interpretation)*: Pending.

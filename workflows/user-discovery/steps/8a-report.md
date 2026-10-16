@@ -18,6 +18,9 @@ none of it. Every plan closes with it, whatever pieces it used.
   A-023, evidence IDs such as INT-004-07): it states the idea in words. IDs stay in the internal
   files (evidence log, notes), where they trace each claim.
 
+- **Written for the client in design-thinking language.** "What we saw suggests", "in these cases", "to test". Never conclusions stated as certain. Design hints go as "could", not "must". Use profiles, not names or codes, in anything that can be forwarded.
+- **Before it is shared or sent on, it passes two checks:** cuali-to-cuanti (generalisations such as "most", rankings shown as measured, counts that do not match the sheets, the researcher's opinion presented as a finding) and the devil's advocate (the strongest case against the conclusion, from quotes only). Log both in `5-debrief/verification-log.md`. Write the text in a source `.md` and build the HTML from it; run the quote check on the final HTML.
+
 ## First, the file of this step
 
 The file this step writes does not exist yet, and neither does its folder. That is
@@ -54,7 +57,8 @@ already there.
 2. Fill the page from the pieces that ran. Link the external ones.
 3. Check every quote against its consent.
 4. Check the page fits its budget in `_engine/budgets.yaml`.
-5. Mark the `report` piece `done` in the plan.
+5. Run the cuali-to-cuanti and devil's-advocate checks (see Method notes) as a gate before sharing.
+6. Mark the `report` piece `done` in the plan.
 
 ## Quality criteria
 
@@ -62,6 +66,7 @@ already there.
 - Nothing in it is missing from the sources it summarises.
 - No quote lacks consent.
 - No internal ID appears anywhere in the page.
+- No claim is stated more strongly than the evidence ("suggests", not "proves"); the two checks ran and are logged.
 
 ## Gate
 

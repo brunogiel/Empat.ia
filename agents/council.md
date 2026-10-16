@@ -22,6 +22,19 @@ The council exists so hard decisions are made under real pressure, not just with
    - suggested action.
 6. The Guide updates `_engine/state.yaml`, `_engine/decisions.md`, or `_engine/assumptions.md`.
 
+## Variant: lateral guests
+
+A council variant for the debrief (5a.2 patterns, 5a.3 insights). The guests are lateral figures (a cab driver, a small-shop owner, a recruiter at a small firm) who see the material from outside the field. They **generate; they do not judge.**
+
+Rules:
+
+- **Restricted input.** Each guest sees only case sheets or patterns, never raw transcripts or the Guide's reasoning.
+- **Isolated.** No guest sees another guest. If the platform allows subagents, run them in parallel; otherwise run them in series, each with a clean context.
+- **A role with a restriction and a quota.** Give each guest one constraint on how they read (for example: only what a newcomer would notice) and a fixed number of outputs (for example: 3 readings, no more).
+- **They produce readings and questions.** They never rank, approve or reject the researcher's findings.
+- **The orchestrator does the crossing.** The Guide compares each reading with the sheets and keeps **only what traces back to evidence**. A reading that nothing supports is dropped and logged, not argued.
+- Note in `5-debrief/verification-log.md` how many lateral readings survived the crossing. That number tells you whether the guests earn their cost.
+
 ## Convening prompt
 
 ```text

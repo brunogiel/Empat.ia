@@ -62,13 +62,35 @@ budgets:
   4-field/0-observation-plan.md:
     lines: 80
     hard: false
+  4-field/card-sort.md:
+    lines: 100
+    hard: false
 
   5-debrief/findings.md:
     lines: 150
     hard: false
+  # Optional. Written before the analysis, so it stays short.
+  5-debrief/analysis-guide.md:
+    lines: 80
+    hard: false
+  5-debrief/coverage-matrix.md:
+    lines: 60
+    hard: false
+  # The log grows with each gate; past the budget, the older gates move to _engine/sources/.
+  5-debrief/verification-log.md:
+    lines: 120
+    hard: false
+  # The skeleton and the instructions for the case sheets. The sheets themselves
+  # (cases/INT-*.json) are data and carry no budget.
+  5-debrief/cases/_case-sheet.json:
+    lines: 80
+    hard: false
+  5-debrief/cases/_instructions.md:
+    lines: 80
+    hard: false
   # The deliverable. Design principles and nothing else: the patterns that
   # support them live in findings.md, the working notes of the synthesis live in
-  # _engine/, and what you hand to someone else lives in output/.
+  # _engine/, and what you hand to someone else lives in the shareable snapshots and 8-report/.
   5-debrief/principles.md:
     lines: 120
     hard: false
@@ -114,6 +136,9 @@ budgets:
 #   rubric needs, and capping them would push toward scoring instead of reading.
 #
 # 4-field/notes.md — the drawer. The editor empties it at every gate.
+#
+# 5-debrief/cases/*.json — one case sheet per person, as long as the person's
+#   interview was. Data for the quote script, not a file anyone reads end to end.
 #
 # share/ — the shareable snapshots (HTML). Output, not a working file: no budget,
 #   and the editor never routes it.

@@ -89,6 +89,13 @@ LAZY = {
     "findings": ("findings.md", "5-debrief/findings.md"),
     "principles": ("principles.md", "5-debrief/principles.md"),
     "synthesis_log": ("synthesis-log.md", "_engine/synthesis-log.md"),
+    # Debrief aids. Each one is optional and is born only when asked for.
+    "analysis_guide": ("analysis-guide.md", "5-debrief/analysis-guide.md"),
+    "case_sheet_template": ("case-sheet.json", "5-debrief/cases/_case-sheet.json"),
+    "case_sheet_instructions": ("case-sheet-instructions.md", "5-debrief/cases/_instructions.md"),
+    "card_sort": ("card-sort.md", "4-field/card-sort.md"),
+    "coverage_matrix": ("coverage-matrix.md", "5-debrief/coverage-matrix.md"),
+    "verification_log": ("verification-log.md", "5-debrief/verification-log.md"),
     "ideation": ("concepts.md", "6-ideation/concepts.md"),
     "validation_guide": ("tasks.md", "7-validation/tasks.md"),
     "validation_index": ("validation-index.md", "7-validation/0-index.md"),
@@ -327,6 +334,8 @@ def install(templates: Path, discovery: Path, project_name: str, language: str,
 AGGREGATE_STEPS = {
     "interview_capture": ["field_index", "interview_feedback", "evidence"],
     "debrief": ["findings", "principles"],
+    # The case sheet is two files: the empty skeleton and the shared instructions.
+    "case_sheet": ["case_sheet_template", "case_sheet_instructions"],
     "validation_capture": ["validation_index", "evidence"],
 }
 

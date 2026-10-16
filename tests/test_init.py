@@ -315,6 +315,32 @@ class TestAggregateSteps(TempProject):
         self.assertFalse((self.discovery / "5-debrief" / "output" / "summary.md").exists(),
                          "the summary moved to 8-report/ and is its own step")
 
+    def test_debrief_aids_land_where_the_debrief_expects_them(self):
+        expected = {
+            "analysis_guide": {"5-debrief/analysis-guide.md"},
+            "coverage_matrix": {"5-debrief/coverage-matrix.md"},
+            "verification_log": {"5-debrief/verification-log.md"},
+            "card_sort": {"4-field/card-sort.md"},
+            "synthesis_log": {"_engine/synthesis-log.md"},
+            "case_sheet": {"5-debrief/cases/_case-sheet.json",
+                           "5-debrief/cases/_instructions.md"},
+        }
+        for step, created in expected.items():
+            with self.subTest(step=step):
+                shutil.rmtree(self.discovery, ignore_errors=True)
+                self.init()
+                before = files_in(self.discovery)
+                result = self.init("--add", step)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(files_in(self.discovery) - before, created)
+
+    def test_case_sheet_skeleton_is_not_picked_up_as_a_case(self):
+        """verify_quotes --cases reads INT-*.json; the skeleton must not match."""
+        self.init()
+        self.init("--add", "case_sheet")
+        cases = self.discovery / "5-debrief" / "cases"
+        self.assertEqual(list(cases.glob("INT-*.json")), [])
+
     def test_start_and_design_challenge_point_at_the_installed_brief(self):
         self.init()
         for step in ["start", "design_challenge"]:
