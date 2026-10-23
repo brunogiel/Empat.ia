@@ -1,0 +1,77 @@
+{
+  "descripcion": "Judges ONE exchange of a user-research interview: the interviewer's question and what the person answered until the next question. One call per exchange. The questions about the answer held up on the first real round; the ones about the interviewer's question only propose candidates.",
+  "variables": [],
+  "preguntas": {
+    "bloque": {
+      "type": "choice",
+      "instructions": "This is a stretch of an interview about {SUBJECT}. Decide which topic of the interview guide this stretch is about, looking mostly at what the person talks about.",
+      "criteria": "{TOPICS}"
+    },
+    "episodio": {
+      "type": "noul",
+      "instructions": "Look only at what the interviewee says. Decide whether they tell something that happened to them on a concrete, identifiable occasion: one specific time, one specific case, one specific person or place.",
+      "criteria": {
+        "true": "Yes: they recount a concrete case of their own (for example, what they did the last time it happened, or what happened on an occasion they can place).",
+        "false": "No: they talk about general habits, opinions, how things are in general, or say nothing substantive."
+      }
+    },
+    "motivo": {
+      "type": "noul",
+      "instructions": "Look only at what the interviewee says. Decide whether they explain a reason of their own for why they did, chose, dropped or value something.",
+      "criteria": {
+        "true": "Yes: they give a reason of their own (for example, I did not go on because it asked for something I did not want to do, or I look at that first because I trust it more).",
+        "false": "No: they say what they did or think without saying why, or the reason is not theirs."
+      }
+    },
+    "tension": {
+      "type": "noul",
+      "instructions": "Look only at what the interviewee says. Decide whether a dilemma, a doubt, a sacrifice or something weighing against appears: what they gave up, what held them back, what did not fit even though they liked something else.",
+      "criteria": {
+        "true": "Yes: there is a pull between two things, something that held them back, or something they gave up.",
+        "false": "No: there is no pull and no cost; they only tell or give an opinion."
+      }
+    },
+    "generalizacion": {
+      "type": "noul",
+      "instructions": "Look only at what the interviewee says. Decide whether the answer is mostly an opinion or a general habit, not anchored in a concrete case of their own.",
+      "criteria": {
+        "true": "Yes: they speak in general (always, usually, people, everyone) and do not tell a specific case of theirs.",
+        "false": "No: they anchor in a concrete case of their own, or the answer is too short to be either."
+      }
+    },
+    "pide_motivo": {
+      "type": "noul",
+      "instructions": "Look only at what the interviewer says. Decide whether their question asks the person for a reason, a why or a criterion.",
+      "criteria": {
+        "true": "Yes: they ask why, what led them to, what made you, how did you notice, or what criterion they used.",
+        "false": "No: they ask something else (what happened, where, when, what did you look at), or ask no question at all."
+      }
+    },
+    "pide_episodio": {
+      "type": "noul",
+      "instructions": "Look only at what the interviewer says. Decide whether their question asks the person for a concrete case: the last time, one specific occasion, tell me that story.",
+      "criteria": {
+        "true": "Yes: they ask for a specific case or for a concrete story.",
+        "false": "No: they ask in general, ask for an opinion, or ask no question at all."
+      }
+    },
+    "premisa": {
+      "type": "noul",
+      "instructions": "Look at what the interviewer says and compare it with what the person answers. Decide whether the interviewer brings in an idea, a conclusion or an interpretation of THEIR OWN that the person had not said yet, and offers it for the person to confirm.",
+      "criteria": {
+        "true": "Yes: the interviewer puts into words a conclusion of their own that did not come from the person (for example, so you barely use that, or so you only look at that at the end) and the person just agrees or picks it up.",
+        "false": "No: the question is open, or the interviewer only repeats or confirms a fact the person already said (for example, was it by email?, was it twice?), or only thanks, greets or gives an instruction."
+      }
+    },
+    "responde": {
+      "type": "choice",
+      "instructions": "Decide how the person responds to what the interviewer said.",
+      "criteria": {
+        "directa": "They answer what was asked from the start, even if they add detail afterwards.",
+        "parcial": "They answer part of it and move to another topic, or take a while to get to what was asked.",
+        "diverge": "They talk about something else and do not answer what was asked.",
+        "no_habia_pregunta": "The interviewer did not ask a question: they commented, explained, gave an instruction or said thanks."
+      }
+    }
+  }
+}

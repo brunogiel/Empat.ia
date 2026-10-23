@@ -949,9 +949,23 @@ class FeedbackHtmlTemplate(TempProject):
         urls = set(re.findall(r'(?:src|href)="(https?://[^"]+)"', text))
         self.assertTrue(all("fonts.g" in u for u in urls), urls)
         self.assertNotIn("<script", text)
-        for section in ("verbosity", "against the previous interview", "What worked",
-                        "did not come out", "next session"):
+        for section in ("How the person tells", "{{SCALES}}", "What came out of each topic",
+                        "How you conducted it", "did not come out", "next session"):
             self.assertIn(section.lower(), text.lower())
+        for verdict in ("✅", "🟡", "❌"):
+            self.assertIn(verdict, text)
+        for bias in ("An idea of yours", "A question that leads", "A hypothetical question",
+                     "Your word before theirs"):
+            self.assertIn(bias, text)
+
+    def test_feedback_readme_says_what_is_counted_by_hand(self):
+        text = (REPO / "templates" / "feedback-readme.md").read_text(encoding="utf-8")
+        self.assertIn("counted by hand", text)
+        self.assertIn("experimental", text)
+        for script in ("segment_interview.py", "feedback_packs.py", "classify_exchanges.py",
+                       "feedback_scales.py"):
+            self.assertIn(script, text)
+            self.assertTrue((REPO / "scripts" / script).exists(), script)
 
     def test_no_internal_codes_in_the_human_template(self):
         text = (REPO / "templates" / "interview-feedback.html").read_text(encoding="utf-8")

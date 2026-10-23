@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-"""Count what is countable in an interview transcript.
+"""Count what is countable in an interview transcript. An internal diagnostic.
 
-The numbers that go into 4-field/feedback/<base>-feedback.md come from here, not
-from a model reading the transcript and forming an impression. Two runs over the
+The interviewer feedback no longer reports these keyword counts: they measured
+the form of the questions, not what came out. The feedback is built by
+segment_interview.py, feedback_packs.py, classify_exchanges.py and
+feedback_scales.py (see templates/feedback-readme.md). This script stays as a
+diagnostic, and its parser is the one segment_interview.py reuses. The numbers
+come from here, not from a model reading the transcript and forming an impression. Two runs over the
 same file return the same answer; that is the whole point. Judgement -- whether
 a question led the answer, whether leaving the guide was worth it -- stays with
 the Guide and is labelled as judgement.

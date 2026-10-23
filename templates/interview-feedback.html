@@ -1,108 +1,145 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{NAME}}: how the interview went</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Feedback {{INTERVIEW}}</title>
 <!--
-FEEDBACK PAGE FOR THE INTERVIEWER. This is the version the interviewer receives; the markdown
-file (`<base>-feedback.md`) is internal. The Guide fills it from the markdown file and from
-`count_interview.py`, in the project's language, and saves it next to it as
-`<base>-feedback.html`. One page, one file, nothing external except the optional Google Fonts line.
+FEEDBACK PAGE FOR THE INTERVIEWER. The version the interviewer receives; the markdown file
+(`<base>-feedback.md`) is the internal worksheet. The Guide writes it in the project's language,
+from `_engine/feedback/<base>-data.json`, `<base>-scales.html` and `<base>-hand-count.md`, and saves
+it as `4-field/feedback/<base>-feedback.html`. How it is made: `4-field/feedback/0-README.md`.
+
+Three parts, in this order:
+1. How the person tells: paste `_engine/feedback/<base>-scales.html` where {{SCALES}} is, then one
+   bold sentence with the reading and one or two literal examples.
+2. What came out of each topic: one row per topic of the guide, judged against what that topic was
+   looking for, plus rows for information that did not come out.
+3. How you conducted it: one row per thing you did, including the four fixed biases.
 
 Rules for what goes in:
+- Verdicts: ✅ good · 🟡 to improve (it happened, but it does not change what can be claimed) ·
+  ❌ failed (something can no longer be claimed, or will not be recovered).
 - Judged on whether the information came out, not on literal adherence to the guide. Changed
   wording, double questions and detours are never listed as faults.
-- Words, not codes: no hypothesis IDs, no evidence IDs. State the idea in words.
-- No score out of ten. Counts are counts; the reading is labelled as a reading.
-- Never call a normal-verbosity interviewee "brief" or "terse".
-- If someone else ran the interview, do not write technique feedback naming them unless they asked.
+- "You asked for a case / a reason and it came out" comes from the hand count, never from the judge.
+  Those numbers are not ranked across interviews.
+- A premise goes in only after a person read it and confirmed it. The judge's candidates are right
+  about half the time. An accepted premise that a summary attributes to the person is ❌; if the
+  person contradicted it, 🟡.
+- Every quote is checked against the transcript (scripts/verify_quotes.py) before it goes in.
+  Quotes of the person between «» (or the project language's quote marks); suggested questions
+  between “ ”.
+- Words, not codes: no hypothesis IDs, no evidence IDs. No score out of ten.
+- If someone else ran the interview, no technique feedback naming them unless they asked.
 
-Replace every {{...}} and delete this comment before saving.
+Replace every {{...}}, delete the example rows you do not use, and delete this comment.
 -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#ffffff; --fg:#1d2330; --muted:#5b6475; --line:#d9dee7; --soft:#f4f6fa;
-          --accent:#2457d6; --good:#1c7a4a; --gap:#a35a00; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#14171f; --fg:#e8ebf2; --muted:#9aa3b5; --line:#2b3140; --soft:#1c2029;
-            --accent:#7ea2ff; --good:#5fcf94; --gap:#f0a95a; }
-  }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--fg);
-         font:16px/1.55 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
-  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
-  h1 { font-size: 1.45rem; margin: 0 0 4px; }
-  h2 { font-size: 1.1rem; margin: 28px 0 8px; }
-  .meta { color: var(--muted); font-size: .85rem; margin: 0 0 16px; }
-  .lead { background: var(--soft); border-left: 4px solid var(--accent); padding: 10px 14px; border-radius: 4px; }
-  .scale { display: flex; gap: 4px; margin: 10px 0 4px; }
-  .scale span { flex: 1; text-align: center; padding: 6px 2px; font-size: .78rem; background: var(--soft);
-                border: 1px solid var(--line); border-radius: 4px; color: var(--muted); }
-  .scale span.here { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
-  .scale-note { font-size: .85rem; color: var(--muted); margin: 0 0 8px; }
-  .wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: .9rem; }
-  th, td { text-align: left; vertical-align: top; padding: 8px 8px; border-bottom: 1px solid var(--line); }
-  th { color: var(--muted); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
-  td.num, th.num { text-align: right; white-space: nowrap; }
-  ul { padding-left: 1.2rem; margin: 6px 0; }
-  li { margin: 6px 0; }
-  .worked li::marker { color: var(--good); }
-  .missing li::marker { color: var(--gap); }
-  .check { list-style: none; padding-left: 0; }
-  .check li::before { content: "\2610\00a0"; }
-  footer { margin-top: 28px; color: var(--muted); font-size: .8rem; }
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --fg:#17202b; --muted:#5b6675; --line:#dde2ea;
+  --accent:#1f5fd1; --good:#1d7a4f; --warn:#b4561b; --soft:#eaf0fb;
+  --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161d; --surface:#18202a; --fg:#e7ecf2; --muted:#9aa6b5; --line:#2a3542;
+  --accent:#7aa7ff; --good:#5fc795; --warn:#f0a066; --soft:#1c2a40; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161d; --surface:#18202a; --fg:#e7ecf2; --muted:#9aa6b5; --line:#2a3542;
+  --accent:#7aa7ff; --good:#5fc795; --warn:#f0a066; --soft:#1c2a40; color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.55}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:40px 64px;display:grid;gap:36px}
+header{display:grid;gap:8px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.1;margin:0;text-wrap:balance;font-weight:700}
+h2{font-size:20px;margin:0 0 12px;text-wrap:balance}
+h3{font-size:15px;margin:0}
+p{margin:0;max-width:65ch}
+.lead{color:var(--muted);font-size:17px}
+.scale{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:10px}
+.scale+.scale{margin-top:12px}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td.v{font-size:18px;width:28px;text-align:center}
+ul{margin:0;padding-left:20px;display:grid;gap:10px}
+li{max-width:65ch}
+.q{border-left:3px solid var(--accent);padding:12px 16px;background:var(--surface);border-radius:0 8px 8px 0;font-size:17px}
+.small{font-size:13px;color:var(--muted)}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+svg text{font-family:var(--sans)}
+@media print{@page{size:A4;margin:15mm}body{background:#fff}.wrap{padding:0}section,.scale{break-inside:avoid}}
 </style>
 </head>
 <body>
-<main>
-  <h1>{{NAME}}: how the interview went</h1>
-  <p class="meta">{{DATE}} &middot; Interview {{N}} of {{TOTAL}} &middot; for {{INTERVIEWER}}</p>
-  <p class="lead">{{ONE SENTENCE: did the information we came for come out, and what is the main thing to carry into the next session}}</p>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">{{PROJECT}} · round {{N}} · {{DATE}}</span>
+    <h1>Feedback on interview {{INTERVIEW}}</h1>
+    <p class="lead">How the session with {{FIRST NAME}} ({{PROFILE}}) went: how this person tells, what came out of each topic of the guide and how you conducted it, with one verdict per thing. Compared with the other {{K}} interviews of the round.</p>
+  </header>
 
-  <h2>How talkative this person was</h2>
-  <!-- Put class="here" on exactly one span. The bands are provisional (calibrating). -->
-  <div class="scale" aria-label="Interviewee verbosity scale">
-    <span>brief</span><span>normal</span><span>talkative</span><span class="here">very talkative</span>
-  </div>
-  <p class="scale-note">{{N}} words per answer on average. Bands are provisional. Read your own talk share
-  next to this: with a very talkative person you talk little almost without trying; with a person of
-  normal verbosity you have to probe more to get the same depth.</p>
+  <section>
+    <h2>How the person tells</h2>
 
-  <h2>The numbers, against the previous interview</h2>
-  <div class="wrap">
-  <table>
-    <thead><tr><th>What was counted</th><th class="num">This one</th><th class="num">Previous</th></tr></thead>
-    <tbody>
-      <tr><td>Mean words per answer (their verbosity)</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
-      <tr><td>Share of the talking that was yours</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
-      <tr><td>Questions asked</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
-      <tr><td>Questions that went deeper</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
-      <tr><td>Anchored in a concrete last time</td><td class="num">{{}}</td><td class="num">{{}}</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="scale-note">Counted from the transcript by a script; the same file gives the same numbers.
-  {{WHAT COULD NOT BE COUNTED, if anything}}</p>
+{{SCALES}}
 
-  <h2>What worked</h2>
-  <ul class="worked">
-    <li>{{A MOVE THAT MADE INFORMATION COME OUT, and what it produced}}</li>
-  </ul>
+    <p style="margin-top:14px"><strong>{{ONE SENTENCE: the reading of the three scales together, e.g. "does not talk much or monologue, but struggles to get to the point"}}</strong> {{ONE OR TWO LITERAL EXAMPLES: your question, and how the answer started}}</p>
+    <p class="small" style="margin-top:8px">The scales come from the interviews of this round and are recalibrated with 8 or more. "How much they monologue" is a word count; "how much they get to the point" is judged by a model answer by answer{{, checked by hand on this interview}}.</p>
+  </section>
 
-  <h2>Information that did not come out</h2>
-  <ul class="missing">
-    <li>{{WHAT WE NEEDED AND DID NOT GET, in words: a follow-up never asked, cards left unplaced, a story without its concrete example}}</li>
-  </ul>
+  <section>
+    <h2>What came out of each topic</h2>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th></th><th>Topic</th><th>What the guide was looking for</th><th>What came out</th></tr></thead>
+        <tbody>
+          <tr><td class="v">✅</td><td><strong>{{TOPIC OF THE GUIDE}}</strong></td><td>{{ITS INTENT, in a few words}}</td><td>{{WHAT CAME OUT: how many concrete cases or reasons, and the best one in a quote}}</td></tr>
+          <tr><td class="v">🟡</td><td><strong>{{TOPIC}}</strong></td><td>{{INTENT}}</td><td>{{WHAT CAME OUT, and what is missing}}</td></tr>
+          <tr><td class="v">❌</td><td><strong>{{INFORMATION THAT DID NOT COME OUT}}</strong></td><td>{{WHY IT MATTERED}}</td><td>{{"Not asked." or what happened instead}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin-top:10px">✅ what the topic was looking for came out ({{THE THRESHOLDS USED, e.g. "in the journey, 5 concrete cases or more; in what makes it worth more, 5 reasons or more"}}) · 🟡 it came out halfway · ❌ it did not come out.</p>
+  </section>
 
-  <h2>For the next session</h2>
-  <ul class="check">
-    <li>{{ONE CONCRETE THING TO DO}}</li>
-  </ul>
+  <section>
+    <h2>How you conducted it</h2>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th></th><th>What</th><th>With {{FIRST NAME}}</th></tr></thead>
+        <tbody>
+          <tr><td class="v">✅</td><td><strong>You asked for concrete cases</strong></td><td>{{FROM THE HAND COUNT: "They came out M of N times."}}</td></tr>
+          <tr><td class="v">✅</td><td><strong>You asked for the reason or the signal</strong></td><td>{{FROM THE HAND COUNT, and the question that worked best, quoted}}</td></tr>
+          <tr><td class="v">🟡</td><td><strong>You followed the tensions</strong></td><td>{{A DILEMMA OR A COST THE PERSON RAISED AND THE NEXT QUESTION DID NOT GO AFTER}}</td></tr>
+          <tr><td class="v">🟡</td><td><strong>An idea of yours in the question</strong></td><td>{{A CONFIRMED PREMISE, quoted, and whether the person took it or contradicted it}}</td></tr>
+          <tr><td class="v">🟡</td><td><strong>A question that leads</strong></td><td>{{A QUESTION THAT CARRIED ITS ANSWER, quoted}}</td></tr>
+          <tr><td class="v">🟡</td><td><strong>A hypothetical question</strong></td><td>{{"WOULD YOU...?" WHERE A PAST CASE WAS POSSIBLE}}</td></tr>
+          <tr><td class="v">🟡</td><td><strong>Your word before theirs</strong></td><td>{{A TERM YOU SAID BEFORE THE PERSON DID}}</td></tr>
+          <tr><td class="v">❌</td><td><strong>{{SOMETHING THAT FAILED}}</strong></td><td>{{WHAT CAN NO LONGER BE CLAIMED, OR WILL NOT BE RECOVERED}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin-top:10px">✅ good · 🟡 to improve: it happened, but it does not change what can be claimed · ❌ failed: something can no longer be claimed, or will not be recovered.</p>
+  </section>
 
-  <footer>This page judges whether the information came out, not whether the guide was followed word for word.</footer>
-</main>
+  <section>
+    <h2>For the next session</h2>
+    <ul>
+      <li>{{ONE CONCRETE THING TO DO, tied to how this kind of person tells}}</li>
+      <li>{{A SUGGESTED QUESTION, between “ ”}}</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>{{THE ONE QUESTION THAT IS STILL MISSING, if there is one}}</h2>
+    <div class="q">“{{THE QUESTION, ready to ask}}”</div>
+  </section>
+
+  <footer>Feedback {{INTERVIEW}} · {{DATE}} · about how the session went, not about whether the interview was useful</footer>
+</div>
 </body>
 </html>

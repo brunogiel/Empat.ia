@@ -1,5 +1,40 @@
 # Changelog
 
+## 3.3.0 - 2026-10-23
+
+### Added: interviewer feedback describes how the person tells and what came out, per topic
+
+Lessons from comparing two feedback formats on the five interviews of a real round. The format the
+interviewer receives now has three parts, each row with a verdict (✅ good · 🟡 to improve · ❌ failed).
+
+- **The exchange is the unit.** `segment_interview.py` cuts a transcript into exchanges: one real
+  question plus everything the person says until the next one. An "ok" of three words or fewer does
+  not cut. Recorder exports that name the other side with and without "(Name)" are read as one
+  speaker. Same flags as the counter for recordings that open with chatter.
+- **Three scales of how the person tells**, with every interview of the round on the bar: how much
+  they tell (median words per exchange), how much they monologue (share of their words in answers of
+  200 words or more) and how much they get to the point (of 10 answers, how many start by answering).
+  `feedback_scales.py` draws them as SVG and writes the numbers per interview. Bands are provisional,
+  set on five interviews; recalibrate with 8 or more.
+- **Depth is read in the answer.** A concrete case, a reason, a tension or a generalisation, counted
+  per topic of the project's own guide. `feedback_packs.py` builds the judge's packs from the guide's
+  numbered blocks and their intent lines, with an option for logistics and one for "none of the
+  topics"; packs ship in English and in Spanish (the wording measured on the round).
+- **jev as an optional, experimental judge.** `classify_exchanges.py` and `jev_client.py` ask jev
+  (typesafe.ai) one call per exchange, about one US cent per interview, with a cache. Without a key
+  they exit with code 2 and the two scales that are plain counts still come out.
+- **What is counted by hand, with a sheet for it.** "You asked for a case / a reason, and it came
+  out" goes on `<base>-hand-count.md`, with the judge's reading of the answer pre-filled and its
+  reading of the question only as candidates. Premise candidates go on the page only after a person
+  confirms them.
+- **New feedback page template**, with the scales, the per-topic table, the conduct table with four
+  fixed biases (an idea of yours to confirm, a question that leads, a hypothetical, your word before
+  theirs) and the next session. The markdown file is the internal worksheet behind it.
+- **The rubric, the Guide, `process-interview`, the qualitative researcher and the feedback README**
+  describe the new flow. `count_interview.py` stays as an internal diagnostic and its parser is
+  shared with the new scripts.
+- **CI runs every suite**, including the new `tests/test_feedback.py` and the quote checker's.
+
 ## 3.2.0 - 2026-10-16
 
 ### Added: the debrief runs in stages, with a standard checker

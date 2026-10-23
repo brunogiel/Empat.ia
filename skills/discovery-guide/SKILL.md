@@ -385,17 +385,23 @@ raises it before anything else. Same shape, second condition.
 
 Two rules on the feedback itself:
 
-- **Separate measured from read.** Counts come from a script over the transcript and are
-  reproducible; judgement is judgement and the user can argue with it. Never blend them, and
-  never score a criterion out of ten.
+- **Separate measured from read.** Counts come from scripts over the transcript (and from jev with
+  fixed thresholds, when there is a key) and are reproducible; judgement is judgement and the user
+  can argue with it. Never blend them, and never score a criterion out of ten.
 - **Judge whether the information came out, not whether the guide was followed.** Never list
   changed wording, a double question or a deviation as a fault. List information that did not
-  come out (a follow-up never asked, cards left unplaced). Keep the metrics: mean answer length,
-  number of questions, depth probes, anchoring in a concrete episode.
-- **Read the talk share against the interviewee's verbosity** (`interviewee_verbosity` in the
-  counter's JSON, bands provisional). A normal talker is never "brief".
+  come out (a follow-up never asked, cards left unplaced).
+- **Describe how the person tells, not the talk share.** Three scales per interview, with the whole
+  round on the bar: how much they tell, how much they monologue, how much they get to the point.
+  Depth is read in the answer (a concrete case, a reason, a tension), per topic of the project's
+  guide, with ✅ 🟡 ❌. Recipe in `4-field/feedback/0-README.md`; scripts `segment_interview.py`,
+  `feedback_packs.py`, `classify_exchanges.py` (jev, optional and experimental) and
+  `feedback_scales.py`.
+- **"You asked for a case / a reason and it came out" is counted by hand**, on the hand-count sheet,
+  never by the judge. Premise candidates go on the page only after a person confirms them.
 - **The interviewer receives an HTML page**, from `--add interview-feedback-html --name <base>`.
-  The markdown file is internal. Neither uses internal codes: see "No codes in reports" below.
+  The markdown file is the internal worksheet. Neither uses internal codes: see "No codes in
+  reports" below.
 - **Coverage is reported, never scored.** Leaving the guide to follow a good thread is often the
   right call. Ask whether the detour earned its place; do not mark it wrong for low coverage.
 - **If someone else ran the interview**, technique feedback naming them is not written into a
