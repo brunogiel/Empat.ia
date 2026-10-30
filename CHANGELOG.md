@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Added: resolve what "this" and "here" pointed at in screen-shared sessions
+
+- **`scripts/resolve_deictics.py`:** finds the participant's phrases with a demonstrative, pairs each
+  with a strip of five frames of the shared screen (−4 to +4 s) and builds one sheet per session with
+  the component, the element, the confidence and a capture. Clock offset, crop, frames and the sheet
+  are code and run locally; only the reading of the frames is judgement.
+- **`templates/deictic-glossary.md` and `templates/deictic-prompt.md`:** the per-product list of
+  components and the instruction for the reading step. `UNKNOWN` is always a valid answer.
+- **`docs/deictic-resolver.md`:** the method, its limits and the privacy rules. Step 7b points to it.
+
 ## 3.3.0 - 2026-10-23
 
 ### Added: interviewer feedback describes how the person tells and what came out, per topic

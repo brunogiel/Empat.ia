@@ -24,3 +24,5 @@ jobs:
         run: python3 tests/test_verify_quotes.py
       - name: The interviewer feedback engine counts what it says
         run: python3 tests/test_feedback.py
+      - name: The deictic resolver picks the right phrases
+        run: python3 tests/test_resolve_deictics.py

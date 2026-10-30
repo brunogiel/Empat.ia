@@ -27,6 +27,14 @@ created before its step starts.
 3. **[DET]** Write each one **in the language set in `_engine/state.yaml`**.
 4. **[LATENT]** Pre-fill with what the project already knows.
 
+## Optional: what did "this" and "here" point at?
+
+When the sessions were screen-shared and the participant points without naming ("this is confusing"),
+`scripts/resolve_deictics.py` pairs each phrase with five frames of the shared screen and a glossary
+of the product's components. It is local, it needs the video, and it produces a sheet per session
+with a confidence and a capture per row. Method, limits and privacy rules: `docs/deictic-resolver.md`.
+Rows marked "review" are opened by a person before any of them is quoted in the findings.
+
 ## Documents to touch
 
 - `discovery/7-validation/`
