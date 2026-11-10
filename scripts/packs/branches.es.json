@@ -1,0 +1,22 @@
+{
+  "descripcion": "Juzga si la persona entrevistada contesta lo que se le pregunto o se va por las ramas. Un intercambio por llamada.",
+  "variables": [],
+  "preguntas": {
+    "arranca_contestando": {
+      "type": "noul",
+      "instructions": "Lee la pregunta del entrevistador y el comienzo de lo que contesta la persona. Decidi si las primeras oraciones de la persona contestan lo que el entrevistador pregunto.",
+      "criteria": {
+        "true": "Si: de entrada responde lo preguntado (por ejemplo, le preguntan donde busca y empieza nombrando donde busca).",
+        "false": "No: arranca hablando de otra cosa, de un tema que le interesa a ella, o tarda en llegar a lo preguntado."
+      }
+    },
+    "se_va_a_otro_tema": {
+      "type": "noul",
+      "instructions": "Lee la pregunta del entrevistador y toda la respuesta de la persona. Decidi si la mayor parte de la respuesta habla de algo distinto de lo que se pregunto: un tema propio, una anecdota que no viene al caso, una opinion sobre otra cosa.",
+      "criteria": {
+        "true": "Si: aunque quizas toque la pregunta al principio, la mayor parte se va a otro tema que no es lo que se pregunto.",
+        "false": "No: la mayor parte de la respuesta se queda en lo que se pregunto, aunque sea larga o con detalle."
+      }
+    }
+  }
+}

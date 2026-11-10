@@ -45,7 +45,8 @@ Job 4 is what keeps the drawer from becoming the problem it was meant to solve. 
 | What the validation showed: understood, stuck, changes | `7-validation/findings.md` |
 | The one-page report of the whole project | `8-report/summary.md` |
 | Per-interview context, roles, place, modality, time boxes | that interview's `4-field/_prep/*-prep.md`, never the master guide |
-| How the interviewer did, counts, technique feedback | `4-field/feedback/<base>-feedback.md` |
+| How the interviewer did, counts, technique feedback | `4-field/feedback/<base>-feedback.md` (internal) and `<base>-feedback.html` (what the interviewer receives) |
+| The researcher's own ideas during fieldwork | stay in `4-field/notes.md` as readings; at the debrief gate each becomes a hypothesis in `_engine/assumptions.md` or is discarded, never evidence |
 | Where to go, who to observe, what to look for | `4-field/0-observation-plan.md` |
 | Cross-interview patterns, weak signals, contradictions, gaps | `5-debrief/findings.md` |
 | Working notes of the synthesis, the evidence chain, the quality checklist | `_engine/synthesis-log.md` |

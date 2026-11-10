@@ -1,6 +1,98 @@
 # Changelog
 
-## Unreleased
+## 3.3.0 - 2026-10-23
+
+### Added: interviewer feedback describes how the person tells and what came out, per topic
+
+Lessons from comparing two feedback formats on the five interviews of a real round. The format the
+interviewer receives now has three parts, each row with a verdict (✅ good · 🟡 to improve · ❌ failed).
+
+- **The exchange is the unit.** `segment_interview.py` cuts a transcript into exchanges: one real
+  question plus everything the person says until the next one. An "ok" of three words or fewer does
+  not cut. Recorder exports that name the other side with and without "(Name)" are read as one
+  speaker. Same flags as the counter for recordings that open with chatter.
+- **Three scales of how the person tells**, with every interview of the round on the bar: how much
+  they tell (median words per exchange), how much they monologue (share of their words in answers of
+  200 words or more) and how much they get to the point (of 10 answers, how many start by answering).
+  `feedback_scales.py` draws them as SVG and writes the numbers per interview. Bands are provisional,
+  set on five interviews; recalibrate with 8 or more.
+- **Depth is read in the answer.** A concrete case, a reason, a tension or a generalisation, counted
+  per topic of the project's own guide. `feedback_packs.py` builds the judge's packs from the guide's
+  numbered blocks and their intent lines, with an option for logistics and one for "none of the
+  topics"; packs ship in English and in Spanish (the wording measured on the round).
+- **jev as an optional, experimental judge.** `classify_exchanges.py` and `jev_client.py` ask jev
+  (typesafe.ai) one call per exchange, about one US cent per interview, with a cache. Without a key
+  they exit with code 2 and the two scales that are plain counts still come out.
+- **What is counted by hand, with a sheet for it.** "You asked for a case / a reason, and it came
+  out" goes on `<base>-hand-count.md`, with the judge's reading of the answer pre-filled and its
+  reading of the question only as candidates. Premise candidates go on the page only after a person
+  confirms them.
+- **New feedback page template**, with the scales, the per-topic table, the conduct table with four
+  fixed biases (an idea of yours to confirm, a question that leads, a hypothetical, your word before
+  theirs) and the next session. The markdown file is the internal worksheet behind it.
+- **The rubric, the Guide, `process-interview`, the qualitative researcher and the feedback README**
+  describe the new flow. `count_interview.py` stays as an internal diagnostic and its parser is
+  shared with the new scripts.
+- **CI runs every suite**, including the new `tests/test_feedback.py` and the quote checker's.
+
+## 3.2.0 - 2026-10-16
+
+### Added: the debrief runs in stages, with a standard checker
+
+Lessons from a real debrief, applied to the method.
+
+- **`5a-debrief.md` is split into sub-stages with a gate each:** 5a.0 analysis guide (optional, with a
+  refuter), 5a.1 evidence (one case sheet per person, run in isolation; card sorting read as
+  triangulation), 5a.2 patterns (inductive affinity before mapping to the research questions;
+  mandatory axes of divergence; optional lateral guests), 5a.3 insights (one author; laterals and a
+  devil's advocate), 5a.4 principles, HMW, coverage matrix and the validation-round guide.
+- **A human checkpoint at every gate.** The checker filters; the researcher sees the evidence and
+  decides: Advance, Deepen, Question or Council. The Guide no longer advances on the checker's verdict.
+- **The standard checker:** `verify_quotes.py` first (deterministic), then ±6 lines of context on
+  every quote that leaves, "does the quote support the claim?" with seeded errors as a control,
+  qualitative-to-quantitative on everything that leaves, a devil's advocate before sharing, and a
+  `verification-log.md`.
+- **Fan-out table per sub-stage** (agents, tier, input, isolation) with a serial fallback for
+  platforms without subagents.
+- **Council variant "lateral guests":** restricted input, isolated, a role with a restriction and a
+  quota, they generate and never judge; the orchestrator crosses and keeps only what traces back.
+- **The report and anything shared** pass the qualitative-to-quantitative and devil's-advocate
+  checks first, and are written in design-thinking language ("suggests", "to test").
+
+## 3.1.0 - 2026-10-15
+
+### Added: interview feedback judges whether the information came out
+
+Lessons from real fieldwork, applied to the method.
+
+- **The talk share is read against how talkative the interviewee was.** `count_interview.py`
+  adds `interviewee_verbosity` to its JSON: a label (brief, normal, talkative, very talkative)
+  from the mean words per answer, marked `calibrating`, with a note that the interviewer's share
+  must be read together with it. The band edges are named constants at the top of the script
+  (seed calibration: about 30 words per answer is normal, 55 and up is very talkative). A person of
+  normal verbosity is never called brief.
+- **Recordings that open with chatter.** `--skip-until-first-interviewee` starts counting at the
+  first turn of anyone who is not the interviewer; `--start-line N` starts at a given line.
+- **The feedback is judged on the information, not on the guide.** The rubric, the Guide, the
+  `process-interview` skill, the feedback templates and the qualitative researcher say the same
+  thing: changed wording, double questions and detours are not faults; a follow-up never asked or
+  cards left unplaced are. Mean answer length, number of questions, depth probes and anchoring in
+  a concrete episode stay.
+- **The interviewer receives an HTML page.** New `interview-feedback.html` template (self-contained,
+  light and dark, works at phone width) with the verbosity scale, the numbers against the previous
+  interview, what worked, information that did not come out and a checklist for the next
+  session. Create it with `--add interview-feedback-html --name <base>` (and
+  `validation-feedback-html`). The markdown feedback is internal.
+- **No codes in reports for people.** Feedback, the final report and the shareable snapshots state
+  ideas in words; hypothesis and evidence IDs stay in the internal files.
+- **Card sorting leaves a record.** The field process asks for a photo or screenshot of the final
+  board before the call ends, pasted into the meeting notes, and treats cards or columns added
+  live as a comparison caveat, not an error.
+- **A drawer for the weeks in the field.** `4-field/notes.md` is born at install, so install is now
+  eleven files, seven of them the user's. It holds the researcher's own emerging ideas, marked as
+  readings and never as evidence; the editor empties it at the gate into the debrief.
+
+### Earlier in this release
 
 ### Fixed: the interview counter read "why" by the word, and lost the other side's turns
 

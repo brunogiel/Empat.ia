@@ -1,6 +1,6 @@
 # Design Principles
 
-Owns: the design principles and nothing else. Does not own: the patterns behind them → `findings.md`; working notes of the synthesis → `_engine/synthesis-log.md`; the final page → `8-report/summary.md`.
+Owns: the design principles and nothing else. Does not own: the patterns behind them → `findings.md`; working notes of the synthesis → `_engine/synthesis-log.md`; the final page → `8-report/summary.md`; the coverage of the challenge → `coverage-matrix.md`.
 
 This document holds the **design principles**, the central deliverable of the method: decision rules the team will use later for product, communication with users and strategy.
 
@@ -12,10 +12,10 @@ Central rule: no principle without evidence.
 
 Actionable rules for deciding on product, service, communication or experience. They must come from evidence.
 
-| Principle | Source insight | Evidence | Implication |
-|---|---|---|---|
-| Pending | Pending | Pending | Pending |
+| ID | Principle | Source insight | Evidence | Implication | HMW |
+|---|---|---|---|---|---|
+| P-01 | Pending | Pending | Pending | Pending | How might we... (no hidden solution) |
 
 ---
 
-The method ends here. The How Might We questions and top quotes in `output/summary.md` open the next phase, ideation — a different method with its own process.
+The principles end the debrief. The How Might We questions carry on into phase 6, ideation, where concepts cite these IDs (`P-01`...). The top quotes and a short read go to `8-report/summary.md`.

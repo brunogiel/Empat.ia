@@ -28,7 +28,9 @@ The same flow processes a session where a person used a prototype, with these di
 - Evidence rows are `VAL-00X-NN`, numbered within the session. Record what the person **did**
   (where they stopped, went back, asked for help) before what they said.
 - The guide to compare against is `7-validation/tasks.md`; its task blocks (`### 3. Task 1: …`)
-  are the blocks `count_interview.py --guide` reports.
+  are the topics: build a separate pair of packs from it (`feedback_packs.py --guide
+  7-validation/tasks.md --out _engine/feedback/validation`) and keep the `VAL-` files there, so
+  the scales compare sessions with sessions, never with interviews.
 - The counter is `validations: {target, done, unprocessed}` in `_engine/state.yaml`, apart from
   `interviews`. If the block is missing, add it. The index is `7-validation/0-index.md`.
 - The retro proposes edits to `tasks.md`, never applies them, same as the master guide.
@@ -67,21 +69,42 @@ The same flow processes a session where a person used a prototype, with these di
    - **Concrete edits to the master guide** for the next interview (add / reword / reorder / drop a question; a technique that worked, like a closing recap). Be specific and quote the guide line.
    - **Part 2?** Default **no**: you learn more from new interviews than from re-interviewing. Only recommend a part 2 if a genuinely important theme was missed.
    If the user reflected out loud during or after the call (their own debrief), capture that verbatim into this section, it's often the sharpest input.
-7. **[DET] Count what is countable.** Run
-   `python3 {method-root}/scripts/count_interview.py <transcript> --interviewer "<name>" --guide <master guide> --product "<your product terms>"`.
-   It returns words per speaker, questions, the probes (questions that went deeper in any form, split into anchors, hows, contrasts and the direct why, with chains), product mentions,
-   whether there was a closing recap, and which guide blocks came up. **No transcript, or no
-   speaker labels: skip this and say so. Never estimate a number.**
-8. **[DET] Create the feedback file** with
-   `python3 {method-root}/scripts/init_project.py --project-root . --add interview-feedback --name <base>`.
-   One file per interview, not an accumulating log: create `4-field/feedback/0-README.md` first if
-   this is the first one (`--add interview_feedback`, no `--name`: that one materialises the
-   folder's README, not a per-interview file).
-   **[LATENT] Write it**, using `references/interview-rubric.md`. Keep **Measured** and **Read**
-   under separate headings: the first is reproducible, the second is judgement the user can argue with.
-   - **Coverage is reported, never scored.** Leaving the guide for a better thread is often the
-     right call; ask whether the detour earned its place.
-   - **Never score a criterion out of ten.**
+7. **[DET] Measure how the person tells and what came out.** Machine files go to
+   `discovery/_engine/feedback/`; `4-field/feedback/0-README.md` has the whole recipe. The scripts
+   are in `{method-root}/scripts/`; run them from inside `discovery/`.
+   - Once per project, after the guide is closed: `feedback_packs.py --guide 3-guide/guide.md
+     --subject "<what the interviews are about>" --lang <es|en> --out _engine/feedback`. It takes
+     the topics from the guide's numbered blocks; read the list it prints.
+   - `segment_interview.py <transcript> --interviewer "<label>" --lang <es|en>
+     --out _engine/feedback/<base>.jsonl` cuts it into exchanges. Add
+     `--skip-until-first-interviewee` (or `--start-line N`) if it opens with chatter.
+   - **Optional, experimental:** `classify_exchanges.py` with `depth-pack.json` and with
+     `branches-pack.json` (jev, one call per exchange). `--dry-run` first. Exit code 2 means no
+     key: go on without it. The first run on a new project is checked by hand.
+   - `feedback_scales.py _engine/feedback --lang <es|en>` writes `<base>-data.json`,
+     `<base>-scales.html` and `<base>-hand-count.md` for every interview of the round.
+   - **[LATENT] Count by hand** on `<base>-hand-count.md`: "you asked for a case / a reason, and
+     it came out". Never take that number from the judge. Read every premise candidate.
+   **No transcript, or no speaker labels: skip this and say so. Never estimate a number.**
+   `count_interview.py` stays as an internal diagnostic; its keyword counts do not go into the
+   feedback.
+8. **[DET] Create the feedback files** with
+   `python3 {method-root}/scripts/init_project.py --project-root . --add interview-feedback --name <base>`
+   (the internal worksheet) and `--add interview-feedback-html --name <base>` (the page the
+   interviewer receives). Create `4-field/feedback/0-README.md` first if this is the first one
+   (`--add interview_feedback`, no `--name`).
+   **[LATENT] Write them**, using `references/interview-rubric.md`. The page has three parts:
+   - **How the person tells:** paste `<base>-scales.html`, then one bold sentence with the reading
+     and one or two literal examples.
+   - **What came out of each topic:** one row per topic of the guide, ✅ 🟡 ❌ against what that
+     topic was looking for, plus rows for information that did not come out.
+   - **How you conducted it:** one row per thing, ✅ 🟡 ❌, with the hand counts and the four fixed
+     biases (an idea of yours to confirm, a question that leads, a hypothetical, your word before
+     theirs).
+   - **Judge whether the information came out, not whether the guide was followed to the letter.**
+     Do not flag changed wording, double questions or deviations as faults.
+   - **Check every quote** against the transcript with `verify_quotes.py` before the page goes out.
+   - **Never score a criterion out of ten.** No internal codes, in either file.
    - The entry is about the interviewer, not the interviewee. No insights here.
    - **If someone else ran the interview**, technique feedback naming them does not go into this
      file, which the team reads. Say it in conversation; write it only if they ask.
@@ -104,7 +127,8 @@ The same flow processes a session where a person used a prototype, with these di
 - One transcript in `discovery/4-field/_raw/<base>-transcript.md`.
 - A structured note in `discovery/4-field/<base>.md` (1:1 with the template), including the **Guide / method learnings** retro.
 - New rows in `_engine/evidence.md`, traceable, IDed `INT-00X-NN` / `OBS-00X-NN`.
-- A feedback file in `discovery/4-field/feedback/<base>-feedback.md`.
+- A feedback page `discovery/4-field/feedback/<base>-feedback.html` (what the interviewer receives)
+  and its internal worksheet `<base>-feedback.md`, built on `_engine/feedback/<base>-*`.
 - An updated `discovery/4-field/0-index.md` (status + gaps).
 - A gate recommendation. No master guide edited unless the user approved it.
 

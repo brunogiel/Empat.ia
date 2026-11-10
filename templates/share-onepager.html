@@ -10,7 +10,7 @@ before starting. The Guide writes it to share/YYYY-MM-DD-<slug>.html, in the pro
 language, only when the person says yes. Replace every {{...}} with text from the brief and
 from `plan:` in _engine/state.yaml. One page, one file, nothing external.
 
-NEVER INCLUDE: assumptions, co-pilot readings, internal notes, or quotes without consent.
+NEVER INCLUDE: internal IDs (hypothesis codes, evidence IDs; state the idea in words), assumptions, co-pilot readings, internal notes, or quotes without consent.
 Delete this comment before saving.
 -->
 <style>
@@ -28,6 +28,8 @@ Delete this comment before saving.
   th, td { text-align: left; vertical-align: top; padding: 8px 8px; border-bottom: 1px solid var(--line); }
   th { color: var(--muted); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
   .wrap { overflow-x: auto; }
+  h2 { font-size: 1.15rem; margin: 28px 0 6px; }
+  h3 { font-size: .95rem; margin: 14px 0 4px; }
   footer { margin-top: 24px; color: var(--muted); font-size: .8rem; }
   @media print { body { background:#fff; color:#000; } @page { margin: 14mm; } }
 </style>
@@ -47,6 +49,25 @@ Delete this comment before saving.
   </table>
   </div>
   <p>{{ONE LINE: which pieces are left out and what that means, if any}}</p>
+  <!-- OPTIONAL SECTION. Keep it only when this page also closes a field round and sets up validation;
+       otherwise delete the whole <section>. Wording: "what we saw suggests", "in these cases", "to test".
+       Never "it is proven" or "must". Refer to profiles, never to names or codes.
+       Design hints go as "could", not "has to". -->
+  <section id="validation-goals">
+    <h2>Goals and ideas for the validation round</h2>
+    <h3>What we set out to find out</h3>
+    <ul><li>{{WHAT WE WANT TO LEARN, one line each. What we saw suggests...}}</li></ul>
+    <h3>Entry scenarios</h3>
+    <ul><li>{{A SITUATION A PROFILE ARRIVES IN, e.g. "someone who does not know the company yet"}}</li></ul>
+    <h3>Possible A/B</h3>
+    <ul><li>{{TWO VERSIONS TO TEST, differing in one thing only}}</li></ul>
+    <h3>What to keep in mind with a small sample</h3>
+    <ul>
+      <li>Change one thing at a time between versions.</li>
+      <li>Alternate the order in which people see them.</li>
+      <li>Watch what people do, not only what they say.</li>
+    </ul>
+  </section>
   <footer>This plan is the agreement. If the method of a piece changes, we say so and update it.</footer>
 </main>
 </body>

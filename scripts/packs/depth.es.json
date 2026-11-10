@@ -1,0 +1,77 @@
+{
+  "descripcion": "Juzga UN intercambio de una entrevista de user research: la pregunta del entrevistador y lo que contesto la persona hasta la proxima pregunta. Una llamada por intercambio. Las preguntas que miran la respuesta son las que se sostuvieron en la primera ronda real; las que miran la pregunta del entrevistador solo proponen candidatas.",
+  "variables": [],
+  "preguntas": {
+    "bloque": {
+      "type": "choice",
+      "instructions": "Es un tramo de una entrevista sobre {SUBJECT}. Decidi de que tema de la guia de entrevista trata este tramo, mirando sobre todo de que habla la persona.",
+      "criteria": "{TOPICS}"
+    },
+    "episodio": {
+      "type": "noul",
+      "instructions": "Mira solo lo que dice la persona entrevistada. Decidi si cuenta algo que le paso a ella en una ocasion concreta e identificable: una vez puntual, un caso puntual, una persona o un lugar puntual.",
+      "criteria": {
+        "true": "Si: relata un caso propio concreto (por ejemplo, lo que hizo la ultima vez que le paso, o lo que paso en una ocasion que puede ubicar).",
+        "false": "No: habla de costumbres generales, de opiniones, de como son las cosas en general, o no dice nada sustantivo."
+      }
+    },
+    "motivo": {
+      "type": "noul",
+      "instructions": "Mira solo lo que dice la persona entrevistada. Decidi si explica una razon propia de por que hizo, eligio, descarto o valora algo.",
+      "criteria": {
+        "true": "Si: da una razon suya (por ejemplo, no lo segui porque me pedia algo que no queria hacer, o lo miro primero porque le creo mas).",
+        "false": "No: cuenta que hizo o que piensa sin decir por que, o la razon no es suya."
+      }
+    },
+    "tension": {
+      "type": "noul",
+      "instructions": "Mira solo lo que dice la persona entrevistada. Decidi si aparece un dilema, una duda, una renuncia o algo que le pesa en contra: lo que cedio, lo que lo freno, lo que no le cerro aunque le gustaba otra cosa.",
+      "criteria": {
+        "true": "Si: aparece un tironeo entre dos cosas, algo que lo freno o algo a lo que renuncio.",
+        "false": "No: no hay tironeo ni costo; solo cuenta o opina."
+      }
+    },
+    "generalizacion": {
+      "type": "noul",
+      "instructions": "Mira solo lo que dice la persona entrevistada. Decidi si la respuesta es mayormente una opinion o una costumbre general, sin anclar en un caso propio concreto.",
+      "criteria": {
+        "true": "Si: habla en general (siempre, en general, la gente, todos) y no cuenta un caso puntual suyo.",
+        "false": "No: ancla en un caso propio concreto, o la respuesta es tan corta que no es ni una cosa ni la otra."
+      }
+    },
+    "pide_motivo": {
+      "type": "noul",
+      "instructions": "Mira solo lo que dice el entrevistador. Decidi si su pregunta le pide a la persona una razon, un porque o un criterio.",
+      "criteria": {
+        "true": "Si: pregunta por que, que lo llevo a, que te hizo, como te diste cuenta, o que criterio uso.",
+        "false": "No: pregunta otra cosa (que paso, donde, cuando, que miraste), o no hace ninguna pregunta."
+      }
+    },
+    "pide_episodio": {
+      "type": "noul",
+      "instructions": "Mira solo lo que dice el entrevistador. Decidi si su pregunta le pide a la persona un caso concreto: la ultima vez, una ocasion puntual, contame esa historia.",
+      "criteria": {
+        "true": "Si: pide un caso puntual o que cuente una historia concreta.",
+        "false": "No: pregunta en general, pide una opinion, o no hace ninguna pregunta."
+      }
+    },
+    "premisa": {
+      "type": "noul",
+      "instructions": "Mira lo que dice el entrevistador y compara con lo que contesta la persona. Decidi si el entrevistador mete una idea, una conclusion o una interpretacion PROPIA, que la persona todavia no habia dicho, y se la ofrece para que la confirme.",
+      "criteria": {
+        "true": "Si: el entrevistador pone en palabras una conclusion suya que no salio de la persona (por ejemplo, entonces eso lo usas poco, o sea que eso lo miras al final) y la persona solo asiente o la retoma.",
+        "false": "No: la pregunta es abierta, o el entrevistador solo repite o confirma un dato que la persona ya habia dicho (por ejemplo, fue por mail?, fueron dos veces?), o solo agradece, saluda o da una consigna."
+      }
+    },
+    "responde": {
+      "type": "choice",
+      "instructions": "Decidi como responde la persona a lo que dijo el entrevistador.",
+      "criteria": {
+        "directa": "Contesta lo que se le pregunto desde el principio, aunque despues agregue detalle.",
+        "parcial": "Contesta una parte y se va a otro tema, o tarda en llegar a lo preguntado.",
+        "diverge": "Habla de otra cosa y no contesta lo preguntado.",
+        "no_habia_pregunta": "El entrevistador no hizo una pregunta: comento, explico, dio una consigna o agradecio."
+      }
+    }
+  }
+}

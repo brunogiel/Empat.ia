@@ -67,9 +67,10 @@ Then you invoke it with _"use Empat.ia"_ from any project.
 ## The discovery folder
 
 It is numbered by phase, so the order you see is the order you work in. And it
-**grows as you go**: ten files exist at install, and six of those are
-yours: the map, the brief, and one short README in each of phases 2 to 5 that
-says what the folder is for and what will appear in it. Every other file is
+**grows as you go**: eleven files exist at install, and seven of those are
+yours: the map, the brief, one short README in each of phases 2 to 5 that
+says what the folder is for and what will appear in it, and `4-field/notes.md`,
+the drawer for your own ideas during fieldwork. Every other file is
 written when you reach its phase, in your language, already filled with what the
 project knows by then.
 

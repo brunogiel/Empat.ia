@@ -20,3 +20,7 @@ jobs:
         run: python3 tests/test_init.py
       - name: The method hangs together
         run: python3 tests/test_consistency.py
+      - name: The quote checker catches planted errors
+        run: python3 tests/test_verify_quotes.py
+      - name: The interviewer feedback engine counts what it says
+        run: python3 tests/test_feedback.py

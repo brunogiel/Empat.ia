@@ -4,7 +4,7 @@ Short on purpose. Every line here is something that went wrong once.
 
 ## Before you tag
 
-1. **Run both suites.** `python3 tests/test_init.py && python3 tests/test_consistency.py`
+1. **Run every suite.** `fail=0; for t in tests/test_*.py; do python3 "$t" || fail=1; done; [ "$fail" = 0 ]`
    CI does this on every push, but run it before you touch the version so a red
    suite never reaches a tag.
 
@@ -29,11 +29,11 @@ Short on purpose. Every line here is something that went wrong once.
 
 ```bash
 git clone https://github.com/brunogiel/Empat.ia.git /tmp/verify && cd /tmp/verify
-python3 tests/test_init.py && python3 tests/test_consistency.py
+fail=0; for t in tests/test_*.py; do python3 "$t" || fail=1; done; [ "$fail" = 0 ]
 python3 scripts/init_project.py --project-root /tmp/fresh --lang es
 ```
 
-The last line is the one that matters: a clean install has to produce ten files
+The last line is the one that matters: a clean install has to produce eleven files
 and nothing else. Two releases shipped without anyone running it.
 
 ## One rule about the changelog

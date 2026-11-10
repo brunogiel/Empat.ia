@@ -1,0 +1,22 @@
+{
+  "descripcion": "Judges whether the interviewee answers what was asked or goes off on a tangent. One exchange per call.",
+  "variables": [],
+  "preguntas": {
+    "arranca_contestando": {
+      "type": "noul",
+      "instructions": "Read the interviewer's question and the start of the person's answer. Decide whether the person's first sentences answer what the interviewer asked.",
+      "criteria": {
+        "true": "Yes: they answer what was asked right away (for example, asked where they look, they start by naming where they look).",
+        "false": "No: they start talking about something else, a topic they care about, or take a while to get to what was asked."
+      }
+    },
+    "se_va_a_otro_tema": {
+      "type": "noul",
+      "instructions": "Read the interviewer's question and the person's whole answer. Decide whether most of the answer is about something other than what was asked: a topic of their own, an anecdote beside the point, an opinion about something else.",
+      "criteria": {
+        "true": "Yes: even if it touches the question at the start, most of it goes to another topic that is not what was asked.",
+        "false": "No: most of the answer stays on what was asked, even if it is long or detailed."
+      }
+    }
+  }
+}

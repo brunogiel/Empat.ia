@@ -53,6 +53,9 @@ created at install except phase 1's brief.
   template by hand.
 - Record moments of tension, surprise, or emotion.
 - Capture tools, documents, spaces, and workarounds.
+- Your own emerging ideas go in `4-field/notes.md` (born at install), marked as your readings. They are not evidence and never enter an interview note or `_engine/evidence.md` until people's own words support them.
+- If an exercise was done on a shared screen (a card sort, a board), the final state goes in the notes as a photo or screenshot taken before the call ended. Cards or columns the interviewer added live are a comparison caveat, not an error.
+- Feedback on the interviewer is delivered as an HTML page in words, never with internal codes; the markdown file stays internal. How it is made (exchanges, three scales of how the person tells, what came out per topic, hand counts) is in `4-field/feedback/0-README.md`; its machine files live in `_engine/feedback/`.
 
 ## Process
 
