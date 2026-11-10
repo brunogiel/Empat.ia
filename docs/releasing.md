@@ -4,7 +4,7 @@ Short on purpose. Every line here is something that went wrong once.
 
 ## Before you tag
 
-1. **Run every suite.** `for t in tests/test_*.py; do python3 "$t" || break; done`
+1. **Run every suite.** `fail=0; for t in tests/test_*.py; do python3 "$t" || fail=1; done; [ "$fail" = 0 ]`
    CI does this on every push, but run it before you touch the version so a red
    suite never reaches a tag.
 
@@ -29,7 +29,7 @@ Short on purpose. Every line here is something that went wrong once.
 
 ```bash
 git clone https://github.com/brunogiel/Empat.ia.git /tmp/verify && cd /tmp/verify
-for t in tests/test_*.py; do python3 "$t" || break; done
+fail=0; for t in tests/test_*.py; do python3 "$t" || fail=1; done; [ "$fail" = 0 ]
 python3 scripts/init_project.py --project-root /tmp/fresh --lang es
 ```
 
