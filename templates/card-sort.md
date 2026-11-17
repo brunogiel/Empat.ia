@@ -4,9 +4,15 @@ Owns: how a card sort is run and recorded so it triangulates what people said, o
 
 A card sort here is a **triangulation**, not a ranking. First learn what matters to the person and why (card to quote), then how they grouped. **Never average positions across people.**
 
+## Before the first session
+
+- **Piloted** with someone inside the team: who, when, and the real minutes against the minutes the guide planned. Pending.
+- **The prompt is fixed in writing** (below) and read as is. It never changes live.
+- **Minimum:** how many sessions must complete the sort before a pattern from it counts (the guide's `Feeds:` line). Pending.
+
 ## Prompt used (versioned)
 
-Write the exact words the prompt used. If the wording changes between sessions, add a new version here and say which sessions used it. A sort is only comparable inside one version.
+Write the exact words the prompt used. If the wording changes between sessions, add a new version here and say which sessions used it. A sort is only comparable inside one version, and the sessions of another version are counted apart.
 
 | Version | Exact prompt | Sessions | Deck |
 |---|---|---|---|
@@ -38,6 +44,14 @@ Duplicate per interview.
 - Cards added live: Pending.
 - Co-placement (cards put together, and why if said): Pending.
 - Missing from the deck (asked for, no card): Pending.
+
+## Enough to read it?
+
+| Version | Sessions that completed the sort | Minimum | Verdict |
+|---|---|---|---|
+| v1 | Pending | Pending | enough / **not enough** |
+
+A session that skipped the sort, or ran out of time before it, does not count. If the number is under the minimum, the verdict is "not enough": say so wherever the sort is mentioned, and keep what it showed as a lead for the next round, never as a pattern.
 
 ## Reading across sessions
 

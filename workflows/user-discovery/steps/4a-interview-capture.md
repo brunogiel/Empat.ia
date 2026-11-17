@@ -44,6 +44,11 @@ created at install except phase 1's brief.
 ## Rules
 
 - Preserve verbatim quotes.
+- **The recorder's automatic summary is not evidence.** It credits the person with premises the interviewer put in the question and can name a session wrongly. Work from the whole transcript; never extract evidence or quotes from the summary.
+- **Consent comes first.** Before an interview's material is used, find that person's row in the consent record (`2-profiling/recruiting.md`, "Consent record"). Record, quote, name and clip are four separate permissions. If the row is missing, the material stays in `_raw/` and nothing is extracted from it for sharing.
+- **Mark who speaks and how a quote came out.** When a row goes into `_engine/evidence.md`, fill `Voice` (`person` / `trade`) and `Induced` (`premise` / `hypothetical` / `moderator`) if the transcript shows it.
+- **The canonical minute of a quote is the video's, not the transcript's.** The recording tool's transcript can run seconds or minutes off the video. Keep the minute the transcript gives in `t_transcript`. When a quote will be played as a clip or cited by minute, find where it is said in the video: transcribe the audio locally (Whisper or equivalent), align it by words against the text of the quote, and write the result in `t_video` (both columns are optional, at the end of `_engine/evidence.md`). Never cut a clip at a transcript minute. `scripts/locate_quotes.py` does this on request, with coverage per word; see `docs/quote-clips.md`.
+- **Ask the focus of the profile.** If the profile has a focus (for example, "people who do not know the brand"), it was filtered when recruiting and it is asked again in the session. Write the answer in the note. If the people who came did not meet it, the gap goes to `0-index.md` and the report says so.
 - Don't mix users without identifying the source.
 - Mark interviewer observations separately from what the user said.
 - Live notes (taken during the call by whoever led or sat in) go **at the top of the transcript**, in the same file in `4-field/_raw/`, under a `## Live notes` heading. Never in the master guide, never in a separate document: the note stays attached to the conversation that produced it.
@@ -66,7 +71,7 @@ created at install except phase 1's brief.
 5. Create a structured note in `4-field/` with
    `python3 <method-root>/scripts/init_project.py --project-root . --add interview-note --name <base>`.
 6. Save materials and consent notes in `_raw/` under the same base name.
-7. Extract atomic evidence into `_engine/evidence.md`.
+7. Extract atomic evidence into `_engine/evidence.md`. If a quote may be played later, add its `t_video` (see the rule on the canonical minute).
 8. Mark gaps before moving to synthesis.
 
 ## How to process each interview
@@ -95,7 +100,7 @@ Suggested action:
 
 ## Checklist before synthesizing
 
-- Each interview has metadata.
+- Each interview has metadata and a row in the consent record.
 - There are verbatim quotes.
 - Observations are separated from interpretations.
 - `index.md` lists files, consent, and gaps.

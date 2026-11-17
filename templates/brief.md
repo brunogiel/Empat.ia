@@ -1,8 +1,10 @@
 # Challenge
 
-Owns: the challenge, the scope, who is who, and the plan. Does not own: the market → `market.md`; what we know and want to learn → `knowledge.md`; who we interview → `2-profiling/profiles.md`.
+Owns: the challenge, the scope, who is who, what the client asked for, and the plan. Does not own: the market → `market.md`; what we know and want to learn → `knowledge.md`; who we interview → `2-profiling/profiles.md`.
 
 What we're researching, for whom, and what decision it unblocks. Keep it as an executive index, not a dump of everything; link to or summarize the sub-documents instead of repeating them.
+
+**The brief holds the decision, not the client's data.** When a meeting brings figures, process detail, names of the client's systems or a long account, they go to `knowledge.md` (what we know and don't), the market to `market.md`, and the meeting itself is mapped in `_engine/meeting-coverage.md` (step `1f`). Here you keep one line and a link. If the brief is past its line budget, that is the usual cause.
 
 ## Executive summary
 
@@ -59,6 +61,14 @@ roles.
 | Decision-maker | Pending | Pending | Pending | Pending |
 | Influencer | Pending | Pending | Pending | Pending |
 | Operator | Pending | Pending | Pending | Pending |
+
+## What the client asked for
+
+Each request, as it was made. Every phase close (5a, 7c, 8a) answers each row, or moves it to the next round with one line.
+
+| Request | Who | When | Answered in |
+|---|---|---|---|
+| Pending | Pending | Pending | Pending / next round: why |
 
 ## Scope and out of scope
 

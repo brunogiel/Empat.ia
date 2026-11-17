@@ -23,14 +23,19 @@ The same flow processes a session where a person used a prototype, with these di
 
 - The ID is `VAL-00X`, and the files live in `discovery/7-validation/`: the note
   `7-validation/<base>.md`, the prep sheet in `_prep/`, the recording or transcript in `_raw/`,
-  the feedback in `feedback/`. Create them with `--add validation-note|validation-prep|validation-feedback --name <base>`.
+  the feedback in `feedback/`. Create them with `--add validation-note|validation-prep|validation-feedback|validation-feedback-html --name <base>`.
   The script refuses `INT-` for these and `VAL-` for interviews.
 - Evidence rows are `VAL-00X-NN`, numbered within the session. Record what the person **did**
   (where they stopped, went back, asked for help) before what they said.
 - The guide to compare against is `7-validation/tasks.md`; its task blocks (`### 3. Task 1: …`)
-  are the topics: build a separate pair of packs from it (`feedback_packs.py --guide
-  7-validation/tasks.md --out _engine/feedback/validation`) and keep the `VAL-` files there, so
-  the scales compare sessions with sessions, never with interviews.
+  are the topics the moderator's feedback follows.
+- **A `VAL-` session gets the moderator's feedback, not the scales.** Skip step 7 (packs,
+  segments, scales, hand count): how much a person tells, monologue and getting to the point
+  do not compare a session on a screen, where the person talks less and acts more
+  (`7b-validation-sessions.md`, "The moderator's feedback"). In step 8 create only
+  `--add validation-feedback-html --name <base>` (`templates/moderator-feedback.html`: one row
+  per task with how far the person got and how, and what the moderator did that helped or
+  led) and, if the team keeps a worksheet, `--add validation-feedback`.
 - The counter is `validations: {target, done, unprocessed}` in `_engine/state.yaml`, apart from
   `interviews`. If the block is missing, add it. The index is `7-validation/0-index.md`.
 - The retro proposes edits to `tasks.md`, never applies them, same as the master guide.
@@ -45,6 +50,7 @@ The same flow processes a session where a person used a prototype, with these di
 ## Flow
 
 1. **[DET] Get the transcript.** Read it from `discovery/4-field/_raw/` or the pointer the user gave. If it's long, save it first and read it in chunks until you've read 100%. Never summarize from a partial read; if you couldn't read all of it, say so.
+   **The recorder's automatic summary is not evidence.** It attributes to the person premises that the interviewer put in the question, and it can name a session wrongly. Do not quote it, do not extract evidence from it, and do not use it to decide what mattered. Work from the whole transcript. If the summary is all you were given, say so and ask for the transcript.
    **Live notes go on top.** If the interviewer or an observer took notes during the call, put them at the top of the saved transcript, under a `## Live notes` heading, as bullets. Not in the master guide, not in a separate file. If you find them written at the bottom of a master guide, move them here and clean the guide. Read them first: they mark the moment someone in the room saw something, and the retro and the feedback start there.
 2. **[DET] Assign an ID and a base name**, `INT-00X-name-surname-company` (lowercase, no accents, company dropped when it is the surname; an alias if consent requires it). Save **one** transcript, in Markdown, as `discovery/4-field/_raw/<base>-transcript.md`: a header line, then `## Live notes`, then `## Before the interview` for any small talk, then `## Interview` (or `## Entrevista`), one turn per paragraph. If the recorder mixed up speakers, relabel it and let the relabeled version replace the raw one, with the recorder's ID in the header. The counting script starts at the `## Interview` line; nothing above it is counted.
 3. **[DET] Create the structured note** with
@@ -62,14 +68,14 @@ The same flow processes a session where a person used a prototype, with these di
    - **Moments of tension, surprise or emotion.**
    - **New questions** (what this opens for the next round).
    - **Co-pilot readings** (your inferences, clearly labeled, not facts).
-4. **[LATENT] Extract atomic evidence** into `discovery/_engine/evidence.md`: one row per unit, typed (`quote`/`fact`/`observation`/`workaround`/`emotion`/`contradiction`/`material`/`open_question`/`copilot_reading`), each traceable to the interview ID and a location (transcript spot or note section). ID the row `INT-00X-NN` (`OBS-00X-NN` for an observation), numbered within this interview starting at `01`, never a global `EV-NNN`: two interviews get processed in parallel without their IDs colliding. Keep insights out of the ledger; this is atomic evidence only.
+4. **[LATENT] Extract atomic evidence** into `discovery/_engine/evidence.md`: one row per unit, typed (`quote`/`fact`/`observation`/`workaround`/`emotion`/`contradiction`/`material`/`open_question`/`copilot_reading`), each traceable to the interview ID and a location (transcript spot or note section). ID the row `INT-00X-NN` (`OBS-00X-NN` for an observation), numbered within this interview starting at `01`, never a global `EV-NNN`: two interviews get processed in parallel without their IDs colliding. Fill the optional `Voice` (`person` / `trade`) and `Induced` (`premise` / `hypothetical` / `moderator`) columns when you can tell from the ±6 lines around the quote; see "Who speaks, and how it came out" in the ledger. Keep insights out of the ledger; this is atomic evidence only.
 5. **[DET] Update `discovery/4-field/0-index.md`**: metadata, files, status `done`, gaps left.
 6. **[LATENT] Interview retro (the distinctive step).** Close the loop back to the guide. Produce three things, inside the note under a clear "Guide / method learnings" section:
    - **Questions left on the table.** Follow-ups the interviewee opened and you didn't pursue, sections of the guide that went uncovered (and whether that was fine because you followed the person, or a real miss).
    - **Concrete edits to the master guide** for the next interview (add / reword / reorder / drop a question; a technique that worked, like a closing recap). Be specific and quote the guide line.
    - **Part 2?** Default **no**: you learn more from new interviews than from re-interviewing. Only recommend a part 2 if a genuinely important theme was missed.
    If the user reflected out loud during or after the call (their own debrief), capture that verbatim into this section, it's often the sharpest input.
-7. **[DET] Measure how the person tells and what came out.** Machine files go to
+7. **[DET] Measure how the person tells and what came out** (interviews only; a `VAL-` session skips this step, see above). Machine files go to
    `discovery/_engine/feedback/`; `4-field/feedback/0-README.md` has the whole recipe. The scripts
    are in `{method-root}/scripts/`; run them from inside `discovery/`.
    - Once per project, after the guide is closed: `feedback_packs.py --guide 3-guide/guide.md
@@ -88,7 +94,7 @@ The same flow processes a session where a person used a prototype, with these di
    **No transcript, or no speaker labels: skip this and say so. Never estimate a number.**
    `count_interview.py` stays as an internal diagnostic; its keyword counts do not go into the
    feedback.
-8. **[DET] Create the feedback files** with
+8. **[DET] Create the feedback files** (an interview's; a `VAL-` session takes the moderator's page, see above) with
    `python3 {method-root}/scripts/init_project.py --project-root . --add interview-feedback --name <base>`
    (the internal worksheet) and `--add interview-feedback-html --name <base>` (the page the
    interviewer receives). Create `4-field/feedback/0-README.md` first if this is the first one

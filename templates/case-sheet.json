@@ -34,8 +34,8 @@
     "what_puts_them_off_or_they_do_not_believe": [],
     "quotes": [{"quote": "", "line": 0}]
   },
-  "what_matters": [{"theme": "", "why": "", "quote": "", "line": 0, "led_by_interviewer": false}],
-  "phrases": [{"quote": "", "line": 0}],
+  "what_matters": [{"theme": "", "why": "", "quote": "", "line": 0, "led_by_interviewer": false, "voice": "person / trade", "induced": "none / premise / hypothetical / moderator"}],
+  "phrases": [{"quote": "", "line": 0, "voice": "person / trade", "induced": "none / premise / hypothetical / moderator"}],
   "axes": {
     "axis_name": {"position": "side A / side B / depends / no evidence", "quote": "", "line": 0}
   },

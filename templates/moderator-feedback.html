@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Moderator feedback {{SESSION}}</title>
+<!--
+FEEDBACK PAGE FOR THE MODERATOR OF A VALIDATION SESSION (a prototype, a wireframe, a form). The
+version the moderator receives; the markdown file (`<base>-feedback.md`) is the internal worksheet.
+The Guide writes it in the project's language and saves it as `7-validation/feedback/<base>-feedback.html`
+(`--add validation-feedback-html --name VAL-00X-...`).
+
+Why it is not the interview page: in a session on a screen the person talks less and acts more.
+The three scales of discovery (how much they tell, monologue, get to the point) compare this
+session with interviews where talking was the work, and say nothing here. Leave them out. Judge
+what happened task by task instead.
+
+Two parts, in this order:
+1. One row per task of the script (`7-validation/tasks.md`): how far the person got and how, from
+   where the person spoke, and what the moderator did that helped or led.
+2. What the moderator said that came back as the person's: an idea, a word or a frame of yours that
+   the summary or the notes attribute to them.
+
+Rules for what goes in:
+- How far, and how, is the same mark as in the notes: `alone` (nobody said anything that pointed the
+  way), `guided` (the moderator answered a question or gave a hint first), `induced` (the idea or the
+  word came from the moderator and ended attributed to the person). Mark it from the video and the
+  transcript together, never from memory.
+- From where the person spoke: `person` (as a user, from what happened to them or what they did on
+  the screen) or `trade` (from their craft: what they would do in the designer's place). A task
+  where the person mostly spoke from the trade is a reading by an expert, not a session of use.
+- What the moderator did is judged on whether the evidence stayed clean, not on adherence to the
+  script. ✅ the moderator kept quiet or asked what they would do next · 🟡 pointed (a hint, a
+  rephrase, a reassurance) but the row is still usable, marked guided · ❌ the idea or the word came
+  from the moderator and the row can no longer be claimed as the person's.
+- Logistics that cost time are listed once, at the end of the table, as their own row.
+- Every quote is checked against the transcript (scripts/verify_quotes.py) before it goes in.
+  Quotes of the person between «» (or the project language's quote marks); suggested questions
+  between “ ”.
+- Words, not codes: no evidence IDs, no score out of ten. Names of people only if the page is for
+  them alone.
+- If someone else ran the session, no technique feedback naming them unless they asked.
+
+Replace every {{...}}, delete the example rows you do not use, and delete this comment.
+-->
+<style>
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --fg:#17202b; --muted:#5b6675; --line:#dde2ea;
+  --accent:#1f5fd1; --good:#1d7a4f; --warn:#b4561b; --soft:#eaf0fb;
+  --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161d; --surface:#18202a; --fg:#e7ecf2; --muted:#9aa6b5; --line:#2a3542;
+  --accent:#7aa7ff; --good:#5fc795; --warn:#f0a066; --soft:#1c2a40; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161d; --surface:#18202a; --fg:#e7ecf2; --muted:#9aa6b5; --line:#2a3542;
+  --accent:#7aa7ff; --good:#5fc795; --warn:#f0a066; --soft:#1c2a40; color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.55}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:40px 64px;display:grid;gap:36px}
+header{display:grid;gap:8px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.1;margin:0;text-wrap:balance;font-weight:700}
+h2{font-size:20px;margin:0 0 12px;text-wrap:balance}
+h3{font-size:15px;margin:0}
+p{margin:0;max-width:65ch}
+.lead{color:var(--muted);font-size:17px}
+.scale{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:10px}
+.scale+.scale{margin-top:12px}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td.v{font-size:18px;width:28px;text-align:center}
+ul{margin:0;padding-left:20px;display:grid;gap:10px}
+li{max-width:65ch}
+.q{border-left:3px solid var(--accent);padding:12px 16px;background:var(--surface);border-radius:0 8px 8px 0;font-size:17px}
+.small{font-size:13px;color:var(--muted)}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+.mark{font-family:var(--mono);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+svg text{font-family:var(--sans)}
+@media print{@page{size:A4;margin:15mm}body{background:#fff}.wrap{padding:0}section,.scale{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">{{PROJECT}} · round {{N}} · {{DATE}}</span>
+    <h1>Moderator feedback on session {{SESSION}}</h1>
+    <p class="lead">How the session with {{FIRST NAME}} ({{PROFILE}}) went on the prototype: task by task, how far the person got and how, from where they spoke, and what you did that helped or led. This page does not compare the session with the interviews of the field: here the person talks less and acts more.</p>
+  </header>
+
+  <section>
+    <h2>Task by task</h2>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th></th><th>Task</th><th>How far, and how</th><th>The person spoke as</th><th>What you did</th></tr></thead>
+        <tbody>
+          <tr><td class="v">✅</td><td><strong>{{TASK OF THE SCRIPT, as the situation you read out}}</strong></td><td><span class="mark">alone</span> · {{WHERE IT ENDED, in a few words}}</td><td>{{person / trade}}</td><td>{{WHAT YOU DID THAT HELPED: you waited, you asked “what would you do next?”}}</td></tr>
+          <tr><td class="v">🟡</td><td><strong>{{TASK}}</strong></td><td><span class="mark">guided</span> · {{WHERE IT ENDED}}</td><td>{{person / trade}}</td><td>{{THE HINT, quoted, and at what point it came}}</td></tr>
+          <tr><td class="v">❌</td><td><strong>{{TASK}}</strong></td><td><span class="mark">induced</span> · {{WHAT ENDED UP ATTRIBUTED TO THE PERSON}}</td><td>{{person / trade}}</td><td>{{THE WORD OR IDEA YOU SAID FIRST, quoted}}</td></tr>
+          <tr><td class="v">🟡</td><td><strong>Before the tasks</strong></td><td>{{TIME LOST: access, device, test data, a window covering the screen}}</td><td></td><td>{{WHAT TO PREPARE NEXT TIME}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin-top:10px">alone: nobody pointed the way · guided: a hint or an answer came first · induced: the idea or the word came from you · ✅ clean · 🟡 usable, marked guided · ❌ cannot be claimed as the person's.</p>
+  </section>
+
+  <section>
+    <h2>What you said that came back as theirs</h2>
+    <ul>
+      <li>{{AN IDEA, A WORD OR A FRAME OF YOURS, quoted, and where it shows up as the person's: the notes, the recorder's summary, a finding}}</li>
+    </ul>
+    <p class="small" style="margin-top:10px">Write “none found” if you looked and there is none; do not leave it empty.</p>
+  </section>
+
+  <section>
+    <h2>Where the person spoke from</h2>
+    <p>{{ONE SENTENCE: how much of the session was the person as a user and how much as a professional of the trade, with one literal example of each}}</p>
+  </section>
+
+  <section>
+    <h2>For the next session</h2>
+    <ul>
+      <li>{{ONE CONCRETE THING TO DO, tied to a row above}}</li>
+      <li>{{A SUGGESTED QUESTION, between “ ”, for the moment where you pointed}}</li>
+    </ul>
+  </section>
+
+  <footer>Moderator feedback {{SESSION}} · {{DATE}} · about how the session was run, not about whether the prototype worked</footer>
+</div>
+</body>
+</html>

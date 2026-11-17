@@ -39,6 +39,8 @@ Format:
 
 When using this prompt, the user or the Guide pastes the real context and question below the block.
 
+- A council has two modes (see `council.md`). In **generative** mode the lateral voices generate and never review. In **review** mode the experts review and never invent: they get the closed decisions of the project, may flag what one costs and never reopen it. The reviewer roles (senior design researcher, qualitative researcher, UX researcher of the domain, the simulated client validator, and the seven readings of the report panel) live inside `council.md`; they are not files here.
+
 ## Roster
 
 - `guide`: orchestrator and facilitator.

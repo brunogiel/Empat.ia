@@ -32,7 +32,8 @@ ENGINE_EXEMPT = ("_engine/", "4-field/_prep/", "4-field/_raw/", "4-field/INT-",
 # Every template the user opens. Each one starts with an 'Owns:' line.
 OWNED_TEMPLATES = ["brief", "knowledge", "market", "profiles", "recruiting", "guide",
                    "process", "findings", "principles", "summary", "concepts", "tasks",
-                   "validation-findings"]
+                   "validation-findings", "expert-consult", "meeting-coverage",
+                   "exercise-menu", "usability-matrix", "presentation", "meeting-claims"]
 
 
 def state_steps():
@@ -113,6 +114,77 @@ class TestStepsAndFiles(unittest.TestCase):
                                 f"but its file is named '{name}'")
 
 
+class TestValidationRound(unittest.TestCase):
+    """Phases 6 and 7: bets that can conclude, a menu, logistics, moderator feedback, a matrix."""
+
+    def read(self, *parts):
+        return REPO.joinpath(*parts).read_text(encoding="utf-8")
+
+    def test_the_bets_say_what_confirms_and_what_drops_them(self):
+        concepts = self.read("templates", "concepts.md")
+        self.assertRegex(concepts, r"\| Bet \| Comes from \| Confirmed if \| Dropped if \|")
+        self.assertIn("whoever did the ideation", concepts)
+        ideation = self.read("workflows", "user-discovery", "steps", "6a-ideation.md")
+        self.assertIn("## The bets", ideation)
+        self.assertIn("external", ideation)
+        guide = self.read("workflows", "user-discovery", "steps", "7a-validation-guide.md")
+        self.assertIn("in the same change", guide)
+        self.assertIn("not tested", guide)
+
+    def test_7a_brings_the_goal_down_and_orders_the_tasks(self):
+        guide = self.read("workflows", "user-discovery", "steps", "7a-validation-guide.md")
+        for phrase in ["behaviour you can watch", "The real case comes first",
+                       "## Optional, 7a.0: the menu of exercises", "## Order and contamination",
+                       "build_menu.py", "exercise_menu", "go", "maybe"]:
+            self.assertIn(phrase, guide)
+        table = guide[guide.index("## Order and contamination"):guide.index("## Process")]
+        self.assertGreaterEqual(len(re.findall(r"^\| (?!If this|---)", table, re.M)), 5)
+        tasks = self.read("templates", "tasks.md")
+        self.assertIn("Order of the tasks, and why", tasks)
+
+    def test_7b_has_the_logistics_checklist_and_the_moderator_page(self):
+        step = self.read("workflows", "user-discovery", "steps", "7b-validation-sessions.md")
+        block = step[step.index("## Before each session"):step.index("## The moderator's feedback")]
+        for phrase in ["computer", "same message as the link", "Test data", "floating window",
+                       "Time per task"]:
+            self.assertIn(phrase, block)
+        self.assertIn("moderator-feedback.html", step)
+        self.assertNotIn("interview-feedback.html", step)
+
+    def test_the_moderator_page_has_no_discovery_scales_and_loads_nothing(self):
+        page = self.read("templates", "moderator-feedback.html")
+        self.assertNotIn("{{SCALES}}", page)
+        self.assertNotIn("<script", page)
+        self.assertIn("prefers-color-scheme: dark", page)
+        for word in ["alone", "guided", "induced", "person", "trade", "Task by task"]:
+            self.assertIn(word, page)
+        urls = set(re.findall(r'(?:src|href)="(https?://[^"]+)"', page))
+        self.assertTrue(all("fonts.g" in u for u in urls), urls)
+
+    def test_7c_separates_a_prototype_failure_from_a_finding(self):
+        step = self.read("workflows", "user-discovery", "steps", "7c-validation-debrief.md")
+        for phrase in ["`prototype`", "does not count toward", "validation_matrix",
+                       "validation_analysis_guide", "refuter", "provisional",
+                       "The devil's advocate is seeded too"]:
+            self.assertIn(phrase, step)
+        matrix = self.read("templates", "usability-matrix.md")
+        for word in ["alone", "guided", "induced", "failed", "prototype", "design",
+                     "undetermined", "Provisional"]:
+            self.assertIn(word, matrix)
+        self.assertIn("Cause", self.read("templates", "validation-findings.md"))
+
+    def test_the_new_files_are_declared_and_budgeted(self):
+        state = self.read("templates", "state.yaml")
+        budgets = self.read("templates", "budgets.yaml")
+        lazy, _ = lazy_map()
+        for step in ["exercise_menu", "validation_matrix", "validation_analysis_guide"]:
+            dest = lazy[step][1]
+            self.assertIn(dest, state, step)
+            self.assertIn(dest, budgets, step)
+        for name in ["exercise-menu.md", "usability-matrix.md", "moderator-feedback.html"]:
+            self.assertTrue((REPO / "templates" / name).exists(), name)
+
+
 class TestFilesAndBudgets(unittest.TestCase):
 
     def test_every_step_output_has_a_budget_or_is_exempt(self):
@@ -176,8 +248,11 @@ class TestPlan(unittest.TestCase):
                                      "validation_debrief"])
         self.assertEqual(phases[8], ["report"])
 
-    def test_plan_is_the_last_step_of_phase_1_and_has_a_gate(self):
-        self.assertEqual(state_phase_steps()[1][-1], "plan")
+    def test_plan_is_the_last_gated_step_of_phase_1_and_has_a_gate(self):
+        """After the plan only on-demand steps may follow (1f: after a client meeting)."""
+        steps = state_steps()
+        gated = [s for s in state_phase_steps()[1] if not steps[s].get("on_demand")]
+        self.assertEqual(gated[-1], "plan")
         self.assertEqual(state_steps()["plan"]["gate"], "true")
         self.assertEqual(state_steps()["plan"]["file"], "1-desk-research/brief.md")
 
@@ -281,6 +356,67 @@ class TestShareable(unittest.TestCase):
         self.assertIn("`share/`", editor)
 
 
+class TestGatesAndReviewers(unittest.TestCase):
+    """One owner per piece, seeded model checkers, two council modes, one checkpoint page."""
+
+    def read(self, *parts):
+        return (REPO.joinpath(*parts)).read_text(encoding="utf-8")
+
+    def test_the_checkpoint_page_is_one_file_with_the_four_buttons(self):
+        body = self.read("templates", "checkpoint.html")
+        self.assertNotIn("http", body)
+        self.assertNotRegex(body, r"(?i)<link\b|@import|url\(|<img\b|<iframe\b|<script[^>]*\bsrc=")
+        self.assertIn("prefers-color-scheme: dark", body)
+        self.assertIn("@media print", body)
+        for choice in ["Advance", "Deepen", "Question", "Council"]:
+            self.assertIn(f'data-choice="{choice}"', body)
+        for word in ["data-ref", "Already corrected", "Copy decisions", "Owns:"]:
+            self.assertIn(word, body)
+
+    def test_the_checkpoint_page_is_named_where_the_gate_is_run(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        skill = self.read("skills", "discovery-guide", "SKILL.md")
+        for text in (step, skill):
+            self.assertIn("templates/checkpoint.html", text)
+        self.assertIn("second round brings only what is new", step.lower())
+
+    def test_the_seeded_rule_lives_in_one_place_and_the_others_point_at_it(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        self.assertEqual(step.count("### Every model checker: seeded, and the right tier"), 1)
+        self.assertIn("No seed caught, no gate", step)
+        for name in ["7c-validation-debrief.md", "8a-report.md", "3a-guide.md", "7a-validation-guide.md"]:
+            with self.subTest(step=name):
+                self.assertIn("Every model checker", self.read("workflows", "user-discovery", "steps", name))
+
+    def test_a_clip_is_checked_like_a_quote(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        self.assertIn("A video or audio clip is a quote", step)
+
+    def test_sense_checks_never_go_to_the_small_model(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        self.assertIn("A small model never runs a check of sense", step)
+
+    def test_sub_stages_are_one_at_a_time(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        for phrase in ["One owner per piece", "One sub-stage at a time", "preliminary",
+                       "if you don't decide, I'll continue", "Compressed mode"]:
+            self.assertIn(phrase, step)
+        self.assertIn("One sub-stage at a time", self.read("skills", "discovery-guide", "SKILL.md"))
+
+    def test_the_council_has_two_modes_and_no_new_agent_files(self):
+        council = self.read("agents", "council.md")
+        for phrase in ["## Two modes", "## Review mode", "Variant: lateral guests",
+                       "N reviewers said this", "Never reopens it", "hypotheses, not evidence",
+                       "Simulated client validator", "The blind panel"]:
+            self.assertIn(phrase, council)
+        for lens in ["Client reader", "Editor", "Designer", "Person from the studied audience",
+                     "Verifier", "Finder of the forgotten", "Clip reviewer"]:
+            self.assertIn(f"| {lens} |", council)
+        roster = {p.stem for p in (REPO / "agents").glob("*.md")}
+        for name in ["reviewer", "validator", "simulated-client", "panel"]:
+            self.assertNotIn(name, roster)
+
+
 class TestOneFileOneJob(unittest.TestCase):
     """R19: every file the user opens writes only what is its own."""
 
@@ -318,6 +454,171 @@ class TestOneFileOneJob(unittest.TestCase):
     def test_the_editor_routes_by_the_owns_line(self):
         editor = (REPO / "agents" / "editor.md").read_text(encoding="utf-8")
         self.assertIn("Owns:", editor)
+
+
+class TestGuideStructureAndCopies(unittest.TestCase):
+    """The guide is built structure first, written by rules, and copied by script."""
+
+    def read(self, *parts):
+        return (REPO.joinpath(*parts)).read_text(encoding="utf-8")
+
+    def test_the_structure_comes_before_the_questions(self):
+        step = self.read("workflows", "user-discovery", "steps", "3a-guide.md")
+        self.assertIn("## First, the structure", step)
+        self.assertLess(step.index("## First, the structure"), step.index("## Recommended structure"))
+        for phrase in ["guide-braindump.md", "generative mode", "it never blocks"]:
+            self.assertIn(phrase, step)
+
+    def test_the_twelve_writing_rules_are_numbered_one_to_twelve(self):
+        step = self.read("workflows", "user-discovery", "steps", "3a-guide.md")
+        block = step[step.index("## Rules for writing the questions"):step.index("## Exercises")]
+        self.assertEqual(re.findall(r"^(\d+)\. \*\*", block, re.M), [str(n) for n in range(1, 13)])
+
+    def test_the_guide_template_opens_with_owns_then_the_sections_table(self):
+        lines = self.read("templates", "guide.md").splitlines()
+        owns = next(i for i, l in enumerate(lines) if l.startswith("Owns:"))
+        table = next(i for i, l in enumerate(lines) if l.startswith("| # |"))
+        first_block = next(i for i, l in enumerate(lines) if l.startswith("### "))
+        self.assertLess(owns, table)
+        self.assertLess(table, first_block)
+        self.assertLessEqual(table - owns, 5, "the table goes right under the Owns line")
+
+    def test_the_guide_template_has_a_protected_exercise_with_a_fixed_prompt(self):
+        text = self.read("templates", "guide.md")
+        for phrase in ["<!-- annex", "<!-- end annex -->", "Prompt:", "Feeds:",
+                       "never reworded", "Piloted", "Minimum sessions"]:
+            self.assertIn(phrase, text)
+
+    def test_exercises_are_piloted_fixed_protected_and_counted(self):
+        step = self.read("workflows", "user-discovery", "steps", "3a-guide.md")
+        for phrase in ["Pilot it before the field", "fixed in writing", "never cut for time",
+                       "Declare the minimum"]:
+            self.assertIn(phrase, step)
+        debrief = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        self.assertIn("not enough", debrief)
+        card_sort = self.read("templates", "card-sort.md")
+        for phrase in ["Piloted", "Minimum", "not enough"]:
+            self.assertIn(phrase, card_sort)
+
+    def test_the_expert_consult_names_its_bias_and_keeps_hypotheses(self):
+        text = self.read("templates", "expert-consult.md")
+        for phrase in ["witness", "sample bias", "hypothesis for the field"]:
+            self.assertIn(phrase, text)
+        step = self.read("workflows", "user-discovery", "steps", "3a-guide.md")
+        self.assertIn("--add expert_consult", step)
+        sys.path.insert(0, str(REPO / "scripts"))
+        import init_project
+        self.assertIn("expert_consult", init_project.LAZY)
+
+    def test_the_export_script_is_named_where_the_guide_is_used(self):
+        for parts in [("workflows", "user-discovery", "steps", "3a-guide.md"),
+                      ("workflows", "user-discovery", "steps", "3b-process.md"),
+                      ("templates", "process.md"), ("templates", "interview-prep.md")]:
+            with self.subTest(file=parts[-1]):
+                self.assertIn("export_guide.py", self.read(*parts))
+        self.assertTrue((REPO / "scripts" / "export_guide.py").exists())
+
+    def test_the_workflow_runs_the_export_suite(self):
+        workflow = self.read(".github", "workflows", "tests.yml")
+        self.assertIn("tests/test_export_guide.py", workflow)
+
+
+class TestMeetingCoverageStep(unittest.TestCase):
+    """Step 1f: map a client meeting to the files before editing any of them."""
+
+    def read(self, *parts):
+        return (REPO.joinpath(*parts)).read_text(encoding="utf-8")
+
+    def test_the_step_is_declared_on_demand_without_a_gate(self):
+        step = state_steps()["meeting_coverage"]
+        self.assertEqual(step["phase"], "1")
+        self.assertEqual(step["gate"], "false")
+        self.assertEqual(step["on_demand"], "true")
+        self.assertIn("1f-meeting-coverage.md", step_files())
+
+    def test_the_step_waits_for_the_researchers_ok_before_editing(self):
+        text = self.read("workflows", "user-discovery", "steps", "1f-meeting-coverage.md")
+        for phrase in ["decide where every point lands", "OK", "tensions", "stays here", "`pending: why`"]:
+            self.assertIn(phrase, text)
+        self.assertLess(text.index("Show the matrix"), text.index("Only then edit"))
+
+    def test_the_skill_lists_the_step_in_order_and_counts_the_files(self):
+        skill = self.read("skills", "discovery-guide", "SKILL.md")
+        self.assertIn("`1f-meeting-coverage.md`", skill)
+        self.assertIn("Nineteen step files", skill)
+        self.assertEqual(len(step_files()), 19)
+
+    def test_the_brief_tells_where_the_clients_data_goes(self):
+        brief = self.read("templates", "brief.md")
+        self.assertIn("The brief holds the decision, not the client's data", brief)
+        self.assertIn("knowledge.md", brief)
+        self.assertIn("meeting-coverage.md", brief)
+
+
+class TestPresentationStage(unittest.TestCase):
+    """Step 5b: a sample before the deck, a report that layers, pieces built by script."""
+
+    def read(self, *parts):
+        return (REPO.joinpath(*parts)).read_text(encoding="utf-8")
+
+    def test_the_step_is_declared_on_demand_with_a_gate_and_a_file(self):
+        step = state_steps()["presentation"]
+        self.assertEqual(step["phase"], "5")
+        self.assertEqual(step["gate"], "true")
+        self.assertEqual(step["on_demand"], "true")
+        self.assertEqual(step["file"], "5-debrief/presentation.md")
+        self.assertIn("5b-presentation.md", step_files())
+        self.assertEqual(state_phase_steps()[5], ["debrief", "presentation"])
+        lazy, _ = lazy_map()
+        self.assertEqual(lazy["presentation"][1], "5-debrief/presentation.md")
+        self.assertEqual(lazy["meeting_claims"][1], "5-debrief/meeting-claims.md")
+
+    def test_the_sample_comes_before_the_deck_and_a_draft_is_a_draft(self):
+        text = self.read("workflows", "user-discovery", "steps", "5b-presentation.md")
+        for phrase in ["A sample before the deck, always", "real content", "Draft, not mock-up",
+                       "finishing work", "does not start until the sample is accepted",
+                       "found in slide, left out", "A count is not a slide", "what is left to measure",
+                       "focus of the analysis"]:
+            self.assertIn(phrase, text)
+        self.assertLess(text.index("Build the sample"), text.index("Build the deck by script"))
+
+    def test_the_script_rules_and_the_rewrite_rule_live_in_5b_and_8a_names_them(self):
+        step = self.read("workflows", "user-discovery", "steps", "5b-presentation.md")
+        report = self.read("workflows", "user-discovery", "steps", "8a-report.md")
+        for phrase in ["The canonical is a Markdown file", "by number or by pattern",
+                       "map from IDs to titles", "never runs on a literal quote",
+                       "table of changes", "reopens a closed decision"]:
+            self.assertIn(phrase, step)
+        for phrase in ["table of changes", "never the file", "the correction goes to the Markdown",
+                       "--source", "UNLINKED", "--titles-from"]:
+            self.assertIn(phrase, report)
+        self.assertIn("--source", step)
+
+    def test_the_report_layers_on_what_was_accepted(self):
+        report = self.read("workflows", "user-discovery", "steps", "8a-report.md")
+        for phrase in ["as it was presented", "new layer", "go **last**", "tasks of the script",
+                       "The cover names the design challenge", "table of verdicts",
+                       "what is left to measure"]:
+            self.assertIn(phrase, report)
+        summary = self.read("templates", "summary.md")
+        for heading in ["## The design challenge", "## What was presented and accepted",
+                        "## What is left to measure", "## Adjustments for this version"]:
+            self.assertIn(heading, summary)
+        self.assertGreater(summary.index("## Adjustments for this version"),
+                           summary.index("## What is left to measure"))
+
+    def test_the_meeting_claims_step_is_named_in_5a_and_the_template_has_its_tables(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        for phrase in ["what I said vs. the evidence", "meeting-claims.md", "cross against the whole list",
+                       "corrected with the client"]:
+            self.assertIn(phrase, step)
+        template = self.read("templates", "meeting-claims.md")
+        for phrase in ["does not hold", "to confirm", "A list the client voted or ranked", "no evidence"]:
+            self.assertIn(phrase, template)
+
+    def test_the_skill_and_the_architecture_name_the_stage(self):
+        self.assertIn("`5b-presentation.md`", self.read("skills", "discovery-guide", "SKILL.md"))
+        self.assertIn("5b", self.read("docs", "method-architecture.md"))
 
 
 class TestScriptMatchesState(unittest.TestCase):

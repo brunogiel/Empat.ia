@@ -18,6 +18,7 @@ Do not read other interviews, `findings.md` or `_engine/evidence.md`.
 - A quote may join consecutive lines of the same person. Cut it into pieces of 5 to 30 words.
 - Every quote carries the transcript line number where it starts.
 - If the interviewer said it and the person only agreed ("yes", "right"), it is not the person's quote. Mark it `"led_by_interviewer": true`.
+- Mark who speaks and how the quote came out, in `what_matters` and `phrases` (the two fields are optional; leave them out when you cannot tell). `voice`: `person` when the speaker answers as a user, `trade` when they answer from their craft or profession. `induced`: `premise` (the question asserted something and the answer took it for granted), `hypothetical` (the answer is to "what would you do if..."), `moderator` (the idea came from the interviewer and ended attributed to the person), or `none`. Read the ±6 lines before you decide.
 - A datum with no quote gets `"quote": null` and a source of `note` or `inferred`. Never invent.
 - A distorted name is fixed in brackets, never silently.
 

@@ -52,6 +52,9 @@ Job 4 is what keeps the drawer from becoming the problem it was meant to solve. 
 | Working notes of the synthesis, the evidence chain, the quality checklist | `_engine/synthesis-log.md` |
 | Version history, changelogs, design rationale for the guide | `_engine/sources/guide-versions/` |
 | Council output | `_engine/sources/councils/` |
+| The researcher's braindump before the guide | `_engine/sources/guide-braindump.md` |
+| What a client meeting said and which file absorbs it | `_engine/meeting-coverage.md` |
+| Questions for experts (witnesses, not users) | `3-guide/expert-consult.md`, never the master guide |
 | Secondary research, data reviews | `_engine/sources/` |
 | Project state, current step | `_engine/state.yaml` and nowhere else |
 

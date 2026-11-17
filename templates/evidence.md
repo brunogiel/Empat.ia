@@ -24,6 +24,49 @@ A quote is copied **verbatim** from the transcript, transcription errors
 included. Check it against the transcript before you rely on it: a recorder's
 mis-hearing does not become gospel just because it landed in the ledger.
 
+## Vetoed quotes
+
+A quote that a context check throws out (induced by the question, cut so the
+meaning flips, professional jargon in the person's voice, hypothetical) stays in
+the ledger, so nobody finds it again and brings it back. Write `vetoed: <reason>`
+in the **Use in synthesis** column of its row. Nothing else changes in the row.
+
+- A vetoed quote is not support for anything. If an analyst brings one, the
+  orchestrator takes it out; it is not argued.
+- `scripts/verify_quotes.py` reads the column. It gives the verdict `VETOED`, and
+  exits with an error, when a vetoed quote shows up in any file it checks: the case
+  sheets, a JSON list, a report, `findings.md`, `principles.md` (`--scan`).
+- The clean evidence you hand to analysts is the ledger **without** the vetoed rows.
+
+## Who speaks, and how it came out
+
+Two optional columns, `Voice` and `Induced`, sit at the end of the ledger. Leave them empty and a row reads as `person` and `none`; a project that started without them keeps working.
+
+- **Voice.** `person`: the speaker answers as a user, from what happened to them. `trade`: the speaker answers from their craft, for example someone who works in the sector under study explaining how it should be done. A `trade` quote is expertise, not a user's experience: it can inform a hunch about the sector, and it does not support "people like this do or feel X".
+- **Induced.** How much of the quote the interviewer put there:
+  - `premise`: the answer takes for granted something the question asserted.
+  - `hypothetical`: the answer is to "what would you do if...", not to something that happened.
+  - `moderator`: the idea came from the moderator, in the call or in a session, and ended attributed to the person. A validation task marked `induced` (`alone` / `guided` / `induced`, see `7b-validation-sessions.md`) is the same thing, one level up: its quotes carry `moderator` here.
+- A quote with a value in `Induced` is never the only support of a finding. Mark the row, and say in the finding that the idea was induced. If the check of context shows that the quote says nothing the person did not get from the question, write `vetoed: <reason>` in **Use in synthesis** instead.
+- The marks come from the transcript, with the ±6 lines around the quote. They are a reading: label them as such.
+
+## Two clocks
+
+The transcript of the recording tool and the video do not share a clock: it can drift by seconds or by minutes. A minute taken from the transcript is not the minute in the video.
+
+- Two optional columns, `t_transcript` and `t_video`, sit at the end of the ledger. Leave them empty and nothing changes.
+- `t_transcript`: the minute as the recorder's transcript gives it. `Location` can keep saying the same.
+- `t_video`: the minute where the person says it in the video. It is the **canonical minute** of the quote, and the only one used to cut a clip or to point someone at a moment.
+- Find it by listening to the audio again with a local transcription (Whisper or equivalent) and aligning it, by words, against the text of the quote. `scripts/locate_quotes.py` does it on request and fills both clocks (`docs/quote-clips.md`). A quote whose coverage is under 0.8 gets no `t_video` until a person checks it.
+
+## Internal, not for the report
+
+Some rows and notes are for the team only: a recruiter's remark, a hunch, a name that identifies someone. Mark them where they live. Add the tag `[not for the report]` to the line, or to any cell of a table row; for several lines, wrap them between `<!-- not for the report -->` and `<!-- end not for the report -->`.
+
+- `scripts/check_share.py` fails when text with that mark shows up in a shared piece (`share/`, `8-report/`), and when the tag itself does.
+- The mark is the only place that says it. Nothing else has to be updated, and nothing marked is deleted.
+- A marked row still counts as evidence for the synthesis. The mark controls what leaves, not what you may think.
+
 ## Types of evidence
 
 - `quote`: the interviewee's exact words.
@@ -38,9 +81,9 @@ mis-hearing does not become gospel just because it landed in the ledger.
 
 ## Ledger
 
-| Evidence ID | Interview | Profile | Type | Evidence | Location | Tags | Preliminary reading | Confidence | Use in synthesis |
-|---|---|---|---|---|---|---|---|---|---|
-| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review |
+| Evidence ID | Interview | Profile | Type | Evidence | Location | Tags | Preliminary reading | Confidence | Use in synthesis | Voice | Induced | t_transcript | t_video |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review/vetoed: reason | person/trade | none/premise/hypothetical/moderator | optional m:ss | optional m:ss |
 
 ## Contradictions to preserve
 

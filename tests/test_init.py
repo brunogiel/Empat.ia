@@ -294,6 +294,77 @@ class TestAddPerItem(TempProject):
         self.assertEqual(note.read_text(encoding="utf-8"), "mine\n")
 
 
+class TestMessagesSayWhatToDo(TempProject):
+    """--add used to fail with a sentence that did not say what to type instead."""
+
+    def test_an_unknown_step_names_the_closest_and_lists_every_kind(self):
+        self.init()
+        result = self.init("--add", "interview-guide")
+        self.assertNotEqual(result.returncode, 0)
+        out = result.stderr + result.stdout
+        self.assertIn("Did you mean 'interview_guide'", out)
+        for word in ["market_research", "debrief (runs", "interview-note", "--name"]:
+            self.assertIn(word, out)
+
+    def test_an_existing_file_says_where_it_is_and_how_to_replace_it(self):
+        self.init()
+        self.init("--add", "profiles")
+        result = self.init("--add", "profiles")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn(str(self.discovery / "2-profiling" / "profiles.md"), result.stdout)
+        self.assertIn("--force", result.stdout)
+        self.assertIn("--overwrite-modified", result.stdout)
+        self.assertNotIn("Now write it", result.stdout)
+
+    def test_an_edited_file_says_how_to_replace_it_anyway(self):
+        self.init()
+        self.init("--add", "profiles")
+        (self.discovery / "2-profiling" / "profiles.md").write_text("mine\n", encoding="utf-8")
+        result = self.init("--add", "profiles", "--force")
+        self.assertIn("not overwritten", result.stdout)
+        self.assertIn("--overwrite-modified", result.stdout)
+
+    def test_pointing_at_the_discovery_folder_itself_names_the_right_root(self):
+        self.init()
+        result = run("--project-root", str(self.discovery), "--method-root", str(REPO),
+                     "--add", "profiles")
+        self.assertNotEqual(result.returncode, 0)
+        out = result.stderr + result.stdout
+        self.assertIn("CONTAINS the discovery folder", out)
+        self.assertIn(f"--project-root {self.tmp.resolve()}", out)
+
+    def test_a_folder_that_is_not_a_discovery_says_what_to_check(self):
+        result = self.init("--add", "profiles")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--folder", result.stderr + result.stdout)
+
+    def test_a_bad_item_name_gives_examples(self):
+        self.init()
+        result = self.init("--add", "interview-note", "--name", "ana")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("INT-004-ana-lopez-acme", result.stderr + result.stdout)
+
+
+class TestGuideAndClientPieces(TempProject):
+    """The expert consult (3-guide) and the meeting coverage (step 1f) are born on demand."""
+
+    def test_expert_consult_creates_only_its_file(self):
+        self.init()
+        before = files_in(self.discovery)
+        self.assertEqual(self.init("--add", "expert_consult").returncode, 0)
+        self.assertEqual(files_in(self.discovery) - before, {"3-guide/expert-consult.md"})
+
+    def test_meeting_coverage_lives_in_the_engine(self):
+        self.init()
+        before = files_in(self.discovery)
+        self.assertEqual(self.init("--add", "meeting_coverage").returncode, 0)
+        self.assertEqual(files_in(self.discovery) - before, {"_engine/meeting-coverage.md"})
+
+    def test_a_clean_install_still_has_exactly_the_same_eleven_files(self):
+        self.init()
+        self.assertEqual(files_in(self.discovery), INSTALLED)
+
+
 class TestAggregateSteps(TempProject):
     """interview_capture and debrief are aggregates in state.yaml: their 'file'
     field lists more than one path, each already a concrete LAZY step."""
@@ -496,9 +567,9 @@ class TestMigrateV3ToReport(TempProject):
         s = s[:s.index("# --- The plan")]
         s = s[:s.index("\nvalidations:")].rstrip("\n") + "\n" if "\nvalidations:" in s else s
         s = re.sub(r"  6:\n(?:    .*\n)+  7:\n(?:    .*\n)+  8:\n(?:    .*\n)+", "", s)
-        s = s.replace(", plan]", "]")
+        s = s.replace(", plan, meeting_coverage]", "]")
         s = re.sub(r"  plan:\n(?:    .*\n|  #.*\n)+", "", s)
-        s = re.sub(r"  (ideation|validation_guide|validation_capture|validation_debrief|report):\n(?:    .*\n)+", "", s)
+        s = re.sub(r"  (meeting_coverage|ideation|validation_guide|validation_capture|validation_debrief|report):\n(?:    .*\n)+", "", s)
         s = s.replace("\n  # The plan can run", "\n  # The plan can run")
         s = s.replace("file: 5-debrief/findings.md + 5-debrief/principles.md",
                       "file: 5-debrief/findings.md + 5-debrief/principles.md + 5-debrief/output/summary.md")
@@ -970,6 +1041,45 @@ class FeedbackHtmlTemplate(TempProject):
     def test_no_internal_codes_in_the_human_template(self):
         text = (REPO / "templates" / "interview-feedback.html").read_text(encoding="utf-8")
         self.assertIsNone(re.search(r"\bA-\d{3}\b|\bINT-\d{3}-\d{2}\b", text))
+
+
+class ValidationAids(TempProject):
+    """7a.0 menu, 7c matrix and analysis guide, and the moderator's page."""
+
+    def test_the_moderator_page_is_not_the_interview_page(self):
+        self.init()
+        result = self.init("--add", "validation-feedback-html", "--name", "VAL-001-ana-lopez")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        page = (self.discovery / "7-validation" / "feedback" /
+                "VAL-001-ana-lopez-feedback.html").read_text(encoding="utf-8")
+        self.assertIn("Moderator feedback", page)
+        self.assertNotIn("{{SCALES}}", page)
+        self.assertIsNone(re.search(r"\bA-\d{3}\b|\bVAL-\d{3}-\d{2}\b", page))
+
+    def test_the_interview_page_is_unchanged_for_interviews(self):
+        self.init()
+        self.init("--add", "interview-feedback-html", "--name", "INT-001-ana-lopez")
+        page = (self.discovery / "4-field" / "feedback" /
+                "INT-001-ana-lopez-feedback.html").read_text(encoding="utf-8")
+        self.assertIn("{{SCALES}}", page)
+
+    def test_each_optional_piece_lands_in_phase_7(self):
+        expected = {
+            "exercise_menu": "7-validation/exercise-menu.md",
+            "validation_matrix": "7-validation/usability-matrix.md",
+            "validation_analysis_guide": "7-validation/analysis-guide.md",
+        }
+        self.init()
+        for step, dest in expected.items():
+            with self.subTest(step=step):
+                result = self.init("--add", step)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertTrue((self.discovery / dest).exists(), dest)
+        self.assertTrue((self.discovery / "7-validation" / "0-README.md").exists())
+
+    def test_a_clean_install_is_still_eleven_files(self):
+        self.init("--lang", "es")
+        self.assertEqual(files_in(self.discovery), INSTALLED)
 
 
 class VerbosityAndStart(unittest.TestCase):

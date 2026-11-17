@@ -23,6 +23,8 @@ The prototype or concept: Pending. *(link, and which concept it is)*
 
 The bets it makes, from `6-ideation/concepts.md`: Pending.
 
+Order of the tasks, and why: Pending. *(from the contamination table in `7a`)*
+
 ### 1. Start and consent
 
 Goal: that they understand you are testing the prototype, not them.
@@ -37,6 +39,7 @@ Goal: remember how they do this today, so you can compare.
 
 - Tell me about the last time you [situation].
 - How did you do it? What did you use?
+- Write the case down before you show anything. Task 1 is compared with it.
 
 ### 3. Task 1: Pending
 
