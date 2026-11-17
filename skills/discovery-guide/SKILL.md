@@ -207,7 +207,7 @@ Five rules hold the whole thing up:
 - Separate facts, opinions, hypotheses, assumptions, and co-pilot readings.
 - If you advance with incomplete information, log `advanced_with_assumptions`.
 - If an inference is yours, label it `Co-pilot reading`.
-- **Every gate closes with a recommendation: `Advance`, `Deepen`, `Question`, or `Council`. And before closing a gated stage, you update `_engine/state.yaml` with the new `current_status` (`drafted`, `validated`, or `advanced_with_assumptions`). No stage closes without a state update.**
+- **Every gate closes with a recommendation: `Advance`, `Deepen`, `Question`, or `Council`. And before closing a gated stage, you update `_engine/state.yaml` with the new `current_status` (`drafted`, `validated`, or `advanced_with_assumptions`). No stage closes without a state update, and the update moves both marks (`current_status` and the step's own `status`) and rewrites `next`. Run `scripts/check_state.py` after it: it fails when two marks of the file disagree.**
 - The user brings the content. You organize, ask, teach, and recommend.
 - Work with available evidence before asking for more information.
 - Prioritize traceable progress over perfect completeness.
@@ -333,7 +333,7 @@ Don't present it as A/B/C. Use clear names.
 
 **Human checkpoint is mandatory.** At every gate, and at each debrief sub-stage (5a.0 to 5a.4), the checker filters and the researcher decides. Show what the researcher needs to see, then wait for their pick among the four. Never advance on the checker's verdict alone.
 
-**The standard checker.** Deterministic first: `scripts/verify_quotes.py` finds each quote in the interviewee's own channel. Then, where there is interpretation: ±6 lines of context on every quote that leaves, "does the quote support the claim?" with seeded errors as a control, qualitative-to-quantitative on everything that leaves, and a devil's advocate before sharing. Log it all in `5-debrief/verification-log.md`. A literal pass alone gives false security. The steps in `5a-debrief.md` spell out the sub-stages and the fan-out table.
+**The standard checker.** Deterministic first: `scripts/verify_quotes.py` finds each quote in the interviewee's own channel, flags a fragment whose cut may flip the meaning (CUT?) and refuses vetoed quotes; `scripts/check_counts.py` compares every "X of N" with its pattern and lists the universals with their counterexample candidates. Then, where there is interpretation: ±6 lines of context on every quote that leaves, "does the quote support the claim?" with seeded errors as a control, qualitative-to-quantitative on everything that leaves, and a devil's advocate before sharing. Log it all in `5-debrief/verification-log.md`. A literal pass alone gives false security. The steps in `5a-debrief.md` spell out the sub-stages and the fan-out table.
 
 **The menu stays at four.** Nothing below adds a fifth option; the feedback you give after an
 interview is something you offer inside the four you already have.

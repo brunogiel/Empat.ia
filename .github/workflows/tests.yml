@@ -26,3 +26,7 @@ jobs:
         run: python3 tests/test_feedback.py
       - name: The deictic resolver picks the right phrases
         run: python3 tests/test_resolve_deictics.py
+      - name: The count checker catches drifted counts and unchecked universals
+        run: python3 tests/test_check_counts.py
+      - name: The state checker catches a file that contradicts itself
+        run: python3 tests/test_check_state.py

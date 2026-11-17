@@ -24,6 +24,20 @@ A quote is copied **verbatim** from the transcript, transcription errors
 included. Check it against the transcript before you rely on it: a recorder's
 mis-hearing does not become gospel just because it landed in the ledger.
 
+## Vetoed quotes
+
+A quote that a context check throws out (induced by the question, cut so the
+meaning flips, professional jargon in the person's voice, hypothetical) stays in
+the ledger, so nobody finds it again and brings it back. Write `vetoed: <reason>`
+in the **Use in synthesis** column of its row. Nothing else changes in the row.
+
+- A vetoed quote is not support for anything. If an analyst brings one, the
+  orchestrator takes it out; it is not argued.
+- `scripts/verify_quotes.py` reads the column. It gives the verdict `VETOED`, and
+  exits with an error, when a vetoed quote shows up in any file it checks: the case
+  sheets, a JSON list, a report, `findings.md`, `principles.md` (`--scan`).
+- The clean evidence you hand to analysts is the ledger **without** the vetoed rows.
+
 ## Types of evidence
 
 - `quote`: the interviewee's exact words.
@@ -40,7 +54,7 @@ mis-hearing does not become gospel just because it landed in the ledger.
 
 | Evidence ID | Interview | Profile | Type | Evidence | Location | Tags | Preliminary reading | Confidence | Use in synthesis |
 |---|---|---|---|---|---|---|---|---|---|
-| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review |
+| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review/vetoed: reason |
 
 ## Contradictions to preserve
 

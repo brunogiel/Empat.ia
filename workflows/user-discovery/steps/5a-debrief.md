@@ -55,8 +55,9 @@ created at install except phase 1's brief.
 
 Every gate runs the same checker. Deterministic first; a model only where there is interpretation.
 
-1. **[DET] Quotes exist.** `python3 <method-root>/scripts/verify_quotes.py` looks up each quote in the interviewee's own channel only. Verdicts: OK, LITERAL~ (close, shows the real text), INTERVIEWER (the interviewer said it), FAIL (discard). A literal pass is necessary and **not enough**.
-2. **[LATENT] Context, always ±6 lines.** For every quote that supports something that leaves the sub-stage, read the six lines before and after. Look for leading questions, cuts that change the meaning, contradictions with the person's own behaviour, and professional-jargon voice.
+1. **[DET] Quotes exist.** `python3 <method-root>/scripts/verify_quotes.py` looks up each quote in the interviewee's own channel only. It reads interviews and validation sessions (`VAL-`), with or without a clock prefix on each line. Verdicts: OK, CUT? (the words are there, but a negation sits right before them, a "but" right after, or the fragment starts or ends mid-sentence: the real context is shown, you decide), LITERAL~ (close, shows the real text), INTERVIEWER (the interviewer said it), FAIL (discard), VETOED (the ledger marks it as vetoed: it must not be in the file you are checking). A literal pass is necessary and **not enough**: a fragment can match word for word and still say the opposite once the sentence around it is gone.
+1b. **[DET] Counts and universals.** `python3 <method-root>/scripts/check_counts.py <every file that leaves>` runs after the quote check and before any model reads. It compares each "X of N" with the number of different people in the pattern it sits next to (the support table in `findings.md`, see 5a.2), lists every universal ("nobody", "everyone", "most", "always", "never", "5 of 5") with the transcript lines that could break it, and refuses a success tick on N of 2 or less. It also reads the transcripts, not only the evidence ledger, because a ledger inherits the gaps of whoever filled it. It runs on every file that leaves the team, the HTML included. Run it again on every file that already left whenever a gate changes a count or a pattern.
+2. **[LATENT] Context, always ±6 lines.** For every quote that supports something that leaves the sub-stage, read the six lines before and after. Look for leading questions, cuts that change the meaning (every CUT? from step 1 first), contradictions with the person's own behaviour, and professional-jargon voice. **A quote that fails this check is vetoed.** Mark its row `vetoed: <reason>` in the Use column of `_engine/evidence.md`. A vetoed quote supports nothing: if an analyst brings it back, the orchestrator takes it out without arguing it. Step 1 turns that rule into an error: `verify_quotes.py` gives VETOED, and exits with a failure, when a vetoed quote shows up in a file it checks (`--scan` reads Markdown and HTML such as `findings.md`, `principles.md` and `share/`).
 3. **[LATENT] Does the quote support the claim?** One checker per sheet or section, with a seeded control: plant a few known errors in a copy (a swapped quote, an exaggerated "why"). If the checker misses them, the gate is worthless. Use a mid model; a small one misses exaggerations buried in long text. Or ask a narrower question ("does the quote say 'only', 'always' or 'never'?").
 4. **[LATENT] Qualitative to quantitative, on everything that leaves.** Not just quotes: catch generalisations ("most"), rankings presented as measured, counts that do not match the sheets, assumptions nobody said, and the researcher's opinion presented as a finding.
 5. **[LATENT] Devil's advocate before sharing.** The strongest case against the conclusion, using quotes only. Verdict: nothing / nuance / rewrite. The orchestrator discards the advocate's own exaggerations.
@@ -78,6 +79,8 @@ If the platform allows subagents, run in parallel. Otherwise run the voices in s
 | 5a.3 lateral readings | 2 to 3 | mid model | the insights only | none sees the others |
 | 5a.3 adversarial | 1 | mid model | insights plus quotes | does not see the author's reasoning |
 | 5a.4 principles and HMW | 1 | strongest model | validated insights | single author |
+| 5a.4 cold read | 2 to 3 readers | mid model, or people outside the project | one principle each time: title, rule and HMW only | none sees the rest of the debrief or the others |
+| 5a.4 chain validation | 1 | mid model | patterns, insights and principles, plus the seeded copy | does not see the author's reasoning |
 
 Shared instructions live in a file; the prompt of each agent only says whose turn it is. That saves tokens and avoids drift between agents. **Anti-pattern:** handing full transcripts to the lateral guests.
 
@@ -98,6 +101,7 @@ Before analysing, the researcher writes down, in `templates/analysis-guide.md`: 
 3. **Case sheets, one person per isolated agent** (`templates/case-sheet.json`, instructions in `templates/case-sheet-instructions.md`). Every datum carries its quote and line number. Each sheet ends with questions to go back with.
 4. **Card sort, read as triangulation, not ranking** (`templates/card-sort.md`). First what matters to the person and why (card to quote), then how they grouped. Three states per card: placed with a reason, placed silently, unplaced. Record who gave the meaning (the person or the interviewer), when it was said, their own vocabulary, cards added live, co-placement and what the deck lacked. Said is not placed. **Never average positions.**
 5. Run the standard checker (steps 1 to 4).
+6. Hand the analysts the **clean evidence**: `_engine/evidence.md` without the vetoed rows. A vetoed row stays in the ledger so nobody finds the quote again and brings it back; it never goes into the input of an affinity analyst or a lateral guest.
 
 - **Researcher sees:** the sheets, the failed or doubtful quotes with their context, and the card-sort reading.
 - **Researcher decides:** which quotes and sheets stand. Advance / Deepen (go back to the transcript or re-interview) / Question / Council.
@@ -110,7 +114,8 @@ Before analysing, the researcher writes down, in `templates/analysis-guide.md`: 
 4. Identify strong patterns, weak signals, outliers, and contradictions. Where it helps, build a mini-journey per case: where the person learns about the subject, in the order it appears, and where the studied product sits. Per case, not invented per profile.
 5. **Optional lateral guests** (see Council): they see sheets or patterns only, generate readings, never judge. The orchestrator crosses their output with the sheets and keeps only what traces back.
 6. Fill `5-debrief/coverage-matrix.md`: each finding placed in a part of the design challenge and a research question as answered / partial / gap. The gaps feed the next round.
-7. Run the checker (steps 1, 2 and 4) on the patterns.
+7. Give every pattern an ID (`PAT-01`, `PAT-02`...) in the "Patterns that repeat" table of `findings.md`, and write its evidence in the Evidence column. That table is the **support table**: `check_counts.py` counts the different people in each row, and every "X of N" written anywhere else is checked against it.
+8. Run the checker (steps 1, 1b, 2 and 4) on the patterns.
 
 - **Researcher sees:** patterns, axes with people placed, the coverage matrix, the laterals' surviving readings.
 - **Researcher decides:** which patterns hold, which axes are real. Advance / Deepen / Question / Council.
@@ -120,9 +125,10 @@ Before analysing, the researcher writes down, in `templates/analysis-guide.md`: 
 1. **One author** writes the insights, as readings, not summaries.
 2. **Laterals with other voices** read the insights, not the evidence, and push back.
 3. **Adversarial:** a reviewer builds the strongest case against each insight from quotes.
-4. Run the full checker (steps 1 to 5) on everything that will leave the team.
+4. **No strong pattern without an insight.** Every pattern held by 3 or more people hangs from an insight (the insight cites its `PAT-` ID), or carries one line saying why it does not: `PAT-07: no insight, because it only describes the setting.` **[DET]** `python3 <method-root>/scripts/check_counts.py --orphans` lists the patterns that have neither. A strong pattern nobody read is the kind of gap a reader finds and the checker of a single insight never does.
+5. Run the full checker (steps 1 to 5) on everything that will leave the team.
 
-- **Researcher sees:** the insights, the lateral and adversarial readings, the checker's table.
+- **Researcher sees:** the insights, the lateral and adversarial readings, the orphan patterns, the checker's table.
 - **Researcher decides:** rewrite, soften or keep each insight. Advance / Deepen / Question / Council.
 
 ### 5a.4 Principles, HMW and the validation guide
@@ -131,16 +137,19 @@ Before analysing, the researcher writes down, in `templates/analysis-guide.md`: 
 2. Formulate HMWs, one per principle where it earns one.
 3. List open questions and evidence gaps.
 4. Close the coverage matrix. Its gaps become **objectives and ideas for the validation round**: what we set out to find out, entry scenarios, possible A/B comparisons, and what to keep in mind with a small n (one difference at a time, alternate the order, watch what people do).
-5. Trace each principle to evidence IDs and run the checker (steps 1, 2, 4 and 6).
+5. Trace each principle to evidence IDs and run the checker (steps 1, 1b, 2, 4 and 6).
+6. **[LATENT] Cold read.** Before the principles close, two or three readers who have seen nothing else read each principle **alone**: title, rule and HMW, nothing around it. Pick people who are not in the project: someone from the client side, a designer, an editor who cares about clarity. Each says in their own words what the rule asks the team to do. A principle that needs the rest of the debrief to be understood, that two readers read differently, or that says what another principle already says, is rewritten or merged. Words only the team uses ("the scale", "the layer") are the usual cause.
+7. **[LATENT] Seeded chain validation.** One checker walks the whole chain, facts to patterns to insights to principles. Each principle follows from its source insight, each insight from patterns, and the same thing carries the same number at all three levels. Control: plant known errors in a copy first (a principle with no source insight, an insight whose count differs from its pattern, a rule that contradicts the insight it cites). If the checker misses one, the check is worth nothing and nothing it passed counts.
 
-- **Researcher sees:** the principles with their evidence, the HMWs, the matrix with its gaps, the validation guide.
+- **Researcher sees:** the principles with their evidence, the HMWs, the cold readers' notes, the chain checker's table, the matrix with its gaps, the validation guide.
 - **Researcher decides:** which principles are final. Advance / Deepen / Question / Council.
 
 ## Quality criteria
 
 - An insight is not a summary: it is a new perspective on the problem.
 - Each insight needs a fact or quote traceable to `_engine/evidence.md`.
-- The principles are design rules, not features.
+- The principles are design rules, not features, and each one makes sense read alone.
+- Every count is the number of different people in its pattern's row; no strong pattern is left without an insight.
 - HMWs shouldn't carry a hidden solution.
 - A good HMW lets you imagine several solutions quickly.
 - If evidence is missing, say so instead of filling in.
@@ -175,4 +184,4 @@ Each sub-stage closes with the checkpoint above. Suggested action:
 - `Question` if conclusions are being invented or the framing is off.
 - `Council` if the synthesis needs to be put under tension.
 
-Before closing a sub-stage, update `_engine/state.yaml`. Before the debrief leaves the team in any form, the cuali-to-cuanti and devil's-advocate checks must have run and be logged.
+Before closing a sub-stage, update `_engine/state.yaml`: **both marks** (`current_status` and `steps.debrief.status`), the sub-stage mark under `substeps:`, and `next`. Then run `python3 <method-root>/scripts/check_state.py`; it fails if two marks disagree, or if `next` still asks for something that is done. Before the debrief leaves the team in any form, the cuali-to-cuanti and devil's-advocate checks must have run and be logged.

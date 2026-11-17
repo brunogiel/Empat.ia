@@ -10,7 +10,7 @@ phase 7; it does not reopen the field debrief.
 
 - Every finding rests on evidence `VAL-00X-NN`.
 - Report what people did. What they said they would do is a weaker signal: label it.
-- Count: how many of how many, not "some".
+- Count: how many of how many, not "some". With 2 people or fewer, say what each did; do not mark it as having worked.
 - Compare with the bets of the ideation: held, partly, did not.
 - A task nobody got stuck on is a finding too.
 - Don't make things up.
@@ -45,6 +45,13 @@ created before its step starts.
 4. Write what they understood, where they got stuck, and what to change.
 5. Check each bet of the ideation against the evidence.
 6. List what you still do not know, such as a profile that was not tested.
+7. **[DET]** Before the findings leave the team, run the two scripts:
+   `python3 <method-root>/scripts/verify_quotes.py --cases` (or `--file` on the HTML) reads `VAL-`
+   quotes against `7-validation/_raw`, and
+   `python3 <method-root>/scripts/check_counts.py 7-validation/findings.md` lists every universal
+   ("nobody", "everyone", "most") with the transcript lines that could break it, every "X of N"
+   to check by hand against the evidence rows, and refuses a success tick on 2 people or fewer.
+   Two people can show where someone got stuck. They cannot show that something worked.
 
 ## Quality criteria
 

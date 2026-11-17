@@ -19,6 +19,10 @@ valid_statuses:
   - advanced_with_assumptions
 recommended_action: Deepen
 recommended_reason: "Complete initial alignment before moving forward."
+# One line: what comes next, rewritten at every gate. Name a step or a sub-stage in
+# backticks (`debrief`, `5a.3`) so scripts/check_state.py can tell when it points at
+# something that is already done.
+next: ""
 industry: ""
 is_tech_project: null
 active_agents:
@@ -47,6 +51,11 @@ editor: on
 #
 # Hard rule: a step with a gate cannot be closed without updating 'status' to
 # 'drafted', 'validated' or 'advanced_with_assumptions', and updating updated_at.
+#
+# There are TWO marks of the same fact: 'current_status' above and 'steps.<step>.status'
+# below. A gate moves both in the same edit, and rewrites 'next'. Run
+# `python3 <method-root>/scripts/check_state.py` after the edit: it fails when two marks
+# disagree, so the file never says 'validated' in one place and 'drafted' in another.
 #
 # This file is the only place the project STATE lives. No other document repeats it.
 #
@@ -215,6 +224,21 @@ validations:
   target: 0
   done: 0
   unprocessed: 0
+
+# Optional. A step that runs in sub-stages keeps one mark per sub-stage here, so
+# "which part is done" is never read out of the step's single status. Today only the
+# debrief has them (5a.0 to 5a.4). Statuses: not_started | in_progress | done | skipped
+# (5a.0 is optional: skip it when there is no analysis guide). A project that started
+# before this block existed simply has none; check_state.py then skips the checks that
+# need it. Rule: a sub-stage is done only when the one before it is done or skipped, and
+# the step is closed only when every sub-stage is.
+substeps:
+  debrief:
+    5a.0: not_started
+    5a.1: not_started
+    5a.2: not_started
+    5a.3: not_started
+    5a.4: not_started
 
 # --- The plan ---------------------------------------------------------------
 # The brief closes with a plan, and this block is its machine-readable twin.

@@ -36,9 +36,15 @@ Pending.
 
 Patterns that appear across several people, or that carry weight by impact.
 
-| Pattern | Evidence | Profiles | Who does not show it | Implication |
-|---|---|---|---|---|
-| Pending | INT-...-.. | Pending | Pending (a pattern with no stated exception is not finished) | Pending |
+| ID | Pattern | Evidence | Profiles | Who does not show it | Implication |
+|---|---|---|---|---|---|
+| PAT-01 | Pending | INT-...-.. | Pending | Pending (a pattern with no stated exception is not finished) | Pending |
+
+This table is the **support table**: `scripts/check_counts.py` counts the different
+people in each Evidence cell, and every "X of N" written elsewhere (insights,
+principles, the report) has to match it. Keep the `PAT-` ID, and list in Evidence the
+evidence IDs of the people who show the pattern; people who do not show it go in the
+next column, which is not counted as support.
 
 ## Axes of divergence
 
