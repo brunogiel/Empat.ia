@@ -58,11 +58,15 @@ created before its step starts.
    in the **What already went out** table of `5-debrief/verification-log.md` and decide whether to
    resend. What the devil's advocate corrects goes into the findings in this same step.
 
+9. **[LATENT]** Every model check this step runs (does the quote support the finding, cuali-to-cuanti, the devil's advocate) follows "Every model checker" in `5a-debrief.md`: it runs first on a copy with planted errors and must catch them, it runs on a mid or strong model, and the log says "seeds caught: X of Y". Every quote or clip that supports a finding gets the ±6 lines of context (a clip against the finding it illustrates). A validation finding built on what a person said they would do, checked by a checker that missed its seeds, is not checked.
+10. **[DET]** Update `substeps:` if the project uses it, and run `python3 <method-root>/scripts/check_state.py` before closing.
+
 ## Quality criteria
 
 - Each change points at the finding that asks for it, and says how big it is.
 - Each finding has a count and an evidence ID.
 - Contradictions stay visible.
+- Every model checker caught its seeded errors before its verdict counted, and the log says so.
 - Nothing that already left still carries a finding this step changed, or it is marked `outdated` in the log.
 
 ## Council

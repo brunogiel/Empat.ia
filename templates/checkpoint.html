@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PROJECT NAME}}: checkpoint {{SUB-STAGE}}</title>
+<!--
+CHECKPOINT PAGE. The Guide writes this file to _engine/sources/checkpoints/YYYY-MM-DD-<sub-stage>-<round>.html,
+in the project's language, when a gate or a debrief sub-stage needs the researcher's decision.
+
+Owns: the decisions of one checkpoint, item by item, and the corrections already made at this gate.
+Does not own: the evidence, the findings or the state of the project → `5-debrief/findings.md`,
+`_engine/state.yaml`. The page asks; the files record.
+
+HOW TO FILL IT
+- One <article class="card"> per item the researcher must DECIDE. Give it a unique data-id and a
+  data-ref: the slide number or the section ID where the item lives, so the researcher finds it at once.
+- One <article class="card fixed"> per correction the Guide already made at this gate (a count, a failed
+  quote, a clip that did not say what its caption said). Say what it said before and what it says now.
+  Facts are corrected there; only a matter of judgement becomes a decision card.
+- ROUND 2 brings only what is new: items already decided do not come back; keep the cards whose
+  question changed because of the decisions, and list the corrections made since.
+- Replace every {{...}} with text taken from the project files. Invent nothing.
+
+The four buttons are the four of every gate: Advance, Deepen, Question, Council.
+"Copy decisions" puts every choice and comment on the clipboard as plain text. The researcher pastes it
+into the conversation, and the Guide applies it and logs it in `5-debrief/verification-log.md` and
+`_engine/decisions.md`.
+
+INTERNAL: this page may carry evidence IDs and references. It never goes into share/.
+One file, nothing external: no fonts, images or links to load, and no script beyond the one below.
+Delete this comment before saving.
+-->
+<style>
+  :root { --bg:#ffffff; --fg:#1d2330; --muted:#5b6475; --line:#d9dee7; --soft:#f4f6fa; --accent:#2457d6; --on-accent:#ffffff; --ok:#1f7a4d; --warn:#9a5b00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14171f; --fg:#e8ebf2; --muted:#9aa3b5; --line:#2b3140; --soft:#1c2029; --accent:#7ea2ff; --on-accent:#10131a; --ok:#5cc98f; --warn:#e0a24a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 96px; }
+  h1 { font-size: 1.6rem; line-height: 1.2; margin: 0 0 4px; }
+  h2 { font-size: 1.1rem; margin: 36px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .meta { color: var(--muted); font-size: .9rem; margin: 0 0 20px; }
+  .card { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin: 12px 0; background: var(--bg); }
+  .card.done { border-color: var(--ok); }
+  .card h3 { font-size: 1rem; margin: 0 0 6px; }
+  .ref { display: inline-block; font-size: .75rem; padding: 1px 8px; border-radius: 10px; border: 1px solid var(--line); color: var(--muted); margin-right: 6px; }
+  .ask { margin: 4px 0 10px; }
+  .before, .after { margin: 2px 0; font-size: .92rem; }
+  .label { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  button { font: inherit; font-size: .9rem; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--soft); color: var(--fg); cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  textarea { width: 100%; min-height: 44px; font: inherit; font-size: .9rem; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); resize: vertical; }
+  .bar { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--line); padding: 10px 0; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .bar .count { color: var(--muted); font-size: .9rem; flex: 1; }
+  #copy { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  #out { display: none; width: 100%; min-height: 140px; margin-top: 10px; }
+  footer { margin-top: 40px; color: var(--muted); font-size: .8rem; }
+  @media print { body { background:#fff; color:#000; } main { padding: 0; } .card { break-inside: avoid; } .bar { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{PROJECT NAME}}</h1>
+  <p class="meta">{{DATE}} &middot; {{SUB-STAGE, e.g. 5a.3 insights}} &middot; Round {{1}} &middot; Pick one for each card; the comment is optional.</p>
+
+  <h2>To decide</h2>
+  <p class="meta">{{ONE LINE: what the checker found, in plain words}}</p>
+
+  <!-- One card per item to decide. Repeat. data-id is unique; data-ref is the slide number or section ID. -->
+  <article class="card" data-kind="decide" data-id="{{d1}}" data-ref="{{SLIDE NUMBER OR SECTION ID}}">
+    <h3><span class="ref">{{SLIDE NUMBER OR SECTION ID}}</span>{{TITLE OF THE ITEM}}</h3>
+    <p class="ask">{{WHAT IS AT STAKE, and what each button would do here, in a line or two}}</p>
+    <div class="choices" role="group" aria-label="Decision">
+      <button type="button" data-choice="Advance" aria-pressed="false">Advance</button>
+      <button type="button" data-choice="Deepen" aria-pressed="false">Deepen</button>
+      <button type="button" data-choice="Question" aria-pressed="false">Question</button>
+      <button type="button" data-choice="Council" aria-pressed="false">Council</button>
+    </div>
+    <textarea aria-label="Comment" placeholder="Comment (optional)"></textarea>
+  </article>
+
+  <h2>Already corrected</h2>
+  <p class="meta">The Guide fixed these at this gate. Accept each one, or revert it.</p>
+
+  <!-- One card per correction already made. Repeat. -->
+  <article class="card fixed" data-kind="fixed" data-id="{{c1}}" data-ref="{{SLIDE NUMBER OR SECTION ID}}">
+    <h3><span class="ref">{{SLIDE NUMBER OR SECTION ID}}</span>{{WHAT WAS CORRECTED}}</h3>
+    <p class="before"><span class="label">Before</span> {{WHAT IT SAID}}</p>
+    <p class="after"><span class="label">Now</span> {{WHAT IT SAYS}}</p>
+    <div class="choices" role="group" aria-label="Correction">
+      <button type="button" data-choice="Accept" aria-pressed="false">Accept</button>
+      <button type="button" data-choice="Revert" aria-pressed="false">Revert</button>
+    </div>
+    <textarea aria-label="Comment" placeholder="Comment (optional)"></textarea>
+  </article>
+
+  <footer>Made with Empat.ia from the project files. A working page of {{DATE}}: it records nothing by itself. Copy the decisions and paste them into the conversation.</footer>
+
+  <div class="bar">
+    <span class="count" id="count" aria-live="polite"></span>
+    <button type="button" id="copy">Copy decisions</button>
+  </div>
+  <textarea id="out" aria-label="Decisions as text" readonly></textarea>
+</main>
+<script>
+(function () {
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".card[data-id]"));
+  var count = document.getElementById("count");
+  var out = document.getElementById("out");
+
+  function pressed(card) {
+    var b = card.querySelector("button[aria-pressed='true']");
+    return b ? b.getAttribute("data-choice") : "";
+  }
+  function refresh() {
+    var done = cards.filter(function (c) { return pressed(c); }).length;
+    count.textContent = done + " of " + cards.length + " answered";
+    cards.forEach(function (c) { c.classList.toggle("done", !!pressed(c)); });
+  }
+  function build() {
+    var title = document.title;
+    var lines = [title, ""];
+    cards.forEach(function (c) {
+      var h = c.querySelector("h3");
+      var ref = c.getAttribute("data-ref") || "";
+      var name = h ? h.textContent : c.getAttribute("data-id");
+      var choice = pressed(c) || "NO ANSWER (stays open)";
+      var note = c.querySelector("textarea").value.trim();
+      var kind = c.getAttribute("data-kind") === "fixed" ? "Correction" : "Decision";
+      lines.push(kind + " [" + (ref || c.getAttribute("data-id")) + "] " + name + ": " + choice + (note ? " - " + note : ""));
+    });
+    return lines.join("\n");
+  }
+
+  cards.forEach(function (card) {
+    Array.prototype.forEach.call(card.querySelectorAll("button[data-choice]"), function (btn) {
+      btn.addEventListener("click", function () {
+        var was = btn.getAttribute("aria-pressed") === "true";
+        Array.prototype.forEach.call(card.querySelectorAll("button[data-choice]"), function (o) {
+          o.setAttribute("aria-pressed", "false");
+        });
+        btn.setAttribute("aria-pressed", was ? "false" : "true");
+        refresh();
+      });
+    });
+  });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    var text = build();
+    out.value = text;
+    out.style.display = "block";
+    function fallback() { out.focus(); out.select(); try { document.execCommand("copy"); } catch (e) {} }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(fallback);
+    } else {
+      fallback();
+    }
+    count.textContent = "Copied. Paste it into the conversation.";
+  });
+
+  refresh();
+})();
+</script>
+</body>
+</html>

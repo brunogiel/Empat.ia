@@ -281,6 +281,67 @@ class TestShareable(unittest.TestCase):
         self.assertIn("`share/`", editor)
 
 
+class TestGatesAndReviewers(unittest.TestCase):
+    """One owner per piece, seeded model checkers, two council modes, one checkpoint page."""
+
+    def read(self, *parts):
+        return (REPO.joinpath(*parts)).read_text(encoding="utf-8")
+
+    def test_the_checkpoint_page_is_one_file_with_the_four_buttons(self):
+        body = self.read("templates", "checkpoint.html")
+        self.assertNotIn("http", body)
+        self.assertNotRegex(body, r"(?i)<link\b|@import|url\(|<img\b|<iframe\b|<script[^>]*\bsrc=")
+        self.assertIn("prefers-color-scheme: dark", body)
+        self.assertIn("@media print", body)
+        for choice in ["Advance", "Deepen", "Question", "Council"]:
+            self.assertIn(f'data-choice="{choice}"', body)
+        for word in ["data-ref", "Already corrected", "Copy decisions", "Owns:"]:
+            self.assertIn(word, body)
+
+    def test_the_checkpoint_page_is_named_where_the_gate_is_run(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        skill = self.read("skills", "discovery-guide", "SKILL.md")
+        for text in (step, skill):
+            self.assertIn("templates/checkpoint.html", text)
+        self.assertIn("second round brings only what is new", step.lower())
+
+    def test_the_seeded_rule_lives_in_one_place_and_the_others_point_at_it(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        self.assertEqual(step.count("### Every model checker: seeded, and the right tier"), 1)
+        self.assertIn("No seed caught, no gate", step)
+        for name in ["7c-validation-debrief.md", "8a-report.md", "3a-guide.md", "7a-validation-guide.md"]:
+            with self.subTest(step=name):
+                self.assertIn("Every model checker", self.read("workflows", "user-discovery", "steps", name))
+
+    def test_a_clip_is_checked_like_a_quote(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        self.assertIn("A video or audio clip is a quote", step)
+
+    def test_sense_checks_never_go_to_the_small_model(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        self.assertIn("A small model never runs a check of sense", step)
+
+    def test_sub_stages_are_one_at_a_time(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        for phrase in ["One owner per piece", "One sub-stage at a time", "preliminary",
+                       "if you don't decide, I'll continue", "Compressed mode"]:
+            self.assertIn(phrase, step)
+        self.assertIn("One sub-stage at a time", self.read("skills", "discovery-guide", "SKILL.md"))
+
+    def test_the_council_has_two_modes_and_no_new_agent_files(self):
+        council = self.read("agents", "council.md")
+        for phrase in ["## Two modes", "## Review mode", "Variant: lateral guests",
+                       "N reviewers said this", "Never reopens it", "hypotheses, not evidence",
+                       "Simulated client validator", "The blind panel"]:
+            self.assertIn(phrase, council)
+        for lens in ["Client reader", "Editor", "Designer", "Person from the studied audience",
+                     "Verifier", "Finder of the forgotten", "Clip reviewer"]:
+            self.assertIn(f"| {lens} |", council)
+        roster = {p.stem for p in (REPO / "agents").glob("*.md")}
+        for name in ["reviewer", "validator", "simulated-client", "panel"]:
+            self.assertNotIn(name, roster)
+
+
 class TestOneFileOneJob(unittest.TestCase):
     """R19: every file the user opens writes only what is its own."""
 

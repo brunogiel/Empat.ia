@@ -13,15 +13,15 @@ The record that lets you defend what goes out. The literal check says a quote ex
 
 ### Model check: does the quote support the claim?
 
-| Sheet or section | Reviewed | NO | PARTIAL | Verifier |
-|---|---|---|---|---|
-| Pending | Pending | Pending | Pending | Pending |
+| Sheet or section | Reviewed | NO | PARTIAL | Verifier (model tier) | Seeds caught |
+|---|---|---|---|---|---|
+| Pending | Pending | Pending | Pending | Pending | Pending of Pending |
 
-- Seeded exaggeration caught: Pending of Pending. A small model misses exaggerations buried in long text; use a stronger model or a smaller question ("does the quote say 'only', 'always' or 'never'?").
+- **Every model checker is seeded, in any phase** (this one, the devil's advocate, cuali-to-cuanti, a clip or a guide check). Seeds caught: Pending of Pending. A checker that missed a seed counts for nothing: change the model tier or narrow the question, and seed again. Questions of sense go to a mid or strongest model; a small one misses exaggerations buried in long text and is only for inventory and binary questions.
 
 ### Context check (the key quotes, about 6 lines around)
 
-Looks for led questions, cuts that change the meaning, contradictions with the person's own behavior and professional voice.
+Looks for led questions, cuts that change the meaning, contradictions with the person's own behavior and professional voice. Video and audio clips are read too: what the clip says against its caption and the finding it illustrates.
 
 - Reviewed: Pending. With a problem: Pending.
 

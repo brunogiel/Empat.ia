@@ -231,7 +231,9 @@ validations:
 # (5a.0 is optional: skip it when there is no analysis guide). A project that started
 # before this block existed simply has none; check_state.py then skips the checks that
 # need it. Rule: a sub-stage is done only when the one before it is done or skipped, and
-# the step is closed only when every sub-stage is.
+# the step is closed only when every sub-stage is. Compressed mode: two consecutive
+# sub-stages may share one checkpoint, declared first in decisions.md as a course change;
+# both marks change in the same edit.
 substeps:
   debrief:
     5a.0: not_started

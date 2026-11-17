@@ -69,8 +69,9 @@ already there.
    `[not for the report]` in a canonical file, and any internal code or working label in capitals.
    It fails if one is found. A correction made for the report that touches an earlier piece marks that
    piece `outdated` in the **What already went out** table of `5-debrief/verification-log.md`.
-6. Run the cuali-to-cuanti and devil's-advocate checks (see Method notes) as a gate before sharing.
-7. Mark the `report` piece `done` in the plan, and run `python3 <method-root>/scripts/check_state.py`.
+6. Run the cuali-to-cuanti and devil's-advocate checks (see Method notes) as a gate before sharing. Both are model checkers: each runs on a mid or strong model, after a copy with planted errors showed it catches them (see "Every model checker" in `5a-debrief.md`). Every quote and every video clip in the page also gets the ±6 lines of context: the words the clip says against the title or the finding it illustrates.
+7. **[LATENT] Review panel.** Convene the standard report panel of `agents/council.md` (review mode): seven readings of the finished page, each reviewer alone and blind to the others. Hand every reviewer the list of closed decisions from `_engine/decisions.md`. The orchestrator crosses the seven answers, corrects what is a fact in the same step, and takes the judgement calls to the researcher.
+8. Mark the `report` piece `done` in the plan, and run `python3 <method-root>/scripts/check_state.py`.
 
 ## Quality criteria
 
@@ -78,7 +79,8 @@ already there.
 - Nothing in it is missing from the sources it summarises.
 - No quote lacks consent.
 - No internal ID appears anywhere in the page, and `check_share.py` passes on the folder.
-- No claim is stated more strongly than the evidence ("suggests", not "proves"); the two checks ran and are logged.
+- No claim is stated more strongly than the evidence ("suggests", not "proves"); the two checks ran, caught their seeded errors and are logged.
+- The review panel ran, and each of its findings is applied, asked of the researcher, or discarded with a reason.
 
 ## Gate
 

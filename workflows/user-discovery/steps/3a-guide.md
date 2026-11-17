@@ -98,6 +98,12 @@ Typical agents: `qualitative-researcher`, `uxer`, `sociologist`, `philosopher`. 
 
 When a council reviews the guide, close it with the application ledger: a council can return
 thirteen recommendations, twelve get applied, and the one left out is usually the structural one.
+The council runs in review mode (`agents/council.md`) and receives the closed decisions of
+`_engine/decisions.md`.
+
+If a model checks the guide for leading questions, it is a model checker like any other: plant a few
+leading questions in a copy first, and if it misses one, its "no leading questions" counts for
+nothing. The rule and the model tiers live in "Every model checker" in `5a-debrief.md`.
 
 ## Gate
 
@@ -106,6 +112,7 @@ Before closing, check:
 - Does the guide have anything that belongs in another file?
 - Does the guide fit its one-page hard budget?
 - Can someone who is not you run this interview from the guide and its prep sheet alone?
+- If a model checked it, did that checker catch its seeded errors?
 
 Suggested action:
 

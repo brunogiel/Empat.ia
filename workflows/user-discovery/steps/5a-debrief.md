@@ -19,6 +19,8 @@ The debrief runs in **sub-stages, each with its own gate**: 5a.0 analysis guide,
 - Don't make things up.
 - **The checker filters, the researcher decides.** Every sub-stage ends with a human checkpoint. No sub-stage closes on the checker's verdict alone.
 - **Fan out where there is independence or divergence; synthesise with one author.** One person per agent (case sheets, per-sheet checks) is independence. Lateral guests, a panel, a devil's advocate are divergence. The synthesis is written by one hand.
+- **One owner per piece.** If two threads or agents work on the same piece (a table of patterns, the insights, the principles), its structure has one owner and is closed **before** anyone fills it. Two hands that fill a structure while it is still moving produce two versions that never merge.
+- **One sub-stage at a time.** Nothing in a sub-stage starts until the one before it is `done` (or `skipped`) in `substeps:` of `_engine/state.yaml`. A number that reaches an analyst or the researcher before its checker has run goes marked **preliminary**, or does not go. At a gate, "if you don't decide, I'll continue" does not exist: no answer is not an Advance.
 
 ## First, the files of this step
 
@@ -57,10 +59,10 @@ Every gate runs the same checker. Deterministic first; a model only where there 
 
 1. **[DET] Quotes exist.** `python3 <method-root>/scripts/verify_quotes.py` looks up each quote in the interviewee's own channel only. It reads interviews and validation sessions (`VAL-`), with or without a clock prefix on each line. Verdicts: OK, CUT? (the words are there, but a negation sits right before them, a "but" right after, or the fragment starts or ends mid-sentence: the real context is shown, you decide), LITERAL~ (close, shows the real text), INTERVIEWER (the interviewer said it), FAIL (discard), VETOED (the ledger marks it as vetoed: it must not be in the file you are checking). A literal pass is necessary and **not enough**: a fragment can match word for word and still say the opposite once the sentence around it is gone.
 1b. **[DET] Counts and universals.** `python3 <method-root>/scripts/check_counts.py <every file that leaves>` runs after the quote check and before any model reads. It compares each "X of N" with the number of different people in the pattern it sits next to (the support table in `findings.md`, see 5a.2), lists every universal ("nobody", "everyone", "most", "always", "never", "5 of 5") with the transcript lines that could break it, and refuses a success tick on N of 2 or less. It also reads the transcripts, not only the evidence ledger, because a ledger inherits the gaps of whoever filled it. It runs on every file that leaves the team, the HTML included. Run it again on every file that already left whenever a gate changes a count or a pattern.
-2. **[LATENT] Context, always ±6 lines.** For every quote that supports something that leaves the sub-stage, read the six lines before and after. Look for leading questions, cuts that change the meaning (every CUT? from step 1 first), contradictions with the person's own behaviour, and professional-jargon voice. **A quote that fails this check is vetoed.** Mark its row `vetoed: <reason>` in the Use column of `_engine/evidence.md`. A vetoed quote supports nothing: if an analyst brings it back, the orchestrator takes it out without arguing it. Step 1 turns that rule into an error: `verify_quotes.py` gives VETOED, and exits with a failure, when a vetoed quote shows up in a file it checks (`--scan` reads Markdown and HTML such as `findings.md`, `principles.md` and `share/`).
-3. **[LATENT] Does the quote support the claim?** One checker per sheet or section, with a seeded control: plant a few known errors in a copy (a swapped quote, an exaggerated "why"). If the checker misses them, the gate is worthless. Use a mid model; a small one misses exaggerations buried in long text. Or ask a narrower question ("does the quote say 'only', 'always' or 'never'?").
+2. **[LATENT] Context, always ±6 lines.** For every quote that supports something that leaves the sub-stage, read the six lines before and after. Look for leading questions, cuts that change the meaning (every CUT? from step 1 first), contradictions with the person's own behaviour, and professional-jargon voice. **A video or audio clip is a quote.** Read the transcript lines around the cut (±6 lines) and compare what the clip actually says with the slide title or the finding it illustrates: a clip is chosen for its image or its tone, and it can say something else, or the opposite, once the surrounding lines are read. **A quote or clip that fails this check is vetoed.** Mark its row `vetoed: <reason>` in the Use column of `_engine/evidence.md`. A vetoed quote supports nothing: if an analyst brings it back, the orchestrator takes it out without arguing it. Step 1 turns that rule into an error: `verify_quotes.py` gives VETOED, and exits with a failure, when a vetoed quote shows up in a file it checks (`--scan` reads Markdown and HTML such as `findings.md`, `principles.md` and `share/`).
+3. **[LATENT] Does the quote support the claim?** One checker per sheet or section. It is a model checker, so the two rules of "Every model checker" below apply: a seeded control that it catches, and a mid or strong model.
 4. **[LATENT] Qualitative to quantitative, on everything that leaves.** Not just quotes: catch generalisations ("most"), rankings presented as measured, counts that do not match the sheets, assumptions nobody said, and the researcher's opinion presented as a finding.
-5. **[LATENT] Devil's advocate before sharing.** The strongest case against the conclusion, using quotes only. Verdict: nothing / nuance / rewrite. The orchestrator discards the advocate's own exaggerations.
+5. **[LATENT] Devil's advocate before sharing.** The strongest case against the conclusion, using quotes only. Verdict: nothing / nuance / rewrite. The orchestrator discards the advocate's own exaggerations. Seeded and tiered like every model checker.
 6. **[DET] Check what already went out.** `python3 <method-root>/scripts/check_share.py` runs the quote check (cut and vetoed quotes), the count check, the internal-marks brake and the codes brake on every file in `share/` (and `8-report/`) in one command. It exits with an error if any of them fails. Run it at **every gate**, not only before a new send: a fix made in `findings.md` does not reach a page that already left until this run finds it there. The brakes it adds:
    - **Internal marks.** A line or table row tagged `[not for the report]`, or a block between `<!-- not for the report -->` and `<!-- end not for the report -->`, in any canonical file (`evidence.md`, `findings.md`, the synthesis log) must not appear in a shared piece. The tag itself must not either.
    - **Codes.** A shared piece holds no evidence ID (`INT-003-12`, `PAT-01`), no hypothesis code (`A-023`), no short code (`H04`) and no working label in capitals (`TODO`, `GATE 2`). Names that only look like a code go in `_engine/share-allow.txt`.
@@ -70,6 +72,21 @@ Every gate runs the same checker. Deterministic first; a model only where there 
 
 Not every project needs every step. A small project runs 1, 2 and 7; anything that leaves the team runs all, and step 6 runs at every gate once something has left.
 
+### Every model checker: seeded, and the right tier
+
+This is the one place where the rule lives. Steps 3, 4 and 5 above, and the model checkers of 7c, 8a and the guide gate (3a, 7a), all point here.
+
+1. **No seed caught, no gate.** Before a model checker runs on the real material, plant known errors in a **copy** (a swapped quote, an exaggerated "why", a count that differs from its pattern, a clip that says something else than its caption). Run the checker on the copy. If it misses a seed, its verdict on the real material counts for nothing: change the checker (a stronger model, a narrower question) and seed again. Log, per checker, "seeds caught: X of Y" in `5-debrief/verification-log.md`. A gate whose checker has no seeded run is not closed, in any phase.
+2. **The tier follows the kind of question.**
+
+| Kind of question | Tier | Examples |
+|---|---|---|
+| Inventory and binary questions | small fast model | Is this name in the file? Does the quote contain "only", "always" or "never"? Is every sheet present? |
+| Questions of sense | mid or strongest model | Does the quote support the claim? Is a "why" exaggerated? Does a clip say what its caption says? Does a rule follow from its insight? Cuali-to-cuanti. Devil's advocate. |
+| Synthesis | strongest model, one author | Patterns across sheets, insights, principles. |
+
+A small model never runs a check of sense: it misses an exaggeration buried in long text and says "OK" with the same confidence. If a small model must be used, cut the question until it is binary.
+
 ## Fan-out per sub-stage
 
 If the platform allows subagents, run in parallel. Otherwise run the voices in series, each with a clean context (the shared instructions file plus only its own input).
@@ -77,7 +94,7 @@ If the platform allows subagents, run in parallel. Otherwise run the voices in s
 | Sub-stage | Agents | Tier | Input | Isolation |
 |---|---|---|---|---|
 | 5a.1 case sheets | one per person | mid model | one transcript plus `templates/case-sheet-instructions.md` | each sees only its own person |
-| 5a.1 quote and support checks | one per sheet | small fast model for the binary check, mid model for exaggeration | one sheet plus its transcript | one sheet each |
+| 5a.1 quote and support checks | one per sheet | small fast model for the binary check, mid model for sense and exaggeration | one sheet plus its transcript | one sheet each |
 | 5a.2 lateral guests (optional) | 2 to 3 | mid model | sheets or patterns, never raw transcripts | none sees the others |
 | 5a.2 cross | 1 | strongest model | all sheets | single author |
 | 5a.3 insights | 1 author | strongest model | patterns plus sheets | single author |
@@ -87,7 +104,7 @@ If the platform allows subagents, run in parallel. Otherwise run the voices in s
 | 5a.4 cold read | 2 to 3 readers | mid model, or people outside the project | one principle each time: title, rule and HMW only | none sees the rest of the debrief or the others |
 | 5a.4 chain validation | 1 | mid model | patterns, insights and principles, plus the seeded copy | does not see the author's reasoning |
 
-Shared instructions live in a file; the prompt of each agent only says whose turn it is. That saves tokens and avoids drift between agents. **Anti-pattern:** handing full transcripts to the lateral guests.
+The Tier column follows the table in "Every model checker"; every row that checks something runs with its seeded copy. Shared instructions live in a file; the prompt of each agent only says whose turn it is. That saves tokens and avoids drift between agents. **Anti-pattern:** handing full transcripts to the lateral guests.
 
 ## Process
 
@@ -178,7 +195,7 @@ Suggest `Council` before closing 5a.3 or 5a.4 if:
 - The `_engine/evidence.md` shows important gaps.
 - The user wants to prioritize opportunities.
 
-For the lateral guests of 5a.2 and 5a.3, use the "lateral guests" variant in `agents/council.md`.
+For the lateral guests of 5a.2 and 5a.3, use the "lateral guests" variant in `agents/council.md` (generative mode: they produce readings, they never review). When a council **reviews** something instead (the insights, the principles, the report), it runs in the review mode of the same file: expert roles, the closed decisions of `_engine/decisions.md` handed to every reviewer, and a synthesis that counts how many reviewers said each thing.
 
 ## Gate
 
@@ -189,4 +206,17 @@ Each sub-stage closes with the checkpoint above. Suggested action:
 - `Question` if conclusions are being invented or the framing is off.
 - `Council` if the synthesis needs to be put under tension.
 
+Before the researcher sees the checker's table, the Guide may build it as a **checkpoint page**: `templates/checkpoint.html`, one file the researcher opens and answers with buttons (see "The checkpoint page" below).
+
 Before closing a sub-stage, update `_engine/state.yaml`: **both marks** (`current_status` and `steps.debrief.status`), the sub-stage mark under `substeps:`, and `next`. Then run `python3 <method-root>/scripts/check_state.py`; it fails if two marks disagree, or if `next` still asks for something that is done. Before the debrief leaves the team in any form, the cuali-to-cuanti and devil's-advocate checks must have run and be logged.
+
+**Compressed mode (optional, declared).** Two consecutive sub-stages, for example 5a.3 and 5a.4, may close with one joint checkpoint. Declare it **before** starting them, as a course change in `_engine/decisions.md`. Both sub-stages run in full, every checker and every seed included; only the pause between them goes. Both marks in `substeps:` change in the same edit, after the joint checkpoint. The researcher can ask to split them at any point.
+
+## The checkpoint page
+
+The checkpoint can be a page instead of a chat message. The Guide builds it from `templates/checkpoint.html` into `_engine/sources/checkpoints/YYYY-MM-DD-<sub-stage>-<round>.html`, in the project's `language`. It is a working file of the team: it never goes into `share/`, and it may carry the internal references that `check_share.py` forbids in a shared piece.
+
+1. **[LATENT]** One card per item the researcher must decide. Each card names what it is about, carries its **reference** (a slide number or a section ID, so the researcher finds the place at once) and offers the four buttons: Advance, Deepen, Question, Council. A comment box sits under each.
+2. **[LATENT]** A section **Already corrected** lists what the Guide fixed at this gate without asking (a count, a failed quote, a clip that did not say what its caption said): the reference, what it said before, what it says now. The researcher accepts or reverts each one. Facts are corrected there. Only a matter of judgement becomes a card.
+3. **[DET]** The button **Copy decisions** puts every choice and comment on the clipboard as plain text. The researcher pastes it into the conversation, and the Guide applies it, logs it in `5-debrief/verification-log.md` and in `_engine/decisions.md`, and moves the marks in `state.yaml`.
+4. **The second round brings only what is new.** An item already decided does not come back. The next page holds the cards that changed because of the decisions, and the corrections made since.

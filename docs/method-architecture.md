@@ -87,6 +87,19 @@ Agents are selectable perspectives with clear contracts. Each agent defines:
 
 **The Guide proposes, the user decides.** For each council, the Guide suggests 3-5 agents with a short justification each. The user can confirm, add or remove agents before the council is convened. `sme-owner` is proposed when small business reality affects adoption, budget, operations or decision-making. `philosopher` is proposed when the council needs to question assumptions, sharpen definitions or surface ethical risks. `cab-driver` is proposed when the council needs lateral thinking, plain language, analogies or a non-expert perspective.
 
+**Two modes.** A council either generates (lateral voices produce readings and never review) or reviews (experts of the trade judge a piece and never invent). Review mode hands every reviewer the closed decisions of `_engine/decisions.md`: a reviewer may flag a decision's cost, never reopen it. The reviewer roles live inside `agents/council.md`, not as agent files.
+
+## Model Checkers
+
+Every check done by a model, in any phase, follows two rules. The full text lives in `workflows/user-discovery/steps/5a-debrief.md`, "Every model checker".
+
+- **Seeded.** The checker first runs on a copy with planted errors. If it misses one, its verdict counts for nothing.
+- **The right tier.** Inventory and binary questions go to a small fast model. Questions of sense (does the quote support the claim, is a "why" exaggerated, does a clip say what its caption says) go to a mid or strongest model. Synthesis is one author, the strongest model.
+
+## Sub-stages And Owners
+
+A step that runs in sub-stages (today the debrief, 5a.0 to 5a.4) keeps one mark per sub-stage under `substeps:` in `state.yaml`. Nothing in a sub-stage starts until the one before it is `done` or `skipped`. A piece worked by two threads has one owner of its structure, and the structure closes before anyone fills it. Two consecutive sub-stages may share one checkpoint (compressed mode) when it is declared in `_engine/decisions.md` first. The checkpoint can be a page: `templates/checkpoint.html`.
+
 ## Method Sources
 
 See `docs/source-distillate.md` for the generalized method principles used to shape templates and workflow steps.

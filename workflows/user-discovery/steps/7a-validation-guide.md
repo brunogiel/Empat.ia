@@ -45,6 +45,7 @@ the design: `7-validation/` is born with this step.
 3. **[DET]** Keep it inside 100 lines. This is a hard budget, like the master guide.
 4. **[LATENT]** More than one profile? One whole script per profile, never deltas.
 5. **[LATENT]** Set `validations.target` in `_engine/state.yaml`.
+6. **[LATENT] Blind review.** Before the script goes to the field, run a **blind panel** (`agents/council.md`, review mode): each reviewer reads the script alone, never sees another reviewer's opinion, and receives the closed decisions of `_engine/decisions.md`. Look for tasks that give the steps, tasks that name the feature, and bets with no task. If a model does any of this, it is a model checker: plant a few leading tasks in a copy first (see "Every model checker" in `5a-debrief.md`).
 
 ## Quality criteria
 
