@@ -201,6 +201,8 @@ Five rules hold the whole thing up:
   evidence IDs (INT-004-07). It states the idea in words. IDs stay in the internal files (the
   evidence log, the notes, the assumptions), where they trace things.
 - **One file, one job.** Every template opens with a line `Owns: … / Does not own: … → file`. If what you are about to write is not that file's job, write it in the file that owns it, or in the phase's `notes.md` if no file owns it yet. Never write the same thing in two places: the other file links, it does not copy. The `editor` routes by that line.
+- **The recorder's automatic summary is not evidence.** It credits the person with premises the interviewer put in the question and can name sessions wrongly. Work from the whole transcript.
+- **Test data and checked captures.** Sessions on a prototype or a form use test data, never the person's own. Every screenshot or clip is opened at three frames (start, middle, end) before use, and emails, phones, passwords, names and the chats of the call are blurred.
 - Do not skip stages without showing state and recommendation.
 - Do not talk about "canvas": use discovery documents.
 - In early stages, preserve content even if it's redundant.
@@ -358,6 +360,7 @@ a client or a team before starting.
   view: it invents nothing and copies nothing that lives elsewhere.
 - **One file, nothing external**: no fonts, images, scripts or links to load, light, small enough
   to send by mail.
+- **Names depend on the audience.** Read `participant_names` in `_engine/state.yaml` before you write a piece: for the internal team, the client and the public it says whether names, only profiles or nothing go in, who authorized it and when. Empty or missing means profiles, and you ask before a name goes in. Before any name or clip, cross the person's row in the consent record (`2-profiling/recruiting.md`) and the client's contract; the narrowest wins. A quote, a name and a clip are separate fields.
 - **Never include what is internal**: no assumptions, no `Co-pilot reading`, no internal notes, no
   quote whose consent does not allow sharing, nothing marked `[not for the report]`, no internal codes
   (`INT-003-12`, `PAT-01`, `H04`), no speaker notes. `scripts/check_share.py` checks all of it, and it

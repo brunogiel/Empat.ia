@@ -11,6 +11,9 @@ session at a time, without synthesising yet.
 - Session IDs are `VAL-00X`, never `INT-` or `OBS-`.
 - Record what they did, in order, before what they said.
 - Mark moments where they stopped, went back, or asked for help.
+- For each task, mark **how far they got and how**: `alone` (nobody said anything that pointed the way), `guided` (the moderator answered a question or gave a hint first), or `induced` (the idea or the word came from the moderator and ended attributed to the person). Mark it while you watch; it is hard to rebuild later.
+- **Test data, never the person's own.** In a session on a prototype or a form, the person types test data (a made-up name, a mailbox and a phone that belong to the project). Never ask them to enter their real data, and never share a screen that shows it. If a real one shows up anyway, the clip is cut or blurred before anyone else sees it.
+- **Check every capture before it is used.** Open each screenshot and each clip at no fewer than three frames (start, middle, end). Anything sensitive in any of them is blurred: emails, phone numbers, passwords, names, chats and notifications of the call itself. A clip with something sensitive that cannot be blurred is not used.
 - Don't cross sessions until each one is processed.
 
 ## First, the file of this step

@@ -14,6 +14,8 @@ Pending.
 |---|---|---|---:|---|
 | Pending | Pending | Pending | 0 | high/medium/low |
 
+A **focus** of a profile (for example, "people who do not know the brand") is a criterion like any other: put it in "Must meet", ask it when you screen, and ask it again at the start of the session. If the people who came did not meet it, the report says so.
+
 ## Channels
 
 | Channel | Profile it reaches | Pros | Bias risks | Owner |
@@ -79,6 +81,16 @@ Hi [Name], I'm researching how [profile/industry] solves [topic]. I saw your exp
 
 It isn't a sales pitch. I'm looking to learn from real cases in a [45-60 min] interview. Would you be interested in taking part?
 ```
+
+## Consent record
+
+One row per person, filled when the consent is signed and before the first session. The signed file is personal data: it lives in `4-field/_raw/` (or `7-validation/_raw/`), never in the report or in `share/`. The four permissions are separate: a person who agrees to be recorded has not agreed to be named, quoted or shown in a clip.
+
+| Person (alias) | Signed file | Record | Quote | Name | Clip | Restrictions | Date |
+|---|---|---|---|---|---|---|---|
+| Pending | `_raw/<base>-consent` | yes/no | yes/no | yes/no | yes/no | Pending | Pending |
+
+Before a name or a clip is used in any piece, cross three things: this row, who the audience of the piece is (`participant_names` in `_engine/state.yaml`), and what the contract with the client says about recordings and names. The narrowest one wins.
 
 ## Recruitment tracker
 

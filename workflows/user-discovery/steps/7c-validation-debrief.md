@@ -10,6 +10,9 @@ phase 7; it does not reopen the field debrief.
 
 - Every finding rests on evidence `VAL-00X-NN`.
 - Report what people did. What they said they would do is a weaker signal: label it.
+- Every "what they did" carries one of three marks: **alone** (nobody pointed the way), **guided** (the moderator gave a hint or an answer first) or **induced** (the idea came from the moderator and ended attributed to the person). A task that someone finished only after a hint did not work alone.
+- **The headline separates two things: where something happened and how it was reached.** "Five of seven reached the form" says where; "two did it alone, three guided" says how. Never put the first without the second in a title or a slide.
+- An `induced` row never supports "this worked". It is a lead for the next round.
 - Count: how many of how many, not "some". With 2 people or fewer, say what each did; do not mark it as having worked.
 - Compare with the bets of the ideation: held, partly, did not.
 - A task nobody got stuck on is a finding too.
@@ -41,7 +44,7 @@ created before its step starts.
 
 1. Review `7-validation/0-index.md`: what is ready, what is missing.
 2. Review the `VAL-` rows of `_engine/evidence.md`.
-3. Group by task.
+3. Group by task, and inside each task by how it was reached (alone, guided, induced).
 4. Write what they understood, where they got stuck, and what to change.
 5. Check each bet of the ideation against the evidence.
 6. List what you still do not know, such as a profile that was not tested.
@@ -63,6 +66,9 @@ created before its step starts.
 
 ## Quality criteria
 
+- Every request in "What the client asked for" (`brief.md`) is answered here or moved to the next round with one line.
+- Every count says how many reached it alone, guided and induced.
+- Every capture or clip used was checked at three frames and shows no sensitive data (see 7b).
 - Each change points at the finding that asks for it, and says how big it is.
 - Each finding has a count and an evidence ID.
 - Contradictions stay visible.

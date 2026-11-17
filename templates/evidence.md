@@ -38,6 +38,18 @@ in the **Use in synthesis** column of its row. Nothing else changes in the row.
   sheets, a JSON list, a report, `findings.md`, `principles.md` (`--scan`).
 - The clean evidence you hand to analysts is the ledger **without** the vetoed rows.
 
+## Who speaks, and how it came out
+
+Two optional columns, `Voice` and `Induced`, sit at the end of the ledger. Leave them empty and a row reads as `person` and `none`; a project that started without them keeps working.
+
+- **Voice.** `person`: the speaker answers as a user, from what happened to them. `trade`: the speaker answers from their craft, for example someone who works in the sector under study explaining how it should be done. A `trade` quote is expertise, not a user's experience: it can inform a hunch about the sector, and it does not support "people like this do or feel X".
+- **Induced.** How much of the quote the interviewer put there:
+  - `premise`: the answer takes for granted something the question asserted.
+  - `hypothetical`: the answer is to "what would you do if...", not to something that happened.
+  - `moderator`: the idea came from the moderator, in the call or in a session, and ended attributed to the person.
+- A quote with a value in `Induced` is never the only support of a finding. Mark the row, and say in the finding that the idea was induced. If the check of context shows that the quote says nothing the person did not get from the question, write `vetoed: <reason>` in **Use in synthesis** instead.
+- The marks come from the transcript, with the ±6 lines around the quote. They are a reading: label them as such.
+
 ## Internal, not for the report
 
 Some rows and notes are for the team only: a recruiter's remark, a hunch, a name that identifies someone. Mark them where they live. Add the tag `[not for the report]` to the line, or to any cell of a table row; for several lines, wrap them between `<!-- not for the report -->` and `<!-- end not for the report -->`.
@@ -60,9 +72,9 @@ Some rows and notes are for the team only: a recruiter's remark, a hunch, a name
 
 ## Ledger
 
-| Evidence ID | Interview | Profile | Type | Evidence | Location | Tags | Preliminary reading | Confidence | Use in synthesis |
-|---|---|---|---|---|---|---|---|---|---|
-| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review/vetoed: reason |
+| Evidence ID | Interview | Profile | Type | Evidence | Location | Tags | Preliminary reading | Confidence | Use in synthesis | Voice | Induced |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review/vetoed: reason | person/trade | none/premise/hypothetical/moderator |
 
 ## Contradictions to preserve
 

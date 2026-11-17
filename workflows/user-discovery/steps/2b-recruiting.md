@@ -10,6 +10,8 @@ Prepare messages and a scheduling plan.
 - Better if they aren't just friends.
 - They shouldn't know the solution if that biases them.
 - Possible channels: WhatsApp, email, LinkedIn, indirect acquaintances.
+- **A focus per profile is filtered here.** If the client asked for a focus (for example, "people who do not know the brand"), it goes in the profile's "Must meet" column, in the screening question, and again in the first minutes of the session. If the sample that came did not meet it, the report says so; it is not hidden by a good count.
+- **Consent lives in the project, per person.** Get it signed before the first session and record it in the "Consent record" of `recruiting.md`: where the file is, and what it allows (record, quote, name, clip) as four separate permissions. A missing permission means no. Before any name or clip leaves, `4a` and `8a` cross the record with the audience and with the client's contract.
 
 ## First, the file of this step
 
@@ -40,6 +42,8 @@ created at install except phase 1's brief.
 - Criteria per profile.
 - Bias risks by channel.
 - Status of each contact.
+- A consent row per person, with the four permissions.
+- The focus of each profile, in the criteria and in the screening question.
 
 ## Using the template
 
@@ -48,6 +52,7 @@ Fill out:
 - Criteria per profile.
 - Channels with bias risks.
 - Messages per channel.
+- Consent record.
 - Recruitment tracker.
 
 ## Gate

@@ -332,6 +332,18 @@ class Vetoed(Fixture):
         self.assertEqual(v.check("INT-001", "Honestly, my sister always knows a cheaper way, "
                                             "so I text her first. And more")[0], "VETOED")
 
+    def test_voice_and_induced_columns_after_the_use_column_change_nothing(self):
+        path = self.ledger()
+        text = path.read_text(encoding="utf-8").replace(
+            "| Use in synthesis |", "| Use in synthesis | Voice | Induced |").replace(
+            "|---|---|---|---|---|---|---|---|---|---|", "|---|---|---|---|---|---|---|---|---|---|---|---|").replace(
+            "| high | yes |", "| high | yes | person | none |").replace(
+            "| low | vetoed: induced by the question |", "| low | vetoed: induced by the question | trade | premise |")
+        path.write_text(text, encoding="utf-8")
+        rows = verify_quotes.read_ledger(path)
+        self.assertEqual([r["vetoed"] for r in rows], [False, True])
+        self.assertEqual(rows[1]["reason"], "induced by the question")
+
     def test_the_ledger_itself_does_not_fail_on_its_own_vetoed_row(self):
         self.ledger()
         result = self.run_cli("--evidence")

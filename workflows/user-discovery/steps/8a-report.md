@@ -18,6 +18,10 @@ none of it. Every plan closes with it, whatever pieces it used.
   A-023, evidence IDs such as INT-004-07): it states the idea in words. IDs stay in the internal
   files (evidence log, notes), where they trace each claim.
 
+- **Names depend on the audience.** `participant_names` in `_engine/state.yaml` says, for each audience (internal team, client, public), whether the piece shows names, only profiles or nothing, who authorized it and when. Read it before writing any piece. If an audience is empty or the block is missing, show profiles and ask before a name goes in. A quote, a name and a clip live in separate fields of the page, so each is checked on its own.
+- **Consent and contract come before names and clips.** A name or a clip goes in only if the person's row in the "Consent record" (`2-profiling/recruiting.md`) allows that exact use, the audience allows it, and the contract with the client allows it. The narrowest of the three wins.
+- **Captures and clips are checked before they are used.** Each one is opened at no fewer than three frames (start, middle, end). Emails, phone numbers, passwords, names and the chats of the call are blurred. Prototype sessions used test data; if a real person's data shows in a frame, the capture is cut or not used.
+- **Answer the client's requests, and report the sample as it was.** Every row of "What the client asked for" in `brief.md` is answered in the page or moved to the next round with one line. If a profile had a focus (for example, people who do not know the brand) and the sample did not meet it, the page says so.
 - **Nothing internal, no speaker notes.** Whatever a canonical file marks `[not for the report]` stays out of the page. A deck built from the report leaves without speaker notes unless the researcher asks for them.
 - **Written for the client in design-thinking language.** "What we saw suggests", "in these cases", "to test". Never conclusions stated as certain. Design hints go as "could", not "must". Use profiles, not names or codes, in anything that can be forwarded.
 - **Before it is shared or sent on, it passes the two scripts (quotes and counts) and two checks:** cuali-to-cuanti (generalisations such as "most", rankings shown as measured, counts that do not match the sheets, the researcher's opinion presented as a finding) and the devil's advocate (the strongest case against the conclusion, from quotes only). Log both in `5-debrief/verification-log.md`. Write the text in a source `.md` and build the HTML from it; run the quote check on the final HTML.
@@ -56,7 +60,8 @@ already there.
 
 1. Read the plan in the brief: which pieces ran, which were skipped, which were external.
 2. Fill the page from the pieces that ran. Link the external ones.
-3. Check every quote against its consent.
+3. Check every quote, name and clip against the consent record, the audience in `participant_names` and the client's contract.
+   Check every row of "What the client asked for" in `brief.md`: answered, or moved to the next round.
 4. Check the page fits its budget in `_engine/budgets.yaml`.
 5. **[DET]** Run the scripts on the source `.md` and on the final HTML, before any model reads it:
    `python3 <method-root>/scripts/verify_quotes.py --file <page.html>` (and `--scan` on the `.md`)
@@ -77,7 +82,9 @@ already there.
 
 - Someone who read nothing else can say what was found and what happens next.
 - Nothing in it is missing from the sources it summarises.
-- No quote lacks consent.
+- No quote lacks consent, and no name or clip appears that the consent record, the audience or the contract does not allow.
+- Every request of the client is answered or moved with a line, and a focus the sample did not meet is named.
+- Every capture and clip was checked at three frames and shows nothing sensitive.
 - No internal ID appears anywhere in the page, and `check_share.py` passes on the folder.
 - No claim is stated more strongly than the evidence ("suggests", not "proves"); the two checks ran, caught their seeded errors and are logged.
 - The review panel ran, and each of its findings is applied, asked of the researcher, or discarded with a reason.

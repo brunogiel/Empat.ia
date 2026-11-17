@@ -206,6 +206,8 @@ Each sub-stage closes with the checkpoint above. Suggested action:
 - `Question` if conclusions are being invented or the framing is off.
 - `Council` if the synthesis needs to be put under tension.
 
+Each time a sub-stage closes that answers something the client asked for (5a.3 and 5a.4 at least), check "What the client asked for" in `brief.md`: each row is answered, or moved to the next round with one line.
+
 Before the researcher sees the checker's table, the Guide may build it as a **checkpoint page**: `templates/checkpoint.html`, one file the researcher opens and answers with buttons (see "The checkpoint page" below).
 
 Before closing a sub-stage, update `_engine/state.yaml`: **both marks** (`current_status` and `steps.debrief.status`), the sub-stage mark under `substeps:`, and `next`. Then run `python3 <method-root>/scripts/check_state.py`; it fails if two marks disagree, or if `next` still asks for something that is done. Before the debrief leaves the team in any form, the cuali-to-cuanti and devil's-advocate checks must have run and be logged.

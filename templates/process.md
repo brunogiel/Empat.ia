@@ -23,6 +23,9 @@ This document keeps you from improvising interviews. Use it before, during and a
 - [ ] Ask permission for photos if applicable.
 - [ ] Avoid photos of faces or sensitive information if there is no explicit permission.
 - [ ] Clarify whether real names or anonymous names will be used.
+- [ ] Record what the person allows (record, quote, name, clip) in the consent record of `2-profiling/recruiting.md`.
+- [ ] In a session on a prototype or a form, the person types test data, never their own. No real mailbox, phone or password on a shared screen.
+- [ ] Before a screenshot or clip is used, open it at three frames (start, middle, end) and blur emails, phones, passwords, names and the chats of the call.
 
 ### Context
 

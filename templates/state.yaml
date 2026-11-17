@@ -225,6 +225,21 @@ validations:
   done: 0
   unprocessed: 0
 
+# Optional. What each audience may see of the people who took part.
+#   shows:          names | profile | nothing    ('profile' = "a product manager, 5 years", no name)
+#   authorized_by:  who decided it (the researcher, the client, the participant's consent)
+#   date:           when
+# The steps that build a piece (share/, 8-report/, a deck, a clip) read this block before
+# they write a name, and the checkers read it before they pass one. A name, a quote and a clip
+# are three separate things: each lives in its own field and is checked against its own
+# permission in the consent record (2-profiling/recruiting.md). If the block is missing
+# (a project from before it existed), or an audience is empty, treat it as 'profile' and
+# ask before a name goes anywhere.
+participant_names:
+  internal_team: {shows: "", authorized_by: "", date: ""}
+  client: {shows: "", authorized_by: "", date: ""}
+  public: {shows: nothing, authorized_by: "", date: ""}
+
 # Optional. A step that runs in sub-stages keeps one mark per sub-stage here, so
 # "which part is done" is never read out of the step's single status. Today only the
 # debrief has them (5a.0 to 5a.4). Statuses: not_started | in_progress | done | skipped

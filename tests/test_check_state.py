@@ -74,6 +74,15 @@ class TestControl(Base):
         text = set_sub(text, "5a.2", "in_progress")
         self.assertEqual(self.errors(text), ([], []))
 
+    def test_the_participant_names_block_reads_and_its_absence_passes(self):
+        state = check_state.parse_yaml(TEMPLATE)
+        self.assertEqual(state["participant_names"]["public"]["shows"], "nothing")
+        self.assertEqual(set(state["participant_names"]), {"internal_team", "client", "public"})
+        old = TEMPLATE[:TEMPLATE.index("# Optional. What each audience may see")]
+        old += TEMPLATE[TEMPLATE.index("# Optional. A step that runs in sub-stages"):]
+        self.assertNotIn("participant_names:", old)
+        self.assertEqual(self.errors(old), ([], []))
+
     def test_the_reader_handles_the_template(self):
         state = check_state.parse_yaml(TEMPLATE)
         self.assertEqual(state["steps"]["debrief"]["phase"], 5)

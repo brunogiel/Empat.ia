@@ -44,6 +44,10 @@ created at install except phase 1's brief.
 ## Rules
 
 - Preserve verbatim quotes.
+- **The recorder's automatic summary is not evidence.** It credits the person with premises the interviewer put in the question and can name a session wrongly. Work from the whole transcript; never extract evidence or quotes from the summary.
+- **Consent comes first.** Before an interview's material is used, find that person's row in the consent record (`2-profiling/recruiting.md`, "Consent record"). Record, quote, name and clip are four separate permissions. If the row is missing, the material stays in `_raw/` and nothing is extracted from it for sharing.
+- **Mark who speaks and how a quote came out.** When a row goes into `_engine/evidence.md`, fill `Voice` (`person` / `trade`) and `Induced` (`premise` / `hypothetical` / `moderator`) if the transcript shows it.
+- **Ask the focus of the profile.** If the profile has a focus (for example, "people who do not know the brand"), it was filtered when recruiting and it is asked again in the session. Write the answer in the note. If the people who came did not meet it, the gap goes to `0-index.md` and the report says so.
 - Don't mix users without identifying the source.
 - Mark interviewer observations separately from what the user said.
 - Live notes (taken during the call by whoever led or sat in) go **at the top of the transcript**, in the same file in `4-field/_raw/`, under a `## Live notes` heading. Never in the master guide, never in a separate document: the note stays attached to the conversation that produced it.
@@ -95,7 +99,7 @@ Suggested action:
 
 ## Checklist before synthesizing
 
-- Each interview has metadata.
+- Each interview has metadata and a row in the consent record.
 - There are verbatim quotes.
 - Observations are separated from interpretations.
 - `index.md` lists files, consent, and gaps.
