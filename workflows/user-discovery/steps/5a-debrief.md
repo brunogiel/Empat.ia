@@ -61,9 +61,14 @@ Every gate runs the same checker. Deterministic first; a model only where there 
 3. **[LATENT] Does the quote support the claim?** One checker per sheet or section, with a seeded control: plant a few known errors in a copy (a swapped quote, an exaggerated "why"). If the checker misses them, the gate is worthless. Use a mid model; a small one misses exaggerations buried in long text. Or ask a narrower question ("does the quote say 'only', 'always' or 'never'?").
 4. **[LATENT] Qualitative to quantitative, on everything that leaves.** Not just quotes: catch generalisations ("most"), rankings presented as measured, counts that do not match the sheets, assumptions nobody said, and the researcher's opinion presented as a finding.
 5. **[LATENT] Devil's advocate before sharing.** The strongest case against the conclusion, using quotes only. Verdict: nothing / nuance / rewrite. The orchestrator discards the advocate's own exaggerations.
-6. **[DET] Write it down** in `5-debrief/verification-log.md`: what each checker looked at, what it caught, what changed, what was kept and why.
+6. **[DET] Check what already went out.** `python3 <method-root>/scripts/check_share.py` runs the quote check (cut and vetoed quotes), the count check, the internal-marks brake and the codes brake on every file in `share/` (and `8-report/`) in one command. It exits with an error if any of them fails. Run it at **every gate**, not only before a new send: a fix made in `findings.md` does not reach a page that already left until this run finds it there. The brakes it adds:
+   - **Internal marks.** A line or table row tagged `[not for the report]`, or a block between `<!-- not for the report -->` and `<!-- end not for the report -->`, in any canonical file (`evidence.md`, `findings.md`, the synthesis log) must not appear in a shared piece. The tag itself must not either.
+   - **Codes.** A shared piece holds no evidence ID (`INT-003-12`, `PAT-01`), no hypothesis code (`A-023`), no short code (`H04`) and no working label in capitals (`TODO`, `GATE 2`). Names that only look like a code go in `_engine/share-allow.txt`.
+   - **No speaker notes** in a slide file, unless you pass `--keep-notes`.
+7. **[DET] Write it down** in `5-debrief/verification-log.md`: what each checker looked at, what it caught, what changed, what was kept and why. Then update the table **What already went out**: one row per file that left (file, to whom, when, what it claims, state). The state is `current`, `outdated` or `corrected and resent`. **If a finding you corrected at this gate appears in a row, mark that row `outdated` in the same step and decide whether to resend.** `check_share.py` lists the files that are missing from the table (NOT_LOGGED) and the ones still `outdated` (OUTDATED).
+8. **Apply the devil's advocate in the same step.** What the advocate corrects (a count, a claim, a quote) goes into the findings at this gate, with the log row, before the checkpoint. A correction left for later is a correction the next send will not carry.
 
-Not every project needs every step. A small project runs 1, 2 and 6; anything that leaves the team runs all.
+Not every project needs every step. A small project runs 1, 2 and 7; anything that leaves the team runs all, and step 6 runs at every gate once something has left.
 
 ## Fan-out per sub-stage
 
@@ -137,7 +142,7 @@ Before analysing, the researcher writes down, in `templates/analysis-guide.md`: 
 2. Formulate HMWs, one per principle where it earns one.
 3. List open questions and evidence gaps.
 4. Close the coverage matrix. Its gaps become **objectives and ideas for the validation round**: what we set out to find out, entry scenarios, possible A/B comparisons, and what to keep in mind with a small n (one difference at a time, alternate the order, watch what people do).
-5. Trace each principle to evidence IDs and run the checker (steps 1, 1b, 2, 4 and 6).
+5. Trace each principle to evidence IDs and run the checker (steps 1, 1b, 2, 4, 6 and 7).
 6. **[LATENT] Cold read.** Before the principles close, two or three readers who have seen nothing else read each principle **alone**: title, rule and HMW, nothing around it. Pick people who are not in the project: someone from the client side, a designer, an editor who cares about clarity. Each says in their own words what the rule asks the team to do. A principle that needs the rest of the debrief to be understood, that two readers read differently, or that says what another principle already says, is rewritten or merged. Words only the team uses ("the scale", "the layer") are the usual cause.
 7. **[LATENT] Seeded chain validation.** One checker walks the whole chain, facts to patterns to insights to principles. Each principle follows from its source insight, each insight from patterns, and the same thing carries the same number at all three levels. Control: plant known errors in a copy first (a principle with no source insight, an insight whose count differs from its pattern, a rule that contradicts the insight it cites). If the checker misses one, the check is worth nothing and nothing it passed counts.
 

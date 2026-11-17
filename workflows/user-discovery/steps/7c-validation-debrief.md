@@ -52,12 +52,18 @@ created before its step starts.
    ("nobody", "everyone", "most") with the transcript lines that could break it, every "X of N"
    to check by hand against the evidence rows, and refuses a success tick on 2 people or fewer.
    Two people can show where someone got stuck. They cannot show that something worked.
+8. **[DET]** Run `python3 <method-root>/scripts/check_share.py` on everything that already went out
+   (`share/`, `8-report/`): it repeats the quote and count checks and adds the internal-marks and codes
+   brakes. If a finding you changed here sits in a piece that already left, mark that row `outdated`
+   in the **What already went out** table of `5-debrief/verification-log.md` and decide whether to
+   resend. What the devil's advocate corrects goes into the findings in this same step.
 
 ## Quality criteria
 
 - Each change points at the finding that asks for it, and says how big it is.
 - Each finding has a count and an evidence ID.
 - Contradictions stay visible.
+- Nothing that already left still carries a finding this step changed, or it is marked `outdated` in the log.
 
 ## Council
 

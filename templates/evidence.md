@@ -38,6 +38,14 @@ in the **Use in synthesis** column of its row. Nothing else changes in the row.
   sheets, a JSON list, a report, `findings.md`, `principles.md` (`--scan`).
 - The clean evidence you hand to analysts is the ledger **without** the vetoed rows.
 
+## Internal, not for the report
+
+Some rows and notes are for the team only: a recruiter's remark, a hunch, a name that identifies someone. Mark them where they live. Add the tag `[not for the report]` to the line, or to any cell of a table row; for several lines, wrap them between `<!-- not for the report -->` and `<!-- end not for the report -->`.
+
+- `scripts/check_share.py` fails when text with that mark shows up in a shared piece (`share/`, `8-report/`), and when the tag itself does.
+- The mark is the only place that says it. Nothing else has to be updated, and nothing marked is deleted.
+- A marked row still counts as evidence for the synthesis. The mark controls what leaves, not what you may think.
+
 ## Types of evidence
 
 - `quote`: the interviewee's exact words.

@@ -18,6 +18,7 @@ none of it. Every plan closes with it, whatever pieces it used.
   A-023, evidence IDs such as INT-004-07): it states the idea in words. IDs stay in the internal
   files (evidence log, notes), where they trace each claim.
 
+- **Nothing internal, no speaker notes.** Whatever a canonical file marks `[not for the report]` stays out of the page. A deck built from the report leaves without speaker notes unless the researcher asks for them.
 - **Written for the client in design-thinking language.** "What we saw suggests", "in these cases", "to test". Never conclusions stated as certain. Design hints go as "could", not "must". Use profiles, not names or codes, in anything that can be forwarded.
 - **Before it is shared or sent on, it passes the two scripts (quotes and counts) and two checks:** cuali-to-cuanti (generalisations such as "most", rankings shown as measured, counts that do not match the sheets, the researcher's opinion presented as a finding) and the devil's advocate (the strongest case against the conclusion, from quotes only). Log both in `5-debrief/verification-log.md`. Write the text in a source `.md` and build the HTML from it; run the quote check on the final HTML.
 
@@ -62,6 +63,12 @@ already there.
    for quotes, cut quotes and vetoed ones, and `python3 <method-root>/scripts/check_counts.py <page>`
    for every "X of N", every universal and every success tick on 2 people or fewer.
    Nothing leaves with an open MISMATCH, FAIL or VETOED.
+   Then run `python3 <method-root>/scripts/check_share.py` on the whole folder (`share/` and
+   `8-report/`; use `--source` for a Markdown source that holds codes on purpose). It runs the same two
+   checks on **everything that already went out**, and adds two brakes: anything marked
+   `[not for the report]` in a canonical file, and any internal code or working label in capitals.
+   It fails if one is found. A correction made for the report that touches an earlier piece marks that
+   piece `outdated` in the **What already went out** table of `5-debrief/verification-log.md`.
 6. Run the cuali-to-cuanti and devil's-advocate checks (see Method notes) as a gate before sharing.
 7. Mark the `report` piece `done` in the plan, and run `python3 <method-root>/scripts/check_state.py`.
 
@@ -70,7 +77,7 @@ already there.
 - Someone who read nothing else can say what was found and what happens next.
 - Nothing in it is missing from the sources it summarises.
 - No quote lacks consent.
-- No internal ID appears anywhere in the page.
+- No internal ID appears anywhere in the page, and `check_share.py` passes on the folder.
 - No claim is stated more strongly than the evidence ("suggests", not "proves"); the two checks ran and are logged.
 
 ## Gate

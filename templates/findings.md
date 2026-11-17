@@ -12,6 +12,8 @@ hand to someone else in `8-report/summary.md`.
 
 Central rule: every claim points to an evidence ID from `_engine/evidence.md`.
 
+Anything here that is for the team only carries the tag `[not for the report]` (see `_engine/evidence.md`). `scripts/check_share.py` stops it from reaching a shared piece.
+
 ## Snapshot
 
 - Interviews processed so far: Pending. *(from `4-field/0-index.md`)*

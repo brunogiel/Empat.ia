@@ -1,6 +1,6 @@
 # Verification log
 
-Owns: what each verifier checked, at which gate, what it caught, what changed and what stayed and why. Does not own: the findings → `findings.md`.
+Owns: what each verifier checked, at which gate, what it caught, what changed and what stayed and why, and what already went out and in which state. Does not own: the findings → `findings.md`.
 
 The record that lets you defend what goes out. The literal check says a quote exists; the context check says whether it supports what is claimed. Only the second one finds reading errors.
 
@@ -32,6 +32,14 @@ Looks for generalizations ("most"), rankings presented as measured, counts that 
 ### Devil's advocate
 
 The strongest case against the conclusion, using quotes only. Verdict: nothing / nuance / rewrite.
+
+## What already went out
+
+One row for each file that left the team, in any form. At every gate, `scripts/check_share.py` runs the checks on all of them. When a finding you corrected sits in a row, mark it `outdated` in the same step and decide whether to resend; after the new version goes, mark it `corrected and resent`.
+
+| File | To whom | When | What it claims | State |
+|---|---|---|---|---|
+| Pending | Pending | Pending | Pending | current / outdated / corrected and resent |
 
 ## What changed and what stayed
 

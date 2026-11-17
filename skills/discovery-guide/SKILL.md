@@ -355,9 +355,12 @@ a client or a team before starting.
 - **One file, nothing external**: no fonts, images, scripts or links to load, light, small enough
   to send by mail.
 - **Never include what is internal**: no assumptions, no `Co-pilot reading`, no internal notes, no
-  quote whose consent does not allow sharing.
+  quote whose consent does not allow sharing, nothing marked `[not for the report]`, no internal codes
+  (`INT-003-12`, `PAT-01`, `H04`), no speaker notes. `scripts/check_share.py` checks all of it, and it
+  runs at every gate on everything already in `share/`, not only on the next piece.
 - **Before sharing anything that leaves the team**, the qualitative-to-quantitative check and the devil's advocate must have run (see "The standard checker"). Write for the client in design-thinking language: "what we saw suggests", "in these cases", "to test".
 - `share/` is output. It has no line budget and the `editor` does not route it.
+- Every file that leaves gets a row in the table **What already went out** of `5-debrief/verification-log.md`. When a later gate corrects a finding that the file carries, mark the row `outdated` and decide whether to resend.
 
 ## Interview feedback: three moments
 

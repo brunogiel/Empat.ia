@@ -30,3 +30,5 @@ jobs:
         run: python3 tests/test_check_counts.py
       - name: The state checker catches a file that contradicts itself
         run: python3 tests/test_check_state.py
+      - name: The share checker catches what already went out
+        run: python3 tests/test_check_share.py
