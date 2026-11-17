@@ -3,9 +3,8 @@
 
 An exchange is one real question from the interviewer plus everything the
 person says until the next real question. A turn is the wrong unit: the
-recorder cuts it, and every "great" or "ok" from the interviewer split an
-answer in two. On the first real round that moved the "how much they tell"
-scale by about 45 %.
+recorder cuts it, and every "great" or "ok" from the interviewer splits an
+answer in two, which moves the "how much they tell" scale a long way.
 
 A question is real when it has a question mark or more than three words. The
 short acknowledgements ("ok", "sure", "great") do not cut the exchange: they
@@ -24,7 +23,7 @@ Output
 
 Usage
   python3 segment_interview.py discovery/4-field/_raw/INT-004-ana-transcript.md \\
-      --interviewer "Bruno" --out discovery/_engine/feedback/INT-004-ana.jsonl
+      --interviewer "Interviewer" --out discovery/_engine/feedback/INT-004-ana.jsonl
   python3 segment_interview.py T.md --interviewer Microphone --lang es \\
       --skip-until-first-interviewee --out INT-004-ana.jsonl
 """

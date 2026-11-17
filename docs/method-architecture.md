@@ -42,10 +42,9 @@ by moving the excess to `_engine/sources/`, never by deleting it.
 
 Documents:
 
-- `README.md`: the map of the folder and what to open now.
+- `0-README.md`: the map of the folder and what to open now.
 - `1-desk-research/brief.md`: goal, maturity level, context, scope and the design challenge.
-- `3-guide/guide.md`: one page, what the interviewer holds during the interview.
-- `3-guide/guide.md`: per-profile variants are a whole copy of the guide each, never deltas.
+- `3-guide/guide.md`: the script, questions only. One page, what the interviewer holds during the interview; per-profile variants are a whole copy of the guide each, never deltas.
 - `5-debrief/findings.md`: what is emerging, distilled, pointing at evidence IDs.
 - `_engine/budgets.yaml`: line budget per file the user opens. `3-guide/guide.md` is a hard cap.
 - `_engine/state.yaml`: current step, status, available agents and recommended action.
@@ -54,7 +53,6 @@ Documents:
 - `1-desk-research/knowledge.md`: knowns, unknowns and learning goals.
 - `1-desk-research/market.md`: market research with sources.
 - `2-profiling/profiles.md`: roles, participant profiles and sample.
-- `3-guide/guide.md`: the script, questions only.
 - `3-guide/expert-consult.md`: optional, the short guide for consulting experts (witnesses, not users); what comes out is a hypothesis for the field.
 - `_engine/meeting-coverage.md`: step 1f, what each client meeting said and which file absorbs it, approved before anything is edited.
 - `2-profiling/recruiting.md`: outreach, channels and recruiting tracker.
@@ -63,8 +61,7 @@ Documents:
 - `5-debrief/principles.md`: the deliverable. Design principles traceable to evidence.
 - `5-debrief/presentation.md`: step 5b, on demand. The types of slide, the sample and its gate, and the client's questions against the deck.
 - `5-debrief/meeting-claims.md`: optional. What the researcher said in a client meeting, set against the evidence.
-- `4-field/0-index.md`: intake and processing flow for field material.
-- `4-field/0-index.md`: interview tracker, files, consent and gaps.
+- `4-field/0-index.md`: intake and processing flow for field material, and the interview tracker: files, consent and gaps.
 - `_engine/evidence.md`: atomic evidence by interview before synthesis.
 - `templates/interview-note.md`: structured note template for each interview.
 

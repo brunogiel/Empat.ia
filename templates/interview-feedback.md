@@ -15,7 +15,7 @@ the letter. Changed wording, a double question or a detour are not faults.
 | How much they monologue (% of their words in answers of 200+) | Pending | — |
 | How much they get to the point (of 10 answers, how many start by answering) | Pending | — |
 
-Judged with jev: Pending (yes / no). Bands provisional, five interviews; recalibrate with 8 or more.
+Judged with jev: Pending (yes / no). Bands provisional; recalibrate with 8 or more interviews.
 Reading in one sentence: Pending.
 
 ## What came out of each topic

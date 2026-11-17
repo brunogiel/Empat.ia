@@ -27,23 +27,22 @@ Five mechanical steps run locally, one judgement step reads the frames.
 The reading step uses `templates/deictic-prompt.md` and a glossary of the product's components
 (`templates/deictic-glossary.md`, one per product). The model answers with a JSON file per batch.
 
-## What was compared
+## Why a strip of frames
 
-Six ways of getting the referent were tried on one session, on 20 phrases whose answer a person had
-checked in the video. Exact answers out of 20, with wrong answers in brackets:
+The strip was chosen against five other ways of getting the referent, on phrases whose answer a person
+had checked in the video:
 
-| Way | Exact (wrong) | Note |
-|---|---|---|
-| Transcript only | 12 (2) | the 2 wrong answers did not warn |
-| Nearest screenshot of the recorder | 13 (2) | the nearest one was over 45 s away in 7 of 20 cases |
-| One frame | 17 (0) | misses scrolls and mouse movement |
-| **Strip of 5 frames** | **18 to 19 (0)** | **chosen**; small model and larger model within one phrase |
-| 13 s clips watched by a person | not scored | 13 to 25 minutes of a person per session |
-| Scene-change timeline | 13 (4) | 3 of the 4 wrong answers came with high confidence |
+| Way | How it fails |
+|---|---|
+| Transcript only | it guesses, and a wrong guess comes without a warning |
+| Nearest screenshot of the recorder | the nearest one can be far from the phrase |
+| One frame | misses scrolls and mouse movement |
+| **Strip of 5 frames** | **chosen**: the most exact answers and no wrong ones; a small model and a larger one agree |
+| Short clips watched by a person | not scored; it costs a person many minutes per session |
+| Scene-change timeline | some wrong answers come with high confidence |
 
-Cost per session was between a few cents and about 40 cents at assumed API prices (not verified),
-and the person's time between 3 and 7 minutes for the strip. Treat these as orders of magnitude, from
-one session and one product.
+The strip costs cents per session in API calls and a few minutes of a person's time. Measure both on
+your own first session: the comparison was made on one product.
 
 ## What it cannot promise
 

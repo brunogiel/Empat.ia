@@ -4,8 +4,8 @@ What to look at after an interview, and how to say it. The Guide uses this; it
 is not copied into the user's folder. One feedback file per interview goes to
 `4-field/feedback/`, explained by its own `0-README.md`.
 
-Every criterion below comes from the method's own sources or from a real round
-of fieldwork, and says which. None of them was invented for this file.
+Every criterion below comes from the method's own sources or from fieldwork. None
+of them was invented for this file.
 
 ## The yardstick: did the information come out?
 
@@ -29,7 +29,7 @@ question plus everything the person says until the next one), never the recorder
 | How much they monologue | Share of all their words said in answers of 200 words or more | A count |
 | How much they get to the point | Of every 10 answers to a real question, how many start by answering it | jev, one call per exchange (optional) |
 
-Bands are provisional, set on five interviews of one project, and are constants at the top of
+Bands are provisional, set on a small first sample, and are constants at the top of
 `scripts/feedback_scales.py`: short < 30 · medium 30-45 · long > 45 words; short stretches < 30 % ·
 stretches out 30-45 % · monologues > 45 %; struggles < 7 · sometimes goes around 7-7.5 · gets to the
 point > 7.5 of 10. Recalibrate with 8 or more interviews. A recording that opens with chatter is cut
@@ -48,7 +48,7 @@ its context, and counted per topic of the guide; the topics come from the projec
 
 | Criterion | Why by hand |
 |---|---|
-| You asked for a concrete case, and it came out | A judge reading the interviewer's question counts greetings, instructions and cut-off questions as requests: on the first real round it was far off (7 of 19 by the judge, 11 of 13 by hand). Not ranked across interviews |
+| You asked for a concrete case, and it came out | A judge reading the interviewer's question counts greetings, instructions and cut-off questions as requests, so its count runs far from the hand count. Not ranked across interviews |
 | You asked for the reason or the signal, and it came out | Same. "How did you notice?" and "what would that be?" count; a literal "why" counts too |
 | An idea of yours for the person to confirm (a premise) | The judge proposes candidates and is right about half the time. A person reads each one. An accepted premise that a summary attributes to the person is ❌; a contradicted one, 🟡 |
 
@@ -110,8 +110,8 @@ was skipped?
   interviews.
 - Put a premise on the page that no person has confirmed by reading it.
 - Report the keyword counts of `count_interview.py` (probes, anchors, the literal "why", the
-  talk share on its own). They measured the form of the questions, not what came out: on the
-  first real round the interview that served least scored second. The script stays as an
+  talk share on its own). They measure the form of the questions, not what came out: an
+  interview that brought out little can rank near the top. The script stays as an
   internal diagnostic.
 - Deliver the markdown file as the feedback. The interviewer receives an HTML page
   (`--add interview-feedback-html --name <base>`); the markdown file is internal.
@@ -124,9 +124,9 @@ rubric does not evaluate the arc. Judging it with the wrong rule is worse than
 not judging it.
 
 **Topics are assigned by jev, exchange by exchange**, against the topics and
-intents of the project's guide. It reads meaning, not title words, but it has
-run on one project only. The first run on a new project is checked by hand.
+intents of the project's guide. It reads meaning, not title words. The first run
+on each new project is checked by hand.
 Without jev, the Guide assigns them by reading.
 
-**"Gets to the point" is calibrated on one project.** Before trusting it on a
-new one, the interviewer labels about 20 exchanges by hand and compares.
+**"Gets to the point" is not calibrated for your project.** Before trusting it on
+a new one, the interviewer labels about 20 exchanges by hand and compares.

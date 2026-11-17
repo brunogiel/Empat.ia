@@ -356,9 +356,14 @@ AGGREGATE_STEPS = {
 
 # 'start', 'design_challenge' and 'plan' all write into
 # 1-desk-research/brief.md, which is created at install, not via --add. There
-# is nothing to materialise. 'plan' is not an error: its section is already in
-# the installed brief, so asking for it exits 0 and says so.
-INSTALLED_AT_INIT_STEPS = {"start", "design_challenge", "plan"}
+# is nothing to materialise, and that is not an error: every key under steps:
+# in state.yaml is a valid --add, so asking for one of these exits 0 and says
+# which section of the installed brief to write.
+INSTALLED_AT_INIT_STEPS = {
+    "start": "the brief's opening sections",
+    "design_challenge": "the '## Design Challenge' section",
+    "plan": "the '## Plan' section",
+}
 PLAN_STEP = "plan"
 
 
@@ -368,17 +373,14 @@ def add_step(templates: Path, discovery: Path, step: str,
 
     'aggregate' is a third outcome, on top of copy_one's four: detail is then
     a list of (sub_step, outcome, detail) tuples, one per concrete step run.
-    'installed' is a fourth, for the step with nothing to create ('plan').
+    'installed' is a fourth, for the steps that write into the installed brief.
     """
-    if step == PLAN_STEP:
-        return "installed", ("the '## Plan' section already lives in the installed "
-                             "1-desk-research/brief.md; nothing was created. Write it there "
-                             "and in the 'plan:' block of _engine/state.yaml")
     if step in INSTALLED_AT_INIT_STEPS:
-        raise SystemExit(
-            f"'{step}' has no separate file to add: its output, "
-            "1-desk-research/brief.md, is created at install, not via --add. "
-            "Edit that file directly.")
+        detail = (f"{INSTALLED_AT_INIT_STEPS[step]} already lives in the installed "
+                  "1-desk-research/brief.md; nothing was created. Write it there")
+        if step == PLAN_STEP:
+            detail += " and in the 'plan:' block of _engine/state.yaml"
+        return "installed", detail
     if step in AGGREGATE_STEPS:
         concrete = AGGREGATE_STEPS[step]
         results = [(sub, *add_step(templates, discovery, sub, force, overwrite_modified))
@@ -400,8 +402,10 @@ def unknown_step_message(step: str) -> str:
     guess += difflib.get_close_matches(step, items, n=1)
     hint = f" Did you mean '{guess[0]}'?" if guess else ""
     return (f"Unknown step '{step}'.{hint}\n"
-            f"  Steps (one file each): {', '.join(steps)}.\n"
+            f"  One file each: {', '.join(steps)}.\n"
             f"  Aggregate steps: {aggregates}.\n"
+            f"  Steps that write into the installed brief (nothing to create): "
+            f"{', '.join(INSTALLED_AT_INIT_STEPS)}.\n"
             f"  Per-interview files, which also need --name (INT-004-ana-lopez): {', '.join(items)}.")
 
 

@@ -66,7 +66,7 @@ editor: on
 #
 # 'file' is what the assistant creates when the step starts: from the template of
 # the same name, written in `language`, pre-filled with what the project already
-# knows. Nothing is created at install except phase 1's brief.
+# knows. Of these files, only phase 1's brief exists from install.
 #
 # 'on_demand: true' means the file is born only if the project needs it. A project
 # that runs no observation never sees an observation file. Phases 6 and 7 are

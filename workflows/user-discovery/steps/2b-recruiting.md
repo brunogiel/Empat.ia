@@ -16,8 +16,8 @@ Prepare messages and a scheduling plan.
 
 ## First, the file of this step
 
-The file this step writes does not exist yet. That is the design: nothing is
-created at install except phase 1's brief.
+The file this step writes does not exist yet. That is the design: a step's file is
+born when the step starts, never at install.
 
 1. **[DET]** Create it:
    `python3 <method-root>/scripts/init_project.py --project-root . --add recruiting`
@@ -59,7 +59,8 @@ Fill out:
 
 ## Gate
 
-Suggested action:
+This step has no gate (`gate: false` in `state.yaml`): recruiting runs alongside the field.
+Suggested action when you close a round of outreach:
 
 - `Advance` if there are messages and channels per profile.
 - `Deepen` if access to users is missing.

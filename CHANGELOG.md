@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.4.1 - 2026-11-17
+
+The method's files now agree with each other and with what the installer does.
+
+- **`install.sh` installs `process-interview` next to `discovery-guide`**, and the method's agents
+  in `agents/`. Every `agents/`, `templates/`, `scripts/` and `references/` path a step names exists
+  after an install, and a test checks it.
+- **One name for the method root, `<method-root>`**, defined once in `SKILL.md` for an install and
+  for a clone of the repo.
+- **Every key under `steps:` in `state.yaml` is a valid `--add`.** `start` and `design_challenge`
+  answer like `plan`: nothing to create, and which section of the installed brief to write.
+  `SKILL.md` lists the names of the optional files apart from the steps.
+- **Each step says where its file comes from**, in line with the eleven-file install, and the steps
+  without a gate (`gate: false`) say so in their Gate section, checked by a test.
+- **Calibrations are written as rules a new project can apply**: check the first run by hand,
+  recalibrate the feedback bands on 8 or more interviews of your own, measure the cost of the
+  deictic resolver on your first session.
+- The examples in `count_interview.py` and `segment_interview.py` use a generic interviewer label.
+
 ## 3.4.0 - 2026-11-17
 
 Lessons from running the whole method, from the guide to the final report, on a real project.

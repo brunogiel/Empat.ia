@@ -39,10 +39,9 @@ budgets:
 
   # THE hard budget of the method. 100 lines is about two printed pages.
   #
-  # This is the file that grows across interviews, and growing is exactly how it
-  # broke before: the first external run produced a 257-line guide that had
-  # absorbed the field checklists, the recruiting logistics and the coding
-  # definitions, and became unusable in the room it was written for.
+  # This is the file that grows across interviews, and growing is how it breaks:
+  # a guide that absorbs the field checklists, the recruiting logistics and the
+  # coding definitions becomes unusable in the room it was written for.
   #
   # Questions only. Everything else has another home, see the editor's routing
   # table in agents/editor.md.
@@ -143,10 +142,9 @@ budgets:
 #
 # 4-field/_prep/*-prep.md — the sheet you carry into the room. It is disposable
 #   and it is written for one interview, so length is not what makes it usable.
-#   Capping it would break a practice that works: a real prep sheet in the field
-#   ran 284 lines against a 123-line master guide, and it worked, because every
-#   block carried a priority mark and a time box. That is the requirement instead
-#   of a line count. See the structural rule below.
+#   Capping it would break a practice that works: a prep sheet can run longer
+#   than the master guide and still work in the room, when every block carries a
+#   priority mark and a time box. That is the requirement instead of a line count. See the structural rule below.
 #
 # 7-validation/_prep/*-prep.md — the same disposable sheet, for a validation session.
 #

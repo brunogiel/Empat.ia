@@ -1,5 +1,5 @@
 {
-  "descripcion": "Judges ONE exchange of a user-research interview: the interviewer's question and what the person answered until the next question. One call per exchange. The questions about the answer held up on the first real round; the ones about the interviewer's question only propose candidates.",
+  "descripcion": "Judges ONE exchange of a user-research interview: the interviewer's question and what the person answered until the next question. One call per exchange. The questions about the answer hold up against a hand reading; the ones about the interviewer's question only propose candidates.",
   "variables": [],
   "preguntas": {
     "bloque": {

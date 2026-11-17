@@ -13,7 +13,7 @@ the Guide and is labelled as judgement.
 
 Input
   A Markdown transcript with speaker labels at the start of a line:
-      Bruno: ...           or      [Bruno] ...
+      Interviewer: ...     or      [Interviewer] ...
   Who the interviewer is comes from --interviewer, never guessed.
   Timestamps are optional. Without them, interruptions are not counted and the
   report says so.
@@ -23,11 +23,11 @@ Output
   with the reason. Nothing is estimated.
 
 Usage
-  python3 count_interview.py TRANSCRIPT --interviewer "Bruno"
-  python3 count_interview.py T.md --interviewer Bruno --product "Empatia,la app"
-  python3 count_interview.py T.md --interviewer Bruno --guide discovery/3-guide/guide.md
-  python3 count_interview.py T.md --interviewer Bruno --skip-until-first-interviewee
-  python3 count_interview.py T.md --interviewer Bruno --start-line 40
+  python3 count_interview.py TRANSCRIPT --interviewer "Interviewer"
+  python3 count_interview.py T.md --interviewer Interviewer --product "Empatia,la app"
+  python3 count_interview.py T.md --interviewer Interviewer --guide discovery/3-guide/guide.md
+  python3 count_interview.py T.md --interviewer Interviewer --skip-until-first-interviewee
+  python3 count_interview.py T.md --interviewer Interviewer --start-line 40
 """
 
 from __future__ import annotations
@@ -115,7 +115,7 @@ def parse(transcript: str):
 
     Two shapes in the wild, and both have to work:
 
-      one turn per line          Bruno: ...
+      one turn per line          Interviewer: ...
                                  Ana: ...
 
       the whole call on one line  Me: ...  Them: ...  Me: ...

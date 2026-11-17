@@ -5,7 +5,7 @@ The depth pack asks jev which topic of the guide each exchange is about. Those
 topics are the project's, not the method's: they come from the numbered blocks
 of the master guide (`### 2. The journey of one purchase`) and from each block's
 intent line (`Goal:`, `Intent:`, `Intención:`, `Objetivo:`). Everything else in
-the pack is fixed wording, measured on the first real round.
+the pack is fixed wording, the same for every project.
 
 Two more options always go in: one for logistics (greeting, consent, thanks,
 goodbye) and one for "none of the topics", because a choice with no way out
@@ -141,8 +141,8 @@ def main() -> int:
                         help="What the interviews are about, as a phrase that follows "
                              "'an interview about ...'.")
     parser.add_argument("--lang", default="en", choices=sorted(FIXED),
-                        help="Language of the packs. 'es' is the wording measured on the "
-                             "first real round.")
+                        help="Language of the packs. Check the first run of each "
+                             "language by hand.")
     parser.add_argument("--out", required=True, help="Folder for the packs (_engine/feedback).")
     parser.add_argument("--logistics", default=None, metavar="N,N",
                         help="Block numbers that are opening or closing. Default: guessed "

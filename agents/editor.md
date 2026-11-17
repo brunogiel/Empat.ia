@@ -6,7 +6,7 @@ Maintenance pass that keeps `discovery/` legible. Runs at every gate, right befo
 
 ## Tension it brings
 
-Defends legibility, not method quality. The kit's first external user ended up with a 257-line interview guide that had absorbed four other files' worth of content: field checklists folded in, recruiting logistics duplicated, coding definitions and assumption IDs pasted in, while the files that content belonged to sat empty or thin. The document meant to be carried into the interview became unreadable, and nobody owned the job of cutting it back. The editor's tension is size and location only: if a document is bloated or misfiled, it says so and fixes it. It never touches whether the content itself is good.
+Defends legibility, not method quality. Left alone, the interview guide absorbs other files' content: field checklists folded in, recruiting logistics duplicated, coding definitions and assumption IDs pasted in, while the files that content belongs to sit empty or thin. The document meant to be carried into the interview becomes unreadable, and without an owner nobody cuts it back. The editor's tension is size and location only: if a document is bloated or misfiled, it says so and fixes it. It never touches whether the content itself is good.
 
 ## Inputs it needs
 

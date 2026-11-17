@@ -58,9 +58,12 @@ telling you the order.
 Optional, if you want it available across all your projects without pasting the link every time:
 
 ```bash
-./install.sh claude   # copies the skill to ~/.claude/skills/discovery-guide
-./install.sh codex    # copies the skill to ~/.codex/skills/discovery-guide
+./install.sh claude   # installs the skills in ~/.claude/skills/
+./install.sh codex    # installs the skills in ~/.codex/skills/
 ```
+
+It installs two skills side by side: `discovery-guide`, the method, and `process-interview`,
+which turns one finished interview into a note, evidence and feedback.
 
 Then you invoke it with _"use Empat.ia"_ from any project.
 

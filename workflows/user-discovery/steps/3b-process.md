@@ -15,8 +15,8 @@ Prepare a protocol for before, during, and after interviewing.
 
 ## First, the file of this step
 
-The file this step writes does not exist yet. That is the design: nothing is
-created at install except phase 1's brief.
+The file this step writes does not exist yet. That is the design: a step's file is
+born when the step starts, never at install.
 
 1. **[DET]** Create it:
    `python3 <method-root>/scripts/init_project.py --project-root . --add field_process`
@@ -44,7 +44,8 @@ created at install except phase 1's brief.
 
 ## Gate
 
-Suggested action:
+This step has no gate (`gate: false` in `state.yaml`): the guide's gate in 3a closes phase 3.
+Suggested action when you close it:
 
 - `Advance` if the team can interview without improvising.
 - `Deepen` if tools or consent are missing.

@@ -12,8 +12,8 @@ Co-create a challenge in `How might we...` format centered on user, need, and im
 
 ## First, the file of this step
 
-This step writes into `1-desk-research/brief.md`, which already exists: it is
-one of the two files installed on day one. Write in the language set in
+This step writes into `1-desk-research/brief.md`, which already exists: the
+init creates it at install. Write in the language set in
 `_engine/state.yaml`.
 
 ## Documents to touch
