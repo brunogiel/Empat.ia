@@ -127,7 +127,12 @@ Delete this comment before saving.
     cards.forEach(function (c) {
       var h = c.querySelector("h3");
       var ref = c.getAttribute("data-ref") || "";
-      var name = h ? h.textContent : c.getAttribute("data-id");
+      var name = c.getAttribute("data-id");
+      if (h) {
+        var copy = h.cloneNode(true);
+        Array.prototype.forEach.call(copy.querySelectorAll(".ref"), function (r) { r.remove(); });
+        name = copy.textContent.trim();
+      }
       var choice = pressed(c) || "NO ANSWER (stays open)";
       var note = c.querySelector("textarea").value.trim();
       var kind = c.getAttribute("data-kind") === "fixed" ? "Correction" : "Decision";
