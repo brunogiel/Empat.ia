@@ -14,8 +14,8 @@ This stage exists so the user can drop in all the real field material, and the G
 
 ## First, the file of this step
 
-The file this step writes does not exist yet. That is the design: nothing is
-created at install except phase 1's brief.
+The file this step writes does not exist yet. That is the design: a step's file is
+born when the step starts, never at install.
 
 1. **[DET]** Create it:
    `python3 <method-root>/scripts/init_project.py --project-root . --add field_index`
@@ -27,7 +27,6 @@ created at install except phase 1's brief.
 ## Documents to touch
 
 - `discovery/4-field/`
-- `discovery/4-field/0-index.md`
 - `discovery/4-field/0-index.md`
 - `discovery/_engine/evidence.md`
 - `discovery/1-desk-research/knowledge.md`
@@ -76,6 +75,10 @@ created at install except phase 1's brief.
 
 ## How to process each interview
 
+The `process-interview` skill runs this for one interview, from the transcript to the feedback
+page. `install.sh` installs it next to `discovery-guide`; in a clone of the repo it is
+`skills/process-interview/SKILL.md`.
+
 Per interview, separate:
 
 - Verbatim quotes.
@@ -103,6 +106,6 @@ Suggested action:
 - Each interview has metadata and a row in the consent record.
 - There are verbatim quotes.
 - Observations are separated from interpretations.
-- `index.md` lists files, consent, and gaps.
+- `4-field/0-index.md` lists files, consent, and gaps.
 - `_engine/evidence.md` has evidence per interview.
 - There are enough profiles to cross patterns, or gaps are recorded.

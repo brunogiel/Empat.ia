@@ -63,10 +63,10 @@ Load the state and continue:
 When the user confirms they want to start, run:
 
 ```bash
-python3 {skill-root}/scripts/init_project.py --project-root {project-root} --method-root {skill-root} --lang {language} --project-name "{project name}"
+python3 <method-root>/scripts/init_project.py --project-root <project-root> --lang <language> --project-name "<project name>"
 ```
 
-If you're working from the source repo, `method-root` can be `repo/`. `--project-name` is the
+`<method-root>` is the folder that holds the method's scripts (see "Method bundle"). `--project-name` is the
 name the user gave the project in the initial conversation; without it, `state.yaml` falls back to
 the project root's folder name, which is rarely the same thing.
 
@@ -111,13 +111,19 @@ born with their first file, and each brings its own `0-README.md`.
 
 ## Creating a file when its step starts
 
-Every file after those six is created the moment the user enters its step, never before:
+Every other file is created the moment the user enters its step, never before:
 
 ```bash
-python3 {skill-root}/scripts/init_project.py --project-root {project-root} --add {step}
+python3 <method-root>/scripts/init_project.py --project-root <project-root> --add <step>
 ```
 
-The step names are the keys under `steps:` in `state.yaml`. Then **you write the file**: in the
+`<step>` is a key under `steps:` in `state.yaml`. A step with several files (`interview_capture`,
+`debrief`) creates the ones every project needs; `start`, `design_challenge` and `plan` create
+nothing, because they write into the installed brief. An optional or engine file has a name of its
+own, which `--add` takes the same way, for example `assumptions`, `decisions`, `expert_consult`, `card_sort`,
+`analysis_guide`, `coverage_matrix`, `verification_log`, `meeting_claims`, `case_sheet`,
+`exercise_menu`, `validation_matrix`, `validation_analysis_guide`. The step file says which ones it
+uses. An unknown name prints every valid one. Then **you write the file**: in the
 project's language, filled with what the project already knows. Copying a blank template and
 calling the step done is the thing this design exists to prevent.
 
@@ -132,7 +138,7 @@ saying so plainly is part of the job.
 `validation-feedback`, `validation-feedback-html`) takes `VAL-`. The script refuses a mismatch.
 
 ```bash
-python3 {skill-root}/scripts/init_project.py --project-root {project-root} \
+python3 <method-root>/scripts/init_project.py --project-root <project-root> \
   --add interview-note --name INT-004-ana-lopez-acme
 ```
 
@@ -236,14 +242,20 @@ Seven rules hold the whole thing up:
 
 ## Method bundle
 
-When installed, the skill should have:
+`<method-root>` is the folder that holds the method's working files. Every command and path in the
+steps is relative to it:
 
 - `workflows/user-discovery/steps/`
-- `method-agents/`
+- `agents/` (the method's agents, next to the skill's own `openai.yaml`)
 - `templates/`
 - `scripts/`
 
-In local development, these directories live at the repo root.
+Installed with `install.sh`, `<method-root>` is this skill's folder. Working from a clone of the
+repo (Case 0), it is the root of the clone. Either way, this skill's `references/` sit next to this
+`SKILL.md`.
+
+`process-interview` is a skill of its own, and steps 4a and 7b run it. `install.sh` installs it
+next to this one. Working from a clone, read `skills/process-interview/SKILL.md` and follow it.
 
 Templates are not placeholders: they contain working instructions. Use them as active guides to complete each stage.
 
@@ -553,7 +565,7 @@ When interviews are done, the user can dump all the raw material in `discovery/4
 1. Log each interview in `discovery/4-field/0-index.md`.
 2. Save clean transcripts in `discovery/4-field/_raw/`.
 3. Create structured notes in `discovery/4-field/` with
-   `python3 {skill-root}/scripts/init_project.py --project-root {project-root} --add interview-note --name <base>`
+   `python3 <method-root>/scripts/init_project.py --project-root <project-root> --add interview-note --name <base>`
    (the interview-note template, per interview).
 4. Save photos, screenshots, and documents in `discovery/4-field/_raw/`.
 5. Log consent or restrictions in `discovery/4-field/_raw/`.

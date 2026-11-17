@@ -9,6 +9,10 @@ Turn **one** raw interview into processed, traceable material, and close the loo
 
 This is the symmetric partner of the interview-guides stage: that stage builds the questions *before*; this skill processes the answers *after*. It operationalizes **step 4a, interview capture**, and adds the two pieces the method implies but never made explicit: an **interview retro** that proposes what to ask next and how to sharpen the guide, and **feedback on how the interview was conducted**, which nothing in the method used to look at.
 
+`<method-root>` below is the folder of the `discovery-guide` skill, where the method's scripts,
+templates and `references/` live (in a clone of the repo: the root of the clone for `scripts/`, and
+`skills/discovery-guide/references/` for the rubric).
+
 ## When to use
 
 - The user finished an interview and wants it captured, not synthesized prematurely.
@@ -54,7 +58,7 @@ The same flow processes a session where a person used a prototype, with these di
    **Live notes go on top.** If the interviewer or an observer took notes during the call, put them at the top of the saved transcript, under a `## Live notes` heading, as bullets. Not in the master guide, not in a separate file. If you find them written at the bottom of a master guide, move them here and clean the guide. Read them first: they mark the moment someone in the room saw something, and the retro and the feedback start there.
 2. **[DET] Assign an ID and a base name**, `INT-00X-name-surname-company` (lowercase, no accents, company dropped when it is the surname; an alias if consent requires it). Save **one** transcript, in Markdown, as `discovery/4-field/_raw/<base>-transcript.md`: a header line, then `## Live notes`, then `## Before the interview` for any small talk, then `## Interview` (or `## Entrevista`), one turn per paragraph. If the recorder mixed up speakers, relabel it and let the relabeled version replace the raw one, with the recorder's ID in the header. The counting script starts at the `## Interview` line; nothing above it is counted.
 3. **[DET] Create the structured note** with
-   `python3 {method-root}/scripts/init_project.py --project-root . --add interview-note --name <base>`.
+   `python3 <method-root>/scripts/init_project.py --project-root . --add interview-note --name <base>`.
    Never copy `templates/interview-note.md` by hand: the script never overwrites a file that
    already exists at that path, which copying by hand does not protect against.
    **[LATENT] Fill it** from the real material:
@@ -77,7 +81,7 @@ The same flow processes a session where a person used a prototype, with these di
    If the user reflected out loud during or after the call (their own debrief), capture that verbatim into this section, it's often the sharpest input.
 7. **[DET] Measure how the person tells and what came out** (interviews only; a `VAL-` session skips this step, see above). Machine files go to
    `discovery/_engine/feedback/`; `4-field/feedback/0-README.md` has the whole recipe. The scripts
-   are in `{method-root}/scripts/`; run them from inside `discovery/`.
+   are in `<method-root>/scripts/`; run them from inside `discovery/`.
    - Once per project, after the guide is closed: `feedback_packs.py --guide 3-guide/guide.md
      --subject "<what the interviews are about>" --lang <es|en> --out _engine/feedback`. It takes
      the topics from the guide's numbered blocks; read the list it prints.
@@ -95,11 +99,11 @@ The same flow processes a session where a person used a prototype, with these di
    `count_interview.py` stays as an internal diagnostic; its keyword counts do not go into the
    feedback.
 8. **[DET] Create the feedback files** (an interview's; a `VAL-` session takes the moderator's page, see above) with
-   `python3 {method-root}/scripts/init_project.py --project-root . --add interview-feedback --name <base>`
+   `python3 <method-root>/scripts/init_project.py --project-root . --add interview-feedback --name <base>`
    (the internal worksheet) and `--add interview-feedback-html --name <base>` (the page the
    interviewer receives). Create `4-field/feedback/0-README.md` first if this is the first one
    (`--add interview_feedback`, no `--name`).
-   **[LATENT] Write them**, using `references/interview-rubric.md`. The page has three parts:
+   **[LATENT] Write them**, using `references/interview-rubric.md` of the `discovery-guide` skill. The page has three parts:
    - **How the person tells:** paste `<base>-scales.html`, then one bold sentence with the reading
      and one or two literal examples.
    - **What came out of each topic:** one row per topic of the guide, ✅ 🟡 ❌ against what that

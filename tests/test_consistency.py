@@ -13,8 +13,12 @@ files, which is what a test does in a second, for free, forever.
 Run:  python3 tests/test_consistency.py
 """
 
+import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -694,6 +698,66 @@ class TestNoContradictions(unittest.TestCase):
         self.assertNotIn("won't let you skip", readme)
         self.assertIn("I just want the guide", readme,
                       "the named entry points replace the claim; keep them documented")
+
+
+class TestPathsAndNames(unittest.TestCase):
+    """What a step says about a gate, a path or the method root is true."""
+
+    def gate_section(self, name):
+        text = (STEPS_DIR / name).read_text(encoding="utf-8")
+        match = re.search(r"^## Gate\n(.*?)(?=^## |\Z)", text, re.M | re.S)
+        return match.group(1) if match else ""
+
+    def test_a_step_without_a_gate_says_so(self):
+        """state.yaml's gate: false and the step's Gate section agree."""
+        by_phase = state_phase_steps()
+        order = [s for n in sorted(by_phase) for s in by_phase[n]]
+        steps = state_steps()
+        for step, name in zip(order, step_files()):
+            with self.subTest(step=step, file=name):
+                says_no_gate = "no gate" in self.gate_section(name).lower()
+                self.assertEqual(says_no_gate, steps[step]["gate"] == "false",
+                                 f"{name}: gate is {steps[step]['gate']} in state.yaml")
+
+    def test_one_placeholder_for_the_method_root(self):
+        tracked = subprocess.run(["git", "ls-files"], cwd=REPO, capture_output=True,
+                                 text=True).stdout.split()
+        offenders = []
+        for rel in tracked:
+            if rel == "CHANGELOG.md" or rel.endswith("test_consistency.py"):
+                continue
+            path = REPO / rel
+            if path.suffix not in {".md", ".py", ".yaml", ".html", ".sh"}:
+                continue
+            body = path.read_text(encoding="utf-8", errors="ignore")
+            for token in ("{skill-root}", "{method-root}", "<skill-root>"):
+                if token in body:
+                    offenders.append(f"{rel} -> {token}")
+        self.assertEqual(offenders, [], "write <method-root>:\n" + "\n".join(offenders))
+
+    @unittest.skipUnless(shutil.which("bash"), "install.sh needs bash")
+    def test_the_install_holds_every_path_the_steps_name(self):
+        """install.sh puts the method agents in agents/ and process-interview next to
+        the guide, so agents/council.md and the skill the steps run both exist."""
+        home = Path(tempfile.mkdtemp())
+        try:
+            env = dict(os.environ, HOME=str(home))
+            result = subprocess.run(["bash", str(REPO / "install.sh"), "claude"], env=env,
+                                    capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            dest = home / ".claude" / "skills" / "discovery-guide"
+            self.assertTrue((home / ".claude" / "skills" / "process-interview" / "SKILL.md").exists())
+            self.assertTrue((dest / "agents" / "openai.yaml").exists())
+            sources = [*STEPS_DIR.glob("*.md"), REPO / "skills" / "discovery-guide" / "SKILL.md"]
+            named = set()
+            for source in sources:
+                body = source.read_text(encoding="utf-8")
+                named |= set(re.findall(r"`((?:agents|templates|scripts|references)/[\w.-]+\.\w+)`", body))
+            self.assertGreater(len(named), 10)
+            missing = sorted(n for n in named if not (dest / n).exists())
+            self.assertEqual(missing, [], "named in a step, missing from the install")
+        finally:
+            shutil.rmtree(home, ignore_errors=True)
 
 
 if __name__ == "__main__":

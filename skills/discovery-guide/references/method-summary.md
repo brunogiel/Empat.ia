@@ -51,6 +51,6 @@ Source principles:
 - User, customer, payer, decision-maker, and operator can be different people.
 - Interview mainstream and extremes.
 - Experts help, but don't replace users.
-- Transcripts and notes come in through `discovery/4-field/_raw/`, are logged in `index.md`, and become atomic evidence in `_engine/evidence.md`.
+- Transcripts and notes come in through `discovery/4-field/_raw/`, are logged in `4-field/0-index.md`, and become atomic evidence in `_engine/evidence.md`.
 - No insight without evidence.
 - HMW must not carry a hidden solution.

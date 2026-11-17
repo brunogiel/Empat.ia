@@ -14,7 +14,7 @@ When a meeting with the client brings something new, decide where every point la
 
 ## First, the file of this step
 
-The file this step writes does not exist yet. That is the design: nothing is created at install except phase 1's brief.
+The file this step writes does not exist yet. That is the design: a step's file is born when the step starts, never at install.
 
 1. **[DET]** Create it, once:
    `python3 <method-root>/scripts/init_project.py --project-root . --add meeting_coverage`

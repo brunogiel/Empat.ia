@@ -24,8 +24,8 @@ The debrief runs in **sub-stages, each with its own gate**: 5a.0 analysis guide,
 
 ## First, the files of this step
 
-The files this step writes do not exist yet. That is the design: nothing is
-created at install except phase 1's brief.
+The files this step writes do not exist yet. That is the design: a step's file is
+born when the step starts, never at install.
 
 1. **[DET]** Create what the sub-stage needs, with `--add`:
    `python3 <method-root>/scripts/init_project.py --project-root . --add findings`

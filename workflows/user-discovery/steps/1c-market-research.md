@@ -12,8 +12,8 @@ Do deep market research when it applies, using current web and citable sources.
 
 ## First, the file of this step
 
-The file this step writes does not exist yet. That is the design: nothing is
-created at install except phase 1's brief.
+The file this step writes does not exist yet. That is the design: a step's file is
+born when the step starts, never at install.
 
 1. **[DET]** Create it:
    `python3 <method-root>/scripts/init_project.py --project-root . --add market_research`

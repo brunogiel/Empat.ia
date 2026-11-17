@@ -413,12 +413,28 @@ class TestAggregateSteps(TempProject):
         self.assertEqual(list(cases.glob("INT-*.json")), [])
 
     def test_start_and_design_challenge_point_at_the_installed_brief(self):
+        """Every key under steps: is a valid --add. These two write into the
+        installed brief, so they create nothing, exit 0 and name the file."""
         self.init()
+        before = files_in(self.discovery)
         for step in ["start", "design_challenge"]:
             with self.subTest(step=step):
                 result = self.init("--add", step)
-                self.assertNotEqual(result.returncode, 0)
-                self.assertIn("brief.md", result.stderr + result.stdout)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("brief.md", result.stdout)
+                self.assertEqual(files_in(self.discovery), before)
+
+    def test_every_state_step_is_a_valid_add(self):
+        """SKILL.md says the step names are the keys under steps: in state.yaml."""
+        text = (REPO / "templates" / "state.yaml").read_text(encoding="utf-8")
+        block = text[text.index("\nsteps:"):text.index("\ninterviews:")]
+        keys = re.findall(r"^  ([a-z_]+):\s*$", block, re.M)
+        self.assertGreater(len(keys), 10)
+        self.init()
+        for step in keys:
+            with self.subTest(step=step):
+                result = self.init("--add", step)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 class TestProjectName(TempProject):

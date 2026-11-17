@@ -15,8 +15,8 @@ Build the field kit: what you actually take to a 45-60 minute interview.
 
 ## First, the file of this step
 
-The file this step writes does not exist yet. That is the design: nothing is
-created at install except phase 1's brief.
+The file this step writes does not exist yet. That is the design: a step's file is
+born when the step starts, never at install.
 
 1. **[DET]** Create it:
    `python3 <method-root>/scripts/init_project.py --project-root . --add interview_guide`
@@ -106,7 +106,7 @@ invented booking app for a small clinic.
    thing is in their life at all.
 3. **No yes/no question without its follow-up, and no double question.** Write
    `Did you cancel anything? → Which one? What happened?`. This is about how the guide is written;
-   the principle of open questions is in `skills/discovery-guide/references/interviewing.md`, and
+   the principle of open questions is in the skill's `references/interviewing.md`, and
    the feedback on an interview judges what came out, not the exact wording said in the room.
 4. **Do not seed the concept you are looking for.** A question the client wants answered, such as
    "Was it clear what the clinic is for?", does not go as written. Ask it open: "What did that page

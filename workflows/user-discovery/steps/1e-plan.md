@@ -23,7 +23,7 @@ phases by default: it walks the ones it needs.
 ## First, the file of this step
 
 This step writes into `1-desk-research/brief.md` (the `## Plan` section), which
-already exists: it is one of the two files installed on day one. It also writes
+already exists: the init creates it at install. It also writes
 the `plan:` block of `_engine/state.yaml`. Write in the language set in
 `_engine/state.yaml`.
 
