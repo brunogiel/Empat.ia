@@ -11,6 +11,7 @@ Prepare a protocol for before, during, and after interviewing.
 - Use recording or an AI notetaker if you can. Arm the recording from the account of whoever keeps the material (`2b`), and always record a session on a screen.
 - Never cut off what the interviewee is saying.
 - Everything the user says is evidence of their perspective; don't argue with it during the interview.
+- The prep sheet of each session is made from the master guide, never retyped: `python3 <method-root>/scripts/export_guide.py --project-root . --prep <INT-00X-name>` (see `3a-guide.md`). Make it the day before, after the last edit of the master.
 
 ## First, the file of this step
 

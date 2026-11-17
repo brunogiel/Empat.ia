@@ -52,6 +52,9 @@ budgets:
   3-guide/process.md:
     lines: 80
     hard: false
+  3-guide/expert-consult.md:
+    lines: 80
+    hard: false
 
   4-field/0-index.md:
     lines: 80

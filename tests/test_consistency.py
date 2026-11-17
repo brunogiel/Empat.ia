@@ -32,7 +32,7 @@ ENGINE_EXEMPT = ("_engine/", "4-field/_prep/", "4-field/_raw/", "4-field/INT-",
 # Every template the user opens. Each one starts with an 'Owns:' line.
 OWNED_TEMPLATES = ["brief", "knowledge", "market", "profiles", "recruiting", "guide",
                    "process", "findings", "principles", "summary", "concepts", "tasks",
-                   "validation-findings"]
+                   "validation-findings", "expert-consult", "meeting-coverage"]
 
 
 def state_steps():
@@ -176,8 +176,11 @@ class TestPlan(unittest.TestCase):
                                      "validation_debrief"])
         self.assertEqual(phases[8], ["report"])
 
-    def test_plan_is_the_last_step_of_phase_1_and_has_a_gate(self):
-        self.assertEqual(state_phase_steps()[1][-1], "plan")
+    def test_plan_is_the_last_gated_step_of_phase_1_and_has_a_gate(self):
+        """After the plan only on-demand steps may follow (1f: after a client meeting)."""
+        steps = state_steps()
+        gated = [s for s in state_phase_steps()[1] if not steps[s].get("on_demand")]
+        self.assertEqual(gated[-1], "plan")
         self.assertEqual(state_steps()["plan"]["gate"], "true")
         self.assertEqual(state_steps()["plan"]["file"], "1-desk-research/brief.md")
 
@@ -379,6 +382,105 @@ class TestOneFileOneJob(unittest.TestCase):
     def test_the_editor_routes_by_the_owns_line(self):
         editor = (REPO / "agents" / "editor.md").read_text(encoding="utf-8")
         self.assertIn("Owns:", editor)
+
+
+class TestGuideStructureAndCopies(unittest.TestCase):
+    """The guide is built structure first, written by rules, and copied by script."""
+
+    def read(self, *parts):
+        return (REPO.joinpath(*parts)).read_text(encoding="utf-8")
+
+    def test_the_structure_comes_before_the_questions(self):
+        step = self.read("workflows", "user-discovery", "steps", "3a-guide.md")
+        self.assertIn("## First, the structure", step)
+        self.assertLess(step.index("## First, the structure"), step.index("## Recommended structure"))
+        for phrase in ["guide-braindump.md", "generative mode", "it never blocks"]:
+            self.assertIn(phrase, step)
+
+    def test_the_twelve_writing_rules_are_numbered_one_to_twelve(self):
+        step = self.read("workflows", "user-discovery", "steps", "3a-guide.md")
+        block = step[step.index("## Rules for writing the questions"):step.index("## Exercises")]
+        self.assertEqual(re.findall(r"^(\d+)\. \*\*", block, re.M), [str(n) for n in range(1, 13)])
+
+    def test_the_guide_template_opens_with_owns_then_the_sections_table(self):
+        lines = self.read("templates", "guide.md").splitlines()
+        owns = next(i for i, l in enumerate(lines) if l.startswith("Owns:"))
+        table = next(i for i, l in enumerate(lines) if l.startswith("| # |"))
+        first_block = next(i for i, l in enumerate(lines) if l.startswith("### "))
+        self.assertLess(owns, table)
+        self.assertLess(table, first_block)
+        self.assertLessEqual(table - owns, 5, "the table goes right under the Owns line")
+
+    def test_the_guide_template_has_a_protected_exercise_with_a_fixed_prompt(self):
+        text = self.read("templates", "guide.md")
+        for phrase in ["<!-- annex", "<!-- end annex -->", "Prompt:", "Feeds:",
+                       "never reworded", "Piloted", "Minimum sessions"]:
+            self.assertIn(phrase, text)
+
+    def test_exercises_are_piloted_fixed_protected_and_counted(self):
+        step = self.read("workflows", "user-discovery", "steps", "3a-guide.md")
+        for phrase in ["Pilot it before the field", "fixed in writing", "never cut for time",
+                       "Declare the minimum"]:
+            self.assertIn(phrase, step)
+        debrief = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        self.assertIn("not enough", debrief)
+        card_sort = self.read("templates", "card-sort.md")
+        for phrase in ["Piloted", "Minimum", "not enough"]:
+            self.assertIn(phrase, card_sort)
+
+    def test_the_expert_consult_names_its_bias_and_keeps_hypotheses(self):
+        text = self.read("templates", "expert-consult.md")
+        for phrase in ["witness", "sample bias", "hypothesis for the field"]:
+            self.assertIn(phrase, text)
+        step = self.read("workflows", "user-discovery", "steps", "3a-guide.md")
+        self.assertIn("--add expert_consult", step)
+        sys.path.insert(0, str(REPO / "scripts"))
+        import init_project
+        self.assertIn("expert_consult", init_project.LAZY)
+
+    def test_the_export_script_is_named_where_the_guide_is_used(self):
+        for parts in [("workflows", "user-discovery", "steps", "3a-guide.md"),
+                      ("workflows", "user-discovery", "steps", "3b-process.md"),
+                      ("templates", "process.md"), ("templates", "interview-prep.md")]:
+            with self.subTest(file=parts[-1]):
+                self.assertIn("export_guide.py", self.read(*parts))
+        self.assertTrue((REPO / "scripts" / "export_guide.py").exists())
+
+    def test_the_workflow_runs_the_export_suite(self):
+        workflow = self.read(".github", "workflows", "tests.yml")
+        self.assertIn("tests/test_export_guide.py", workflow)
+
+
+class TestMeetingCoverageStep(unittest.TestCase):
+    """Step 1f: map a client meeting to the files before editing any of them."""
+
+    def read(self, *parts):
+        return (REPO.joinpath(*parts)).read_text(encoding="utf-8")
+
+    def test_the_step_is_declared_on_demand_without_a_gate(self):
+        step = state_steps()["meeting_coverage"]
+        self.assertEqual(step["phase"], "1")
+        self.assertEqual(step["gate"], "false")
+        self.assertEqual(step["on_demand"], "true")
+        self.assertIn("1f-meeting-coverage.md", step_files())
+
+    def test_the_step_waits_for_the_researchers_ok_before_editing(self):
+        text = self.read("workflows", "user-discovery", "steps", "1f-meeting-coverage.md")
+        for phrase in ["decide where every point lands", "OK", "tensions", "stays here", "`pending: why`"]:
+            self.assertIn(phrase, text)
+        self.assertLess(text.index("Show the matrix"), text.index("Only then edit"))
+
+    def test_the_skill_lists_the_step_in_order_and_counts_the_files(self):
+        skill = self.read("skills", "discovery-guide", "SKILL.md")
+        self.assertIn("`1f-meeting-coverage.md`", skill)
+        self.assertIn("Eighteen step files", skill)
+        self.assertEqual(len(step_files()), 18)
+
+    def test_the_brief_tells_where_the_clients_data_goes(self):
+        brief = self.read("templates", "brief.md")
+        self.assertIn("The brief holds the decision, not the client's data", brief)
+        self.assertIn("knowledge.md", brief)
+        self.assertIn("meeting-coverage.md", brief)
 
 
 class TestScriptMatchesState(unittest.TestCase):

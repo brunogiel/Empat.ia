@@ -11,7 +11,7 @@ This document keeps you from improvising interviews. Use it before, during and a
 - [ ] Design Challenge visible.
 - [ ] Learning objectives clear.
 - [ ] Interviewee profile reviewed.
-- [ ] Corresponding guide ready.
+- [ ] Corresponding guide ready, and this session's prep sheet made from the master (`scripts/export_guide.py --prep`), not retyped.
 - [ ] Roles defined: who asks, who takes notes, who observes.
 - [ ] Recording or note-taking tool tested.
 - [ ] The recording is armed from the account of whoever will keep the material, not from a guest's or a colleague's: the file lands in the storage of whoever starts or hosts the call, and may never reach the project.
@@ -60,6 +60,7 @@ capture the voices but not the screen. So the board's final state would be lost.
       where the person left them.
 - [ ] Paste it into the meeting notes for that interview (or export it from the board tool and
       save it next to the transcript in `4-field/_raw/`).
+- [ ] Read the prompt of the exercise exactly as the guide has it. A prompt reworded live makes the session incomparable with the others; if it has to change, say so in the notes.
 - [ ] If the interviewer **adds cards or columns live**, write it down in the notes as a
       **comparison caveat** ("this person saw one card more than the others"), not as an
       error. The sorts stay comparable once you know what each person actually saw.

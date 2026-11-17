@@ -36,3 +36,5 @@ jobs:
         run: python3 tests/test_locate_quotes.py
       - name: The clip cutter plans, builds its commands and judges a clip
         run: python3 tests/test_cut_clips.py
+      - name: The guide export builds the client copy and the prep sheet from the master
+        run: python3 tests/test_export_guide.py

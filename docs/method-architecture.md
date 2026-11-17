@@ -55,6 +55,8 @@ Documents:
 - `1-desk-research/market.md`: market research with sources.
 - `2-profiling/profiles.md`: roles, participant profiles and sample.
 - `3-guide/guide.md`: the script, questions only.
+- `3-guide/expert-consult.md`: optional, the short guide for consulting experts (witnesses, not users); what comes out is a hypothesis for the field.
+- `_engine/meeting-coverage.md`: step 1f, what each client meeting said and which file absorbs it, approved before anything is edited.
 - `2-profiling/recruiting.md`: outreach, channels and recruiting tracker.
 - `3-guide/process.md`: before, during and after fieldwork.
 - `4-field/0-observation-plan.md`: observation, experts, analogies and immersion.

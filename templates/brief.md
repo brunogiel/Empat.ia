@@ -4,6 +4,8 @@ Owns: the challenge, the scope, who is who, what the client asked for, and the p
 
 What we're researching, for whom, and what decision it unblocks. Keep it as an executive index, not a dump of everything; link to or summarize the sub-documents instead of repeating them.
 
+**The brief holds the decision, not the client's data.** When a meeting brings figures, process detail, names of the client's systems or a long account, they go to `knowledge.md` (what we know and don't), the market to `market.md`, and the meeting itself is mapped in `_engine/meeting-coverage.md` (step `1f`). Here you keep one line and a link. If the brief is past its line budget, that is the usual cause.
+
 ## Executive summary
 
 Pending.

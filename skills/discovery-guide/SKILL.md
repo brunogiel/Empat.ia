@@ -142,7 +142,7 @@ discovery/
   AGENTS.md  CLAUDE.md       pointers, so any assistant knows what this folder is
   1-desk-research/           brief.md  market.md  knowledge.md  sources/
   2-profiling/               profiles.md  recruiting.md
-  3-guide/                   guide.md  process.md
+  3-guide/                   guide.md  process.md  expert-consult.md (optional)
   4-field/                   0-index.md  0-observation-plan.md  feedback/
                              INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
   5-debrief/                 findings.md  principles.md
@@ -151,7 +151,7 @@ discovery/
                              VAL-001-name-surname.md  _prep/  _raw/  feedback/   (on demand)
   8-report/                  summary.md                      (born with its first --add)
   _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md
-                             evidence.md  synthesis-log.md  sources/  skills/
+                             evidence.md  synthesis-log.md  meeting-coverage.md  sources/  skills/
   {phase}/notes.md           the drawer, born on demand (4-field/notes.md is born at install).
                              The editor empties it at each gate
 ```
@@ -187,6 +187,7 @@ Five rules hold the whole thing up:
 - **The listing says how far, the state says what state.** A file exists because the user
   *entered* its step, not because they finished it. Never read existence as "done", and never
   build a progress checklist in `0-README.md` that has to be kept in sync by hand.
+- **After a meeting with the client, map before you edit.** Step `1f` lists what was said, which file absorbs each point and its status, and waits for the researcher's OK before any file changes. The brief stays an index; the client's data goes to `knowledge.md`.
 - **Files the user opens have line budgets** in `_engine/budgets.yaml`. Over budget means the
   content belongs somewhere else, not that it should be deleted. `3-guide/guide.md` is a hard
   cap: two printed pages, questions only.
@@ -242,18 +243,19 @@ Order:
 3. `1c-market-research.md`
 4. `1d-knowledge-base.md`
 5. `1e-plan.md`
-6. `2a-profiles.md`
-7. `2b-recruiting.md`
-8. `3a-guide.md`
-9. `3b-process.md`
-10. `4a-interview-capture.md`
-11. `4b-observation.md`
-12. `5a-debrief.md`
-13. `6a-ideation.md` (on demand)
-14. `7a-validation-guide.md` (on demand)
-15. `7b-validation-sessions.md` (on demand)
-16. `7c-validation-debrief.md` (on demand)
-17. `8a-report.md`
+6. `1f-meeting-coverage.md` (on demand, after each meeting with the client)
+7. `2a-profiles.md`
+8. `2b-recruiting.md`
+9. `3a-guide.md`
+10. `3b-process.md`
+11. `4a-interview-capture.md`
+12. `4b-observation.md`
+13. `5a-debrief.md`
+14. `6a-ideation.md` (on demand)
+15. `7a-validation-guide.md` (on demand)
+16. `7b-validation-sessions.md` (on demand)
+17. `7c-validation-debrief.md` (on demand)
+18. `8a-report.md`
 
 This is the order of the files, not the order of the work. The order of the work is the plan.
 
@@ -265,7 +267,7 @@ Valid statuses:
 - `validated`
 - `advanced_with_assumptions`
 
-Seventeen step files, eight phases. The user sees the phases; you read the steps. Granularity is
+Eighteen step files, eight phases. The user sees the phases; you read the steps. Granularity is
 cheap where an agent reads it and expensive where a person does. Phases 6 and 7 are on demand;
 phase 8, the report, is not: every plan closes with it.
 
@@ -383,6 +385,9 @@ counting the transcript and writing the entry.
 **2. Before each interview, when you build the prep sheet.** Check whether the previous one left
 guide edits unapplied: *"the one with Ana proposed two changes to the guide and they are still
 not in. Do we apply them before you go?"* The lesson lands right before it gets used again.
+The sheet itself is generated, never retyped: `scripts/export_guide.py --prep <INT-00X-name>` copies the
+route and the questions from the master guide, and the same script makes the client's copy with
+`--client` (no `Owns:` lines, no internal IDs, no interviewer notes, an annex that shows the exercise).
 
 **3. At the gate into phase 5.** If `interviews.unprocessed` in `state.yaml` is above zero, say
 so before offering `Advance`: *"there are three transcripts not processed yet. Shall we process

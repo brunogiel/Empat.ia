@@ -81,7 +81,7 @@ phases:
   1:
     name: desk-research
     folder: 1-desk-research
-    steps: [start, design_challenge, market_research, knowledge_base, plan]
+    steps: [start, design_challenge, market_research, knowledge_base, plan, meeting_coverage]
   2:
     name: profiling
     folder: 2-profiling
@@ -140,6 +140,15 @@ steps:
     status: not_started
     file: 1-desk-research/brief.md
     gate: true
+  # After each meeting with the client that brings something new: what was said,
+  # which file absorbs it, approved by the researcher before anything is edited.
+  # It repeats, so it is on demand and has no gate.
+  meeting_coverage:
+    phase: 1
+    status: not_started
+    file: _engine/meeting-coverage.md
+    gate: false
+    on_demand: true
   profiles:
     phase: 2
     status: not_started
@@ -153,7 +162,7 @@ steps:
   interview_guide:
     phase: 3
     status: not_started
-    file: 3-guide/guide.md
+    file: 3-guide/guide.md + 3-guide/expert-consult.md
     gate: true
   field_process:
     phase: 3

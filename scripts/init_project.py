@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import difflib
 import filecmp
 import re
 import shutil
@@ -75,10 +76,14 @@ INSTALL = {
 # which template lands where. It mirrors the `file:` field in state.yaml.
 LAZY = {
     "market_research": ("market.md", "1-desk-research/market.md"),
+    # Step 1f: after a meeting with the client, what was said and where it lands.
+    "meeting_coverage": ("meeting-coverage.md", "_engine/meeting-coverage.md"),
     "knowledge_base": ("knowledge.md", "1-desk-research/knowledge.md"),
     "profiles": ("profiles.md", "2-profiling/profiles.md"),
     "recruiting": ("recruiting.md", "2-profiling/recruiting.md"),
     "interview_guide": ("guide.md", "3-guide/guide.md"),
+    # Optional: a short guide to consult experts (witnesses, not users).
+    "expert_consult": ("expert-consult.md", "3-guide/expert-consult.md"),
     "field_process": ("process.md", "3-guide/process.md"),
     "field_index": ("field-index.md", "4-field/0-index.md"),
     "interview_feedback": ("feedback-readme.md", "4-field/feedback/0-README.md"),
@@ -370,14 +375,53 @@ def add_step(templates: Path, discovery: Path, step: str,
                    for sub in concrete]
         return "aggregate", results
     if step not in LAZY:
-        known = ", ".join(sorted(LAZY))
-        aggregates = ", ".join(f"{k} (runs {', '.join(v)})" for k, v in sorted(AGGREGATE_STEPS.items()))
-        raise SystemExit(
-            f"Unknown step '{step}'. Known steps: {known}. "
-            f"Aggregate steps: {aggregates}.")
+        raise SystemExit(unknown_step_message(step))
     template_name, relative = LAZY[step]
     return copy_one(templates, discovery, template_name, relative,
                     force, overwrite_modified)
+
+
+def unknown_step_message(step: str) -> str:
+    """Say what to type instead: the closest name, then every valid one."""
+    steps = sorted(LAZY)
+    items = sorted(PER_ITEM_PATHS)
+    aggregates = ", ".join(f"{k} (runs {', '.join(v)})" for k, v in sorted(AGGREGATE_STEPS.items()))
+    guess = difflib.get_close_matches(step.replace("-", "_"), steps + sorted(AGGREGATE_STEPS), n=1)
+    guess += difflib.get_close_matches(step, items, n=1)
+    hint = f" Did you mean '{guess[0]}'?" if guess else ""
+    return (f"Unknown step '{step}'.{hint}\n"
+            f"  Steps (one file each): {', '.join(steps)}.\n"
+            f"  Aggregate steps: {aggregates}.\n"
+            f"  Per-interview files, which also need --name (INT-004-ana-lopez): {', '.join(items)}.")
+
+
+def outcome_message(outcome: str, detail: str, discovery: Path) -> str:
+    """One line per outcome of copy_one, and for the two that stop short, what to do next."""
+    path = discovery / detail if outcome in ("kept", "protected") else None
+    if outcome == "created":
+        return f"Created {detail}"
+    if outcome == "kept":
+        return (f"Already there, kept as is: {path}\n"
+                "  Open it and keep writing. To copy the template over it again, pass --force "
+                "(only works while nobody has edited it), or --overwrite-modified (replaces your edits).")
+    if outcome == "protected":
+        return (f"Edited already, not overwritten: {path}\n"
+                "  --force only replaces a file nobody touched. To replace this one anyway, copy "
+                "your edits somewhere safe and pass --overwrite-modified.")
+    return f"Template missing from the bundle: {detail}"
+
+
+def wrong_root_message(project_root: Path, discovery: Path, version) -> str:
+    """The folder you pointed at is not the one that holds the discovery."""
+    found = f"detected: {version or 'nothing'}"
+    if detect_version(project_root) == 3:
+        return (f"{discovery} is not a v3 folder ({found}), but {project_root} itself is one. "
+                f"--project-root takes the folder that CONTAINS the discovery folder, not the "
+                f"discovery folder. Run again with --project-root {project_root.parent}"
+                + ("" if project_root.name == "discovery" else f" --folder {project_root.name}") + ".")
+    return (f"{discovery} is not a v3 folder ({found}). --project-root takes the folder that "
+            f"contains the discovery folder; if yours has another name, pass --folder <name>. "
+            "A folder from an older version needs --migrate first.")
 
 
 def add_item(templates: Path, discovery: Path, item: str, name: str,
@@ -757,28 +801,22 @@ def main() -> int:
     # --- add one per-item file (interview note, prep sheet, feedback, ...) --
     if args.add and args.add in PER_ITEM_PATHS:
         if version != 3:
-            raise SystemExit(
-                f"{discovery} is not a v3 folder (detected: {version or 'nothing'}). "
-                "Run --migrate first.")
+            raise SystemExit(wrong_root_message(project_root, discovery, version))
         if not args.name:
             raise SystemExit(f"--add {args.add} takes a base name: pass --name "
                               "INT-004-ana-lopez-acme (or OBS-002-... for an observation).")
         outcome, detail = add_item(templates, discovery, args.add, args.name,
                                    args.force, args.overwrite_modified)
-        print({"created": f"Created {detail}",
-               "kept": f"Already there, kept as is: {detail}",
-               "protected": f"Edited already, not overwritten: {detail}",
-               "missing": f"Template missing from the bundle: {detail}"}[outcome])
-        print("Now write it in the project's language, filled with what the project "
-              "already knows. An empty template is not a finished step.")
+        print(outcome_message(outcome, detail, discovery))
+        if outcome == "created":
+            print("Now write it in the project's language, filled with what the project "
+                  "already knows. An empty template is not a finished step.")
         return 1 if outcome == "missing" else 0
 
     # --- add one step's file -------------------------------------------------
     if args.add:
         if version != 3:
-            raise SystemExit(
-                f"{discovery} is not a v3 folder (detected: {version or 'nothing'}). "
-                "Run --migrate first.")
+            raise SystemExit(wrong_root_message(project_root, discovery, version))
         outcome, detail = add_step(templates, discovery, args.add,
                                    args.force, args.overwrite_modified)
         if outcome == "aggregate":
@@ -796,12 +834,10 @@ def main() -> int:
         if outcome == "installed":
             print(f"Nothing to create: {detail}.")
             return 0
-        print({"created": f"Created {detail}",
-               "kept": f"Already there, kept as is: {detail}",
-               "protected": f"Edited already, not overwritten: {detail}",
-               "missing": f"Template missing from the bundle: {detail}"}[outcome])
-        print("Now write it in the project's language, filled with what the project "
-              "already knows. An empty template is not a finished step.")
+        print(outcome_message(outcome, detail, discovery))
+        if outcome == "created":
+            print("Now write it in the project's language, filled with what the project "
+                  "already knows. An empty template is not a finished step.")
         return 1 if outcome == "missing" else 0
 
     # --- migrate ------------------------------------------------------------

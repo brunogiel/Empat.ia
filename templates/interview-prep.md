@@ -58,7 +58,8 @@ in the master guide.
 ## The questions
 
 Copied **verbatim** from the master guide: none added, none lost, same order.
-Cross them out as you go.
+`scripts/export_guide.py --prep <name>` fills this section and the route above from the master,
+so the copy cannot drift. Cross them out as you go.
 
 - [ ] Pending.
 
