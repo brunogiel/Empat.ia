@@ -11,3 +11,6 @@ private/
 # Local development preferences, not part of the method
 .brain
 CLAUDE.local.md
+
+# Claude Code local permissions can hold literal commands
+.claude/settings.local.json
