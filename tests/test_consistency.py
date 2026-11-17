@@ -33,7 +33,7 @@ ENGINE_EXEMPT = ("_engine/", "4-field/_prep/", "4-field/_raw/", "4-field/INT-",
 OWNED_TEMPLATES = ["brief", "knowledge", "market", "profiles", "recruiting", "guide",
                    "process", "findings", "principles", "summary", "concepts", "tasks",
                    "validation-findings", "expert-consult", "meeting-coverage",
-                   "exercise-menu", "usability-matrix"]
+                   "exercise-menu", "usability-matrix", "presentation", "meeting-claims"]
 
 
 def state_steps():
@@ -545,14 +545,80 @@ class TestMeetingCoverageStep(unittest.TestCase):
     def test_the_skill_lists_the_step_in_order_and_counts_the_files(self):
         skill = self.read("skills", "discovery-guide", "SKILL.md")
         self.assertIn("`1f-meeting-coverage.md`", skill)
-        self.assertIn("Eighteen step files", skill)
-        self.assertEqual(len(step_files()), 18)
+        self.assertIn("Nineteen step files", skill)
+        self.assertEqual(len(step_files()), 19)
 
     def test_the_brief_tells_where_the_clients_data_goes(self):
         brief = self.read("templates", "brief.md")
         self.assertIn("The brief holds the decision, not the client's data", brief)
         self.assertIn("knowledge.md", brief)
         self.assertIn("meeting-coverage.md", brief)
+
+
+class TestPresentationStage(unittest.TestCase):
+    """Step 5b: a sample before the deck, a report that layers, pieces built by script."""
+
+    def read(self, *parts):
+        return (REPO.joinpath(*parts)).read_text(encoding="utf-8")
+
+    def test_the_step_is_declared_on_demand_with_a_gate_and_a_file(self):
+        step = state_steps()["presentation"]
+        self.assertEqual(step["phase"], "5")
+        self.assertEqual(step["gate"], "true")
+        self.assertEqual(step["on_demand"], "true")
+        self.assertEqual(step["file"], "5-debrief/presentation.md")
+        self.assertIn("5b-presentation.md", step_files())
+        self.assertEqual(state_phase_steps()[5], ["debrief", "presentation"])
+        lazy, _ = lazy_map()
+        self.assertEqual(lazy["presentation"][1], "5-debrief/presentation.md")
+        self.assertEqual(lazy["meeting_claims"][1], "5-debrief/meeting-claims.md")
+
+    def test_the_sample_comes_before_the_deck_and_a_draft_is_a_draft(self):
+        text = self.read("workflows", "user-discovery", "steps", "5b-presentation.md")
+        for phrase in ["A sample before the deck, always", "real content", "Draft, not mock-up",
+                       "finishing work", "does not start until the sample is accepted",
+                       "found in slide, left out", "A count is not a slide", "what is left to measure",
+                       "focus of the analysis"]:
+            self.assertIn(phrase, text)
+        self.assertLess(text.index("Build the sample"), text.index("Build the deck by script"))
+
+    def test_the_script_rules_and_the_rewrite_rule_live_in_5b_and_8a_names_them(self):
+        step = self.read("workflows", "user-discovery", "steps", "5b-presentation.md")
+        report = self.read("workflows", "user-discovery", "steps", "8a-report.md")
+        for phrase in ["The canonical is a Markdown file", "by number or by pattern",
+                       "map from IDs to titles", "never runs on a literal quote",
+                       "table of changes", "reopens a closed decision"]:
+            self.assertIn(phrase, step)
+        for phrase in ["table of changes", "never the file", "the correction goes to the Markdown",
+                       "--source", "UNLINKED", "--titles-from"]:
+            self.assertIn(phrase, report)
+        self.assertIn("--source", step)
+
+    def test_the_report_layers_on_what_was_accepted(self):
+        report = self.read("workflows", "user-discovery", "steps", "8a-report.md")
+        for phrase in ["as it was presented", "new layer", "go **last**", "tasks of the script",
+                       "The cover names the design challenge", "table of verdicts",
+                       "what is left to measure"]:
+            self.assertIn(phrase, report)
+        summary = self.read("templates", "summary.md")
+        for heading in ["## The design challenge", "## What was presented and accepted",
+                        "## What is left to measure", "## Adjustments for this version"]:
+            self.assertIn(heading, summary)
+        self.assertGreater(summary.index("## Adjustments for this version"),
+                           summary.index("## What is left to measure"))
+
+    def test_the_meeting_claims_step_is_named_in_5a_and_the_template_has_its_tables(self):
+        step = self.read("workflows", "user-discovery", "steps", "5a-debrief.md")
+        for phrase in ["what I said vs. the evidence", "meeting-claims.md", "cross against the whole list",
+                       "corrected with the client"]:
+            self.assertIn(phrase, step)
+        template = self.read("templates", "meeting-claims.md")
+        for phrase in ["does not hold", "to confirm", "A list the client voted or ranked", "no evidence"]:
+            self.assertIn(phrase, template)
+
+    def test_the_skill_and_the_architecture_name_the_stage(self):
+        self.assertIn("`5b-presentation.md`", self.read("skills", "discovery-guide", "SKILL.md"))
+        self.assertIn("5b", self.read("docs", "method-architecture.md"))
 
 
 class TestScriptMatchesState(unittest.TestCase):

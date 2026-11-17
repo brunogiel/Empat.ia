@@ -101,6 +101,10 @@ LAZY = {
     "card_sort": ("card-sort.md", "4-field/card-sort.md"),
     "coverage_matrix": ("coverage-matrix.md", "5-debrief/coverage-matrix.md"),
     "verification_log": ("verification-log.md", "5-debrief/verification-log.md"),
+    # Optional, after a client meeting in which the researcher gave conclusions: what was said against the evidence.
+    "meeting_claims": ("meeting-claims.md", "5-debrief/meeting-claims.md"),
+    # Step 5b, on demand: the debrief shown to the client, sample first.
+    "presentation": ("presentation.md", "5-debrief/presentation.md"),
     "ideation": ("concepts.md", "6-ideation/concepts.md"),
     "validation_guide": ("tasks.md", "7-validation/tasks.md"),
     # Optional, step 7a.0: the long menu of possible exercises, chosen before the script is written.

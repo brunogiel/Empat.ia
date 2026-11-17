@@ -97,7 +97,7 @@ phases:
   5:
     name: debrief
     folder: 5-debrief
-    steps: [debrief]
+    steps: [debrief, presentation]
   6:
     name: ideation
     folder: 6-ideation
@@ -183,8 +183,17 @@ steps:
   debrief:
     phase: 5
     status: not_started
-    file: 5-debrief/findings.md + 5-debrief/principles.md + 5-debrief/analysis-guide.md + 5-debrief/coverage-matrix.md + 5-debrief/verification-log.md + 5-debrief/cases/_case-sheet.json + 5-debrief/cases/_instructions.md
+    file: 5-debrief/findings.md + 5-debrief/principles.md + 5-debrief/analysis-guide.md + 5-debrief/coverage-matrix.md + 5-debrief/verification-log.md + 5-debrief/meeting-claims.md + 5-debrief/cases/_case-sheet.json + 5-debrief/cases/_instructions.md
     gate: true
+  # Step 5b: the debrief shown to the client. A sample with one slide of each type and
+  # real content is accepted first, then the deck is built by script. On demand: a
+  # project that never shows the debrief outside the team skips it.
+  presentation:
+    phase: 5
+    status: not_started
+    file: 5-debrief/presentation.md
+    gate: true
+    on_demand: true
   ideation:
     phase: 6
     status: not_started

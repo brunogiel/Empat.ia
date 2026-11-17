@@ -79,6 +79,14 @@ budgets:
   5-debrief/coverage-matrix.md:
     lines: 60
     hard: false
+  # Optional. Written after a client meeting, from the researcher's own claims.
+  5-debrief/meeting-claims.md:
+    lines: 80
+    hard: false
+  # Step 5b. The plan of the presentation, not the deck: the deck is output.
+  5-debrief/presentation.md:
+    lines: 60
+    hard: false
   # The log grows with each gate; past the budget, the older gates move to _engine/sources/.
   5-debrief/verification-log.md:
     lines: 120

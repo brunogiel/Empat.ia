@@ -30,7 +30,7 @@ created at install except phase 1's brief.
 1. **[DET]** Create what the sub-stage needs, with `--add`:
    `python3 <method-root>/scripts/init_project.py --project-root . --add findings`
    Keys: `findings`, `synthesis_log`, `analysis_guide`, `case_sheet`, `card_sort`,
-   `coverage_matrix`, `verification_log`.
+   `coverage_matrix`, `verification_log`, `meeting_claims`.
 2. **[DET]** Write each in the **language set in `_engine/state.yaml`**, not in
    the language of the repository.
 3. **[LATENT]** Pre-fill with what the project already knows. An empty
@@ -44,6 +44,7 @@ created at install except phase 1's brief.
 - `discovery/_engine/synthesis-log.md`
 - `discovery/5-debrief/coverage-matrix.md`
 - `discovery/5-debrief/verification-log.md`
+- `discovery/5-debrief/meeting-claims.md` (if the researcher gave conclusions in a client meeting)
 - `discovery/5-debrief/principles.md`
 - `discovery/4-field/card-sort.md` (if card sorting ran)
 - `discovery/4-field/0-index.md`
@@ -208,11 +209,24 @@ Each sub-stage closes with the checkpoint above. Suggested action:
 
 Each time a sub-stage closes that answers something the client asked for (5a.3 and 5a.4 at least), check "What the client asked for" in `brief.md`: each row is answered, or moved to the next round with one line.
 
+To show the debrief to the client, continue with `5b-presentation.md`: a sample first, then the deck.
+
 Before the researcher sees the checker's table, the Guide may build it as a **checkpoint page**: `templates/checkpoint.html`, one file the researcher opens and answers with buttons (see "The checkpoint page" below).
 
 Before closing a sub-stage, update `_engine/state.yaml`: **both marks** (`current_status` and `steps.debrief.status`), the sub-stage mark under `substeps:`, and `next`. Then run `python3 <method-root>/scripts/check_state.py`; it fails if two marks disagree, or if `next` still asks for something that is done. Before the debrief leaves the team in any form, the cuali-to-cuanti and devil's-advocate checks must have run and be logged.
 
 **Compressed mode (optional, declared).** Two consecutive sub-stages, for example 5a.3 and 5a.4, may close with one joint checkpoint. Declare it **before** starting them, as a course change in `_engine/decisions.md`. Both sub-stages run in full, every checker and every seed included; only the pause between them goes. Both marks in `substeps:` change in the same edit, after the joint checkpoint. The researcher can ask to split them at any point.
+
+## After a client meeting: what I said vs. the evidence
+
+**On demand.** In a meeting with the client the researcher often gives conclusions before the debrief is closed, and the client writes them down. Some of them the evidence does not hold. This step finds them while the notes are still fresh. It runs after the meeting, whichever sub-stage the debrief is in; it is a separate matter from step 1f, which decides where the meeting's *new information* lands.
+
+1. **[DET]** `python3 <method-root>/scripts/init_project.py --project-root . --add meeting_claims` creates `5-debrief/meeting-claims.md` from `templates/meeting-claims.md`.
+2. **[LATENT]** List every sentence the researcher said about the people studied, from the minutes of the meeting. One row each, in the researcher's words.
+3. **[LATENT]** Cross each one against `findings.md` and `_engine/evidence.md`: **holds**, **holds with a nuance**, **does not hold**, **to confirm**. Count people, not mentions. A sentence that the evidence only holds for some of the people says so with the number. A model checker here is seeded and runs on the mid or strong tier, like any check of sense (see "Every model checker").
+4. **[LATENT]** What the client asked and the meeting left open goes in a second table, with the same scale.
+5. **When the client voted or ranked a list, cross against the whole list.** Take the list as the client gave it, item by item, not the part the draft already crossed. An item the evidence does not cover is a row that says "no evidence"; a missing row is a hole. A comparison built from the draft alone leaves out whatever the draft did not mention.
+6. **A sentence that does not hold is corrected with the client**, in a short page built from the file (profiles, no names), after it passes cuali-to-cuanti and `check_share.py`. Fixing the files and saying nothing leaves the client with the old note. Log the correction in `_engine/decisions.md`, and mark any piece that carried the sentence `outdated` in **What already went out**.
 
 ## The checkpoint page
 

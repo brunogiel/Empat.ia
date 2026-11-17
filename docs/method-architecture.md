@@ -61,6 +61,8 @@ Documents:
 - `3-guide/process.md`: before, during and after fieldwork.
 - `4-field/0-observation-plan.md`: observation, experts, analogies and immersion.
 - `5-debrief/principles.md`: the deliverable. Design principles traceable to evidence.
+- `5-debrief/presentation.md`: step 5b, on demand. The types of slide, the sample and its gate, and the client's questions against the deck.
+- `5-debrief/meeting-claims.md`: optional. What the researcher said in a client meeting, set against the evidence.
 - `4-field/0-index.md`: intake and processing flow for field material.
 - `4-field/0-index.md`: interview tracker, files, consent and gaps.
 - `_engine/evidence.md`: atomic evidence by interview before synthesis.
@@ -101,6 +103,12 @@ Every check done by a model, in any phase, follows two rules. The full text live
 ## Sub-stages And Owners
 
 A step that runs in sub-stages (today the debrief, 5a.0 to 5a.4) keeps one mark per sub-stage under `substeps:` in `state.yaml`. Nothing in a sub-stage starts until the one before it is `done` or `skipped`. A piece worked by two threads has one owner of its structure, and the structure closes before anyone fills it. Two consecutive sub-stages may share one checkpoint (compressed mode) when it is declared in `_engine/decisions.md` first. The checkpoint can be a page: `templates/checkpoint.html`.
+
+## Presentation, Pieces Built By Script And Rewrites
+
+Step 5b shows the debrief to the client. It builds a sample (one slide of each type, real content) and the researcher accepts it before the deck exists. The report (8a) takes what the client already accepted as it was presented and adds the validation as a new layer.
+
+A piece that is generated has a Markdown canonical, and a script builds the HTML or the deck from it: cuts by number or pattern, the map from IDs to titles by script, no vocabulary replacement on a literal quote, fidelity checked by `check_share.py` (`--titles-from`, and `--source` on the Markdown). If another model rewrites a text, it returns a table of changes (original, proposal, reason), never the file. The full text lives in `workflows/user-discovery/steps/5b-presentation.md`.
 
 ## Method Sources
 

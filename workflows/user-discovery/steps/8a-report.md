@@ -25,7 +25,19 @@ none of it. Every plan closes with it, whatever pieces it used.
 - **Answer the client's requests, and report the sample as it was.** Every row of "What the client asked for" in `brief.md` is answered in the page or moved to the next round with one line. If a profile had a focus (for example, people who do not know the brand) and the sample did not meet it, the page says so.
 - **Nothing internal, no speaker notes.** Whatever a canonical file marks `[not for the report]` stays out of the page. A deck built from the report leaves without speaker notes unless the researcher asks for them.
 - **Written for the client in design-thinking language.** "What we saw suggests", "in these cases", "to test". Never conclusions stated as certain. Design hints go as "could", not "must". Use profiles, not names or codes, in anything that can be forwarded.
+- **What the client already accepted goes in as it was presented.** When a round was already shown and accepted (the deck of 5b, a page that left), the report takes it **word for word**, links to it, and adds the validation as a **new layer** with its own visual style. Do not summarise it again and do not rewrite it: the client already read that version. A correction to it follows the rule of "What already went out" and is marked, not slipped in.
+- **The lasting and the temporary are separate.** Findings and what worked stay. The adjustments that belong to this prototype or this round expire when the designer fixes them: they go **last**, in the form of a method note (how it was tested, what happened, what to adjust, what is left to measure).
+- **"What happened" follows the tasks of the script.** Order the validation by the tasks or situations of `7-validation/tasks.md`, the way the round was run, not by the objective declared in the plan. An objective that cuts across tasks is a heading inside the task where it showed up.
+- **The cover names the design challenge.** The challenge, as the brief states it, in large type on the first page. It is what stays when the details of the round are forgotten.
+- **No count as a figure, no table of verdicts at the top.** A count ("3 of 5") is not a chart, circles or a headline; it goes to the annex or the notes, where the support table can be read. The report does not open with a table of verdicts per principle. What worked goes in the body, in words. What the sample could not show goes in a section **what is left to measure**. This is the same rule as in `5b-presentation.md`.
+- **A draft is called a draft.** A page that already carries real data is a draft, not a mock-up. Say what is pending as finishing work (clips, the priority, the annex, the checks), so the researcher knows what is missing.
 - **Before it is shared or sent on, it passes the two scripts (quotes and counts) and two checks:** cuali-to-cuanti (generalisations such as "most", rankings shown as measured, counts that do not match the sheets, the researcher's opinion presented as a finding) and the devil's advocate (the strongest case against the conclusion, from quotes only). Log both in `5-debrief/verification-log.md`. Write the text in a source `.md` and build the HTML from it; run the quote check on the final HTML.
+
+## Pieces built by script, and texts rewritten by another model
+
+The report is built from a Markdown source by a script. The rules of "Pieces built by script" in `5b-presentation.md` apply here as they are written there: the canonical is Markdown and the HTML or the deck is generated from it; cuts are made by number or pattern, never by hand; the map from IDs to titles is made by script; a vocabulary replacement never runs on a literal quote; the fidelity of the piece to its source is checked by script. In short: **the correction goes to the Markdown, and the script runs again.**
+
+If another model rewrites a text of the report to improve the prose, it returns a **table of changes** (original text, proposal, reason), never the file. Quotes and numbers are checked by script. A change that loses a datum or reopens a decision closed in `_engine/decisions.md` is not applied. See "When another model rewrites a text" in `5b-presentation.md`.
 
 ## Optional, on request: clips
 
@@ -78,6 +90,7 @@ already there.
    for quotes, cut quotes and vetoed ones, and `python3 <method-root>/scripts/check_counts.py <page>`
    for every "X of N", every universal and every success tick on 2 people or fewer.
    Nothing leaves with an open MISMATCH, FAIL or VETOED.
+   The final page holds no IDs, so its counts have no pattern to link to and `check_counts.py` says UNLINKED. **Also run** `python3 <method-root>/scripts/check_share.py --source <source.md>` on the Markdown the page is built from: the source does carry the IDs, so the count check has its full force there. Run both, on the piece and on the source. Add `--titles-from 5-debrief/findings.md` so a title that differs from the canonical one (TITLE_DRIFT) is caught.
    Then run `python3 <method-root>/scripts/check_share.py` on the whole folder (`share/` and
    `8-report/`; use `--source` for a Markdown source that holds codes on purpose). It runs the same two
    checks on **everything that already went out**, and adds two brakes: anything marked
@@ -94,6 +107,9 @@ already there.
 - Nothing in it is missing from the sources it summarises.
 - No quote lacks consent, and no name or clip appears that the consent record, the audience or the contract does not allow.
 - Every request of the client is answered or moved with a line, and a focus the sample did not meet is named.
+- What the client already accepted is in the report unchanged, and the validation is a separate layer; the adjustments that expire are last.
+- The cover names the design challenge, "what happened" follows the tasks of the script, and nothing opens with a table of verdicts or shows a count as a figure.
+- The page is built from a Markdown by script, `check_share.py` passes on the page and on its source, and any text rewritten by another model came back as a table of changes.
 - Every capture and clip was checked at three frames and shows nothing sensitive.
 - Every clip in the page has `ok: true` and was chosen against the title it illustrates, not by topic.
 - No internal ID appears anywhere in the page, and `check_share.py` passes on the folder.

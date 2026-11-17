@@ -254,5 +254,45 @@ class TestLog(Fixture):
         self.assertEqual(rows, {"clean.html": "current", "old.md": "outdated"})
 
 
+class TestTitles(Fixture):
+    """A title edited by hand in the piece and not in the canonical file is caught by script."""
+
+    def canon(self):
+        path = self.root / "canon.md"
+        path.write_text("# Findings\n\n## 01 People compare several sites first\n\n"
+                        "## 02 They wait a day before booking\n\n### Open questions\n", encoding="utf-8")
+        return path
+
+    def test_a_title_that_matches_passes(self):
+        self.put("deck.html", "<h2>People compare several sites first</h2><h2>2. They wait a day before booking</h2>")
+        result = self.run_cli("--titles-from", str(self.canon()))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_a_title_edited_by_hand_fails_with_the_canonical_one(self):
+        self.put("deck.html", "<h2>People compare many sites first</h2>")
+        result = self.run_cli("--titles-from", str(self.canon()))
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("TITLE_DRIFT", result.stdout)
+        self.assertIn("People compare several sites first", result.stdout)
+
+    def test_the_same_finding_with_two_titles_in_one_piece_is_caught(self):
+        self.put("deck.md", "## Summary\n\n### They wait a day before booking\n\n### They wait one day before they book\n")
+        result = self.run_cli("--titles-from", str(self.canon()))
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("deck.md:5", result.stdout)
+        self.assertNotIn("deck.md:3", result.stdout)
+
+    def test_a_heading_of_the_pieces_own_is_left_alone(self):
+        self.put("deck.html", "<h1>What we saw in the round</h1><h2>Where to go next</h2>")
+        self.assertEqual(self.run_cli("--titles-from", str(self.canon())).returncode, 0)
+
+    def test_without_the_flag_titles_are_not_read(self):
+        self.put("deck.html", "<h2>People compare many sites first</h2>")
+        self.assertEqual(self.run_cli().returncode, 0)
+
+    def test_a_missing_canonical_file_is_exit_2(self):
+        self.assertEqual(self.run_cli("--titles-from", str(self.root / "nope.md")).returncode, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

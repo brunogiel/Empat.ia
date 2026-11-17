@@ -6,7 +6,7 @@ reads the folder of shareable pieces (`share/` by default, plus `8-report/`) and
 runs the same brakes on every file in it, at every gate, so a corrected finding
 cannot stay alive in something that already went out.
 
-One run does five things:
+One run does five things (a sixth, the titles, when you pass --titles-from):
 
   1. Quotes. `verify_quotes.py` on each piece: a quote that the ledger marks as
      vetoed (VETOED, fails), a quote whose cut may flip the meaning (CUT?), a quote
@@ -44,9 +44,20 @@ entry per line in `_engine/share-allow.txt` (blank lines and # comments are
 ignored). Use them for names that look like a code and are not, such as a product
 called "H20".
 
+6. Titles (only with --titles-from FILE). The canonical Markdown holds the titles of
+     the findings; a heading in a piece that is close to one of them but not equal is
+     TITLE_DRIFT, and it fails. It catches the title edited by hand in one place and not
+     in the other. A heading that resembles no canonical title is the piece's own and is
+     left alone.
+
 A source file that holds codes on purpose (the Markdown the HTML is built from) is
 named with --source: it gets the quote and count checks and skips the code,
 internal and notes checks.
+
+Run it twice when the piece is built from a Markdown source: on the piece, and on the
+source with --source. In a final piece the counts carry no pattern ID (it holds no codes), so
+check_counts cannot link them to a support table and says UNLINKED; the source does carry the
+IDs, so the count check has its full force there.
 
 Exit code 1 if any check fails, 2 when an input is missing. Reuses
 `verify_quotes.py` and `check_counts.py` by import; nothing is copied.
@@ -55,6 +66,7 @@ Usage:
   python3 scripts/check_share.py
   python3 scripts/check_share.py --share share --share 8-report
   python3 scripts/check_share.py --source 8-report/source.md --allow H20
+  python3 scripts/check_share.py --titles-from 5-debrief/findings.md
   python3 scripts/check_share.py --strict
 """
 
@@ -62,6 +74,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import difflib
 import html
 import io
 import re
@@ -79,7 +92,7 @@ ALLOW_DEFAULT = Path("_engine") / "share-allow.txt"
 LOG_HEADING = re.compile(r"what already went out", re.I)
 
 FAILING = {"INTERNAL", "CODE", "NOTES", "FAIL", "VETOED", "MISMATCH", "BAD_FRACTION",
-           "UNKNOWN_ID", "SMALL_N", "ORPHAN"}
+           "UNKNOWN_ID", "SMALL_N", "ORPHAN", "TITLE_DRIFT"}
 SOFT = {"NOT_LOGGED", "OUTDATED"}
 
 # What a person should never read. Case matters: "Gate 2" is a sentence, "GATE 2" is a label.
@@ -199,6 +212,58 @@ def canonical_files(root: Path, skip: set):
     return out
 
 
+
+# ---- the titles of the canonical file -----------------------------------------
+
+TITLE_CLOSE = 0.6          # similar enough to be "the same title, edited"
+LEADING_CODE = re.compile(r"^\s*(?:[A-Za-z]{1,4}-?\d+[a-z]?|\d+(?:\.\d+)*)\s*[:.\u00b7\u2013\u2014)\-]*\s+")
+
+
+def title_key(text: str) -> str:
+    """A title without its number or ID, folded: 'PAT-01 · Waits a day' -> 'waits a day'."""
+    return verify_quotes.norm(LEADING_CODE.sub("", text.strip(), count=1))
+
+
+def headings_of(path: Path):
+    """[(line, heading text)] of a Markdown or an HTML file."""
+    text = path.read_text(encoding="utf-8")
+    out = []
+    if path.suffix.lower() in (".html", ".htm"):
+        for m in re.finditer(r"<h([1-6])\b[^>]*>(.*?)</h\1\s*>", text, re.S | re.I):
+            out.append((line_of(text, m.start()),
+                        html.unescape(re.sub(r"<[^>]*>", "", m.group(2))).strip()))
+    else:
+        for number, line in enumerate(text.splitlines(), 1):
+            m = re.match(r"^#{1,6}\s+(.+?)\s*#*\s*$", line)
+            if m:
+                out.append((number, m.group(1)))
+    return out
+
+
+def canon_titles(files):
+    """{folded title: original} from the headings of the canonical files."""
+    found = {}
+    for path in files:
+        for _, heading in headings_of(path):
+            key = title_key(heading)
+            if len(key.split()) >= 2:
+                found.setdefault(key, LEADING_CODE.sub("", heading.strip(), count=1))
+    return found
+
+
+def drifted_titles(piece: Path, canon: dict):
+    """[(line, title in the piece, the canonical title)] for a heading close to a canonical one, not equal."""
+    out = []
+    for number, heading in headings_of(piece):
+        key = title_key(heading)
+        if len(key.split()) < 2 or key in canon:
+            continue
+        best = max(canon, key=lambda c: difflib.SequenceMatcher(None, key, c).ratio(), default=None)
+        if best and difflib.SequenceMatcher(None, key, best).ratio() >= TITLE_CLOSE:
+            out.append((number, heading, canon[best]))
+    return out
+
+
 # ---- the log of what went out -------------------------------------------------
 
 def read_log(path: Path):
@@ -252,6 +317,9 @@ def main(argv=None) -> int:
     ap.add_argument("--allow", action="append", default=[], metavar="TOKEN",
                     help='exception to the code brake; "re:PATTERN" for a pattern, repeatable')
     ap.add_argument("--allow-file", help="exceptions, one per line (default: <root>/_engine/share-allow.txt)")
+    ap.add_argument("--titles-from", action="append", default=[], metavar="FILE",
+                    help="canonical Markdown whose headings are the titles; a close but different "
+                         "heading in a piece is TITLE_DRIFT, repeatable")
     ap.add_argument("--keep-notes", action="store_true", help="speaker notes are allowed in this piece")
     ap.add_argument("--log", help="verification log (default: <root>/5-debrief/verification-log.md)")
     ap.add_argument("--raw", help="interview transcripts folder (default: <root>/4-field/_raw)")
@@ -274,7 +342,8 @@ def main(argv=None) -> int:
         shared += sorted(p for p in ([f] if f.is_file() else f.rglob("*"))
                          if p.is_file() and p.suffix.lower() in EXTENSIONS)
     sources = [Path(s) for s in a.source]
-    for s in sources:
+    canon_files = [Path(s) for s in a.titles_from]
+    for s in sources + canon_files:
         if not s.is_file():
             print(f"No such file: {s}", file=sys.stderr)
             return 2
@@ -357,6 +426,14 @@ def main(argv=None) -> int:
             for m in list(NOTES_HTML.finditer(raw_text)) + list(NOTES_TEXT.finditer(raw_text)):
                 report("NOTES", f"{path.name}:{line_of(raw_text, m.start())}",
                        "speaker notes in a piece that leaves")
+
+    # 6. titles, against the canonical file
+    if canon_files:
+        canon = canon_titles(canon_files)
+        for path in shared:
+            for number, title, wanted in drifted_titles(path, canon):
+                report("TITLE_DRIFT", f"{path.name}:{number}",
+                       f"«{title[:60]}» is not the canonical title «{wanted[:60]}»")
 
     # 5. the log
     log = read_log(Path(a.log) if a.log else root / LOG_DEFAULT)

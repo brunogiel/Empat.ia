@@ -2,19 +2,20 @@
 
 Owns: the one-page report of the whole project. Does not own: any new claim, or the detail behind it → the files it summarises.
 
-The whole project on one page, for someone who read none of it. It covers every
-round that ran: the field and, when there was one, the ideation and the
-validation. It is the only shareable artefact of the method: no raw quotes
-without consent, no internal notes, no logistics, no codes (state ideas in words). Everything here is a shorter
-view of the principles, the evidence and the findings files. A skipped piece
-gets one line saying what we assume by not doing it; a piece done by someone
-else gets a link.
+The whole project on one page, for someone who read none of it. It is the only
+shareable artefact of the method: no raw quotes without consent, no internal notes,
+no logistics, no codes. A shorter view of the other files, with no new claim. A
+skipped piece gets one line saying what we assume; a piece done by someone else gets
+a link. What the client already accepted goes in **as it was presented**; validation
+is a new layer on top, in its own style.
+
+## The design challenge
+
+The cover, in a few big words, as the brief states it: Pending.
 
 ## What we researched
 
-- The challenge: Pending. *(one line, from `1-desk-research/brief.md`)*
-- What it decides, and when: Pending.
-- Pieces used, skipped or done by others: Pending. *(from the plan in the brief)*
+What it decides, and when. Pieces used, skipped or done by others (from the plan): Pending.
 
 ## Who we talked to
 
@@ -23,13 +24,9 @@ else gets a link.
 | Field | Pending | Pending | Pending |
 | Validation | Pending | Pending | Pending |
 
-## The principles
+## What was presented and accepted
 
-One line each. The full version, with its evidence, is in `5-debrief/principles.md`.
-
-1. Pending.
-2. Pending.
-3. Pending.
+What the client already saw, **word for word**, with a link to that piece: Pending.
 
 ## In their words
 
@@ -41,20 +38,23 @@ Verbatim, with the source. Only quotes whose consent allows sharing.
 
 ## What we tried, and what happened
 
-*Skip this section if there was no ideation or validation.*
+*Skip if there was no ideation or validation. A new layer: give it its own style.*
+- The concept we chose, and why: Pending. *(from `6-ideation/concepts.md`)*
+- What happened, **task by task, in the order of the script** (`7-validation/tasks.md`),
+  not by objective: where people got through, where they got stuck. Pending.
+- What worked: Pending. Do not open with a table of verdicts.
 
-- The concept we chose, and why: Pending. *(from `6-ideation/concepts.md`, or a link if someone else did it)*
-- What people understood, where they got stuck, what changes: Pending. *(from `7-validation/findings.md`)*
+## What is left to measure
+
+What the sample could not show. In words, not as a figure: Pending.
 
 ## How might we
-
-Questions the project leaves open. A How Might We question should allow several
-answers: if it already contains a solution, reframe it.
 
 | HMW | Source insight | Scope |
 |---|---|---|
 | Pending | Pending | too broad / just right / too narrow |
 
-## What we still do not know
+## Adjustments for this version
 
-- Pending. *(from the evidence gaps in `5-debrief/findings.md` and `7-validation/findings.md`)*
+*Last, because they expire.* What belongs to this prototype or this round and goes
+away when the designer fixes it: what to adjust, how it was tested. Pending.

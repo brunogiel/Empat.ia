@@ -145,7 +145,7 @@ discovery/
   3-guide/                   guide.md  process.md  expert-consult.md (optional)
   4-field/                   0-index.md  0-observation-plan.md  feedback/
                              INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
-  5-debrief/                 findings.md  principles.md
+  5-debrief/                 findings.md  principles.md  presentation.md (5b)  meeting-claims.md (optional)
   6-ideation/                concepts.md                     (on demand, born with its first --add)
   7-validation/              tasks.md  0-index.md  findings.md  exercise-menu.md  usability-matrix.md (optional)
                              VAL-001-name-surname.md  _prep/  _raw/  feedback/   (on demand)
@@ -190,6 +190,7 @@ Five rules hold the whole thing up:
   *entered* its step, not because they finished it. Never read existence as "done", and never
   build a progress checklist in `0-README.md` that has to be kept in sync by hand.
 - **After a meeting with the client, map before you edit.** Step `1f` lists what was said, which file absorbs each point and its status, and waits for the researcher's OK before any file changes. The brief stays an index; the client's data goes to `knowledge.md`.
+- **Show a sample before the deck.** Step `5b` builds one slide of each type with real content and waits for the researcher's OK before the rest. A draft that carries real data is called a draft, and what is pending is listed as finishing work. A count is not a slide: it goes to the notes. Pieces are built by script from a Markdown, and a text rewritten by another model comes back as a table of changes, never as a file.
 - **Files the user opens have line budgets** in `_engine/budgets.yaml`. Over budget means the
   content belongs somewhere else, not that it should be deleted. `3-guide/guide.md` is a hard
   cap: two printed pages, questions only.
@@ -253,11 +254,12 @@ Order:
 11. `4a-interview-capture.md`
 12. `4b-observation.md`
 13. `5a-debrief.md`
-14. `6a-ideation.md` (on demand)
-15. `7a-validation-guide.md` (on demand)
-16. `7b-validation-sessions.md` (on demand)
-17. `7c-validation-debrief.md` (on demand)
-18. `8a-report.md`
+14. `5b-presentation.md` (on demand, when the debrief is shown to the client)
+15. `6a-ideation.md` (on demand)
+16. `7a-validation-guide.md` (on demand)
+17. `7b-validation-sessions.md` (on demand)
+18. `7c-validation-debrief.md` (on demand)
+19. `8a-report.md`
 
 This is the order of the files, not the order of the work. The order of the work is the plan.
 
@@ -269,7 +271,7 @@ Valid statuses:
 - `validated`
 - `advanced_with_assumptions`
 
-Eighteen step files, eight phases. The user sees the phases; you read the steps. Granularity is
+Nineteen step files, eight phases. The user sees the phases; you read the steps. Granularity is
 cheap where an agent reads it and expensive where a person does. Phases 6 and 7 are on demand;
 phase 8, the report, is not: every plan closes with it.
 
