@@ -1,16 +1,113 @@
 # Changelog
 
-## Unreleased
+## 3.4.0 - 2026-11-17
 
-### Added: resolve what "this" and "here" pointed at in screen-shared sessions
+Lessons from running the whole method, from the guide to the final report, on a real project.
+Most of them move a check from "someone should notice" to a script or a gate. Every new column,
+field and step is optional: a project installed with 3.3.0 keeps working.
 
-- **`scripts/resolve_deictics.py`:** finds the participant's phrases with a demonstrative, pairs each
-  with a strip of five frames of the shared screen (−4 to +4 s) and builds one sheet per session with
-  the component, the element, the confidence and a capture. Clock offset, crop, frames and the sheet
-  are code and run locally; only the reading of the frames is judgement.
-- **`templates/deictic-glossary.md` and `templates/deictic-prompt.md`:** the per-product list of
-  components and the instruction for the reading step. `UNKNOWN` is always a valid answer.
-- **`docs/deictic-resolver.md`:** the method, its limits and the privacy rules. Step 7b points to it.
+### Added: checks that run as code
+
+- **`verify_quotes.py` flags a quote whose cut may flip the meaning (`CUT?`)**: a negation right
+  before the fragment, a "but" right after it, or a cut in the middle of a sentence. Quotes marked
+  `vetoed:` in the evidence fail the run (`VETOED`) wherever they reappear (`--scan` for Markdown
+  and HTML).
+- **The quote parser reads validation sessions**, clock-prefixed lines and unlabelled continuation
+  lines.
+- **New `check_counts.py`:** compares every "X of N" with the support table of patterns, lists
+  universals ("nobody", "most") with counterexamples from the transcripts, refuses a success tick on
+  two people or fewer, and lists strong patterns with no insight (`--orphans`).
+- **New `check_state.py`:** fails when two marks of `state.yaml` contradict each other or a
+  sub-stage closes before the one before it, and warns when `next` points at something already done.
+- **New `check_share.py`:** runs the quote, count, internal-mark and code checks on everything in
+  `share/` and `8-report/` in one command, so a correction reaches what already went out. Text tagged
+  `[not for the report]` cannot appear in a shared piece, internal codes fail the run (with an
+  exceptions file), speaker notes stay out by default, and `--titles-from` catches titles that
+  drifted from the canonical file. Run it with `--source` on the canonical Markdown as well.
+
+### Added: gates, reviewers and what already went out
+
+- **The verification log tracks "What already went out"**, with a state per file. When a corrected
+  finding sits in a piece already shared, the piece is marked `outdated` and resending is decided.
+  The devil's advocate's corrections reach the findings in the same step.
+- **Sub-stages run one at a time, with one owner per piece.** A number that reaches the researcher
+  before its checker is marked preliminary. A silent answer is never an Advance. An optional,
+  declared compressed mode lets two sub-stages share a checkpoint.
+- **Every model checker, in any phase, is seeded first** and runs on the right model tier. The rule
+  and the tier table live in one place in `5a-debrief.md`. The ±6 lines context check covers video
+  and audio clips against their caption.
+- **`council.md` has a generative mode and a review mode.** Lateral voices generate; reviews go to
+  expert roles and a simulated client validator, with a standard seven-reading panel for the report
+  and a blind panel before the field. Reviewers receive the closed decisions: they may flag their
+  cost, never reopen them, and the synthesis separates fact (fixed) from judgement (asked).
+- **`templates/checkpoint.html`:** a self-contained checkpoint page with the four gate buttons, a
+  reference per card, an "Already corrected" section and a button that copies the decisions.
+
+### Added: evidence, consent and what the client asked for
+
+- **Evidence rows and case sheets can mark who speaks** (`person` or `trade`) **and how a quote came
+  out** (`premise`, `hypothetical`, `moderator`). Validation findings mark every task as reached
+  alone, guided or induced.
+- **`participant_names` in the project state** sets names, profile or nothing for each audience,
+  with who authorized it. A per-person consent record (record, quote, name, clip) is crossed with
+  the audience and the client contract before names or clips go out.
+- **The brief lists what the client asked for**, and each phase close answers every item or moves
+  it to the next round. A focus by profile is filtered when recruiting and asked in the session.
+- **Screenshots and clips** use test data, get a three-frame review and blur what is sensitive. The
+  recorder's automatic summary is not evidence: work on the whole transcript.
+
+### Added: video and clips
+
+- **The canonical minute of a quote is the video's.** The evidence keeps `t_transcript` and
+  `t_video` as optional columns. Screen-shared sessions are processed with their video, sampled
+  densely around clicks; anything not seen is declared as deduced. The recording is armed from the
+  account of whoever keeps the material.
+- **Optional `locate_quotes.py` and `cut_clips.py`**, on request, for any debrief: local
+  speech-to-text aligned by words, clips with burned captions, a re-check that each clip says its
+  quote (`ok: true`) and a thumbnail for PDF. A clip is chosen against the title it illustrates.
+  See `docs/quote-clips.md`.
+- **`resolve_deictics.py`** finds the participant's phrases with "this" or "here", pairs each with a
+  strip of five frames of the shared screen and builds one sheet per session with the component,
+  the element, the confidence and a capture. Only the reading of the frames is judgement. With
+  `templates/deictic-glossary.md`, `templates/deictic-prompt.md` and `docs/deictic-resolver.md`.
+
+### Added: the guide and the field
+
+- **The guide is built structure first:** the sections table is approved before any question, and
+  the researcher's braindump is saved as input. Twelve rules for writing the questions, and a guide
+  template that reads well on a phone.
+- **Exercises are piloted, fixed in writing, protected from cuts and counted**; the debrief says
+  "not enough" under the declared minimum.
+- **`templates/expert-consult.md`:** experts are witnesses, not users; their sample bias is named
+  and what they say enters as a hypothesis.
+- **New `export_guide.py`:** the client copy of the guide and each session's prep sheet, built from
+  the master.
+- **New step `1f`, meeting coverage:** what a client meeting said, mapped to the project files and
+  approved before anything is edited. `init_project.py --add` errors say what to type.
+
+### Added: validation
+
+- **Bets live in `concepts.md`** with what confirms and what drops each one, even when the ideation
+  is external; 7a rewrites them when the validation design changes.
+- **7a brings the client's goal down to a behaviour you can watch**, asks for a real case before the
+  prototype and orders tasks with a contamination table. Optional 7a.0 exercise menu with
+  `build_menu.py`: go / maybe / no buttons that add minutes against the session.
+- **7b gains a logistics checklist and `templates/moderator-feedback.html`** for sessions on a screen.
+- **7c gains `templates/usability-matrix.md`**, an analysis guide and a cause for every failure: a
+  failure of the prototype is not a finding.
+
+### Added: presentation and report
+
+- **New step 5b, presentation of the debrief:** a sample with one slide of each type and real
+  content passes a gate before the deck is built, and a coverage table puts the client's questions
+  against the deck.
+- **The report keeps what the client already accepted as presented**, adds the validation as a new
+  layer, orders "what happened" by the tasks of the script and puts temporary adjustments last.
+  Counts go to notes or the annex; what could not be seen goes to "what is left to measure".
+- **Pieces are built by script from a canonical Markdown**, and a text rewritten by another model
+  comes back as a table of changes, never as the file.
+- **`templates/meeting-claims.md`:** what the researcher said in a client meeting, checked against
+  the evidence and against the client's whole voted list.
 
 ## 3.3.0 - 2026-10-23
 
