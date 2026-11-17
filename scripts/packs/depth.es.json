@@ -1,5 +1,5 @@
 {
-  "descripcion": "Juzga UN intercambio de una entrevista de user research: la pregunta del entrevistador y lo que contesto la persona hasta la proxima pregunta. Una llamada por intercambio. Las preguntas que miran la respuesta son las que se sostuvieron en la primera ronda real; las que miran la pregunta del entrevistador solo proponen candidatas.",
+  "descripcion": "Juzga UN intercambio de una entrevista de user research: la pregunta del entrevistador y lo que contesto la persona hasta la proxima pregunta. Una llamada por intercambio. Las preguntas que miran la respuesta se sostienen contra una lectura a mano; las que miran la pregunta del entrevistador solo proponen candidatas.",
   "variables": [],
   "preguntas": {
     "bloque": {

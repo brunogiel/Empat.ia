@@ -208,7 +208,7 @@ class TestFilesAndBudgets(unittest.TestCase):
 
     def test_the_hard_budget_is_the_guide(self):
         """The files that must never grow are the two scripts you hold in the room:
-        the master guide (it reached 257 lines on the first external run) and the
+        the master guide (the file that grows across interviews) and the
         validation task script."""
         text = BUDGETS.read_text(encoding="utf-8")
         hard = re.findall(r"^  ([^\s#][^:]*):\n    lines: \d+\n    hard: true",

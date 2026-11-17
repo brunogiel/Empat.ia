@@ -5,10 +5,10 @@ A library, not a CLI: the one you run is classify_exchanges.py.
 
 EXPERIMENTAL. jev answers closed questions about one item per call, with no
 batch and no neighbours, so the judgement of one exchange never bleeds into the
-next. It does not write and does not reason. On the first real round (five
-interviews, about 500 exchanges, about one US cent per interview) the questions
-about the person's answer held up; the ones about the interviewer's own question
-did not, and are counted by hand. Check the first run of a new project by hand.
+next. It does not write and does not reason. The questions about the person's answer
+hold up against a hand reading; the ones about the interviewer's own question do
+not, and are counted by hand. A run costs cents per interview. Check the first
+run of a new project by hand.
 
 The API key never lives in the repository or in the project folder:
     export TYPESAFE_API_KEY="tsk_..."

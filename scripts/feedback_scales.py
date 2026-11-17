@@ -24,9 +24,8 @@ per-topic table do not, and the Guide reads them by hand.
 
 "You asked for a case / a reason and it came out" is counted BY HAND, on the
 hand-count sheet: the judge that looks at the interviewer's question counts
-greetings, instructions and cut-off questions as requests, and on the first real
-round it was far off (7 of 19 by the judge, 11 of 13 by hand, in one interview).
-The judge only pre-fills candidates.
+greetings, instructions and cut-off questions as requests, so its count runs far
+from the hand count. The judge only pre-fills candidates.
 
 Usage
   python3 feedback_scales.py discovery/_engine/feedback --lang es \\
@@ -46,7 +45,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from segment_interview import answer_of, question_of  # noqa: E402
 
-# --- Bands. PROVISIONAL: set on five interviews of the first real round. ----
+# --- Bands. PROVISIONAL: set on a small first sample. ----------------------
 # Recalibrate with 8 or more. Each scale is (axis_min, axis_max, [(edge, label)])
 # where an edge is the upper end of its band. Nothing else depends on them.
 MONOLOGUE_WORDS = 200          # an answer this long or longer is a monologue
@@ -341,7 +340,7 @@ def main() -> int:
         if not sheet.exists():
             sheet.write_text(hand_count_sheet(d, *raw[base], args.lang), encoding="utf-8")
         out = {k: v for k, v in d.items() if not k.startswith("_")}
-        out["bands_status"] = "provisional: five interviews; recalibrate with 8 or more"
+        out["bands_status"] = "provisional; recalibrate with 8 or more interviews"
         (folder / f"{base}-data.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n",
                                                   encoding="utf-8")
 

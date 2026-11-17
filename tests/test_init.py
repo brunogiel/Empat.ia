@@ -436,8 +436,7 @@ class TestProjectName(TempProject):
 
 class TestForceIsSafe(TempProject):
     """The v2 foot-gun: --force used to replace hand-translated files with the
-    English templates. A real project logged 'do not run --force: it overwrites
-    the Spanish'."""
+    English templates."""
 
     def test_force_does_not_touch_an_edited_file(self):
         self.init("--lang", "es")

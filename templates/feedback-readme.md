@@ -18,7 +18,8 @@ a card left unplaced, a story left without its concrete case: those are.
      answering it (< 7 struggles · 7-7.5 sometimes goes around · > 7.5 gets to the point). Judged by
      jev, one call per exchange.
    - One bold sentence with the reading, and one or two literal examples.
-   - The bands come from five interviews of one project: recalibrate with 8 or more.
+   - The bands are provisional, set on a small first sample: recalibrate them on 8 or more
+     interviews of your own.
 2. **What came out of each topic.** One row per topic of the guide, with a verdict against what that
    topic was looking for, plus rows for information that did not come out. Thresholds by what the
    topic seeks: a topic after concrete cases is ✅ with 5 or more; one after reasons, ✅ with 5 or
@@ -56,18 +57,17 @@ inside this discovery folder.
 ## What is counted by hand, and why
 
 - **"You asked for a case / a reason and it came out."** The judge that reads the interviewer's own
-  question counted greetings, instructions and cut-off questions as requests, and missed by a lot
-  (in one interview 7 of 19 by the judge, 11 of 13 by hand; in another, 7 of 17 against 11 of 15).
-  The sheet lists every exchange with jev's reading of the answer pre-filled, which held up; you mark
+  question counts greetings, instructions and cut-off questions as requests, so its count runs far
+  from the hand count. The sheet lists every exchange with jev's reading of the answer pre-filled, which held up; you mark
   the question side. These numbers are not ranked across interviews.
 - **Premises.** The judge proposes candidates; a person confirms them. They are right about half
-  the time: many were confirmations of a fact the person had already said.
+  the time: many are confirmations of a fact the person had already said.
 
 ## jev is experimental
 
 jev (typesafe.ai) answers closed questions about one exchange per call, with no batch and no
-neighbours. It has run on one real round: the questions about the person's answer held up; the ones
-about the interviewer's question did not. **The first run on a new project is checked by hand,
+neighbours. The questions about the person's answer hold up against a hand reading; the ones about
+the interviewer's question do not. **The first run on a new project is checked by hand,
 exchange by exchange, on at least one interview**, before its numbers go into a page. Its confidence
 never ranks anything; the code cuts on fixed thresholds. Without a key, the two scales that are
 plain counts still come out, over every exchange (the opening and the closing are not set apart),
