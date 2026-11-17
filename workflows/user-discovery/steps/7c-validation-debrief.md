@@ -12,6 +12,7 @@ phase 7; it does not reopen the field debrief.
 - Report what people did. What they said they would do is a weaker signal: label it.
 - Every "what they did" carries one of three marks: **alone** (nobody pointed the way), **guided** (the moderator gave a hint or an answer first) or **induced** (the idea came from the moderator and ended attributed to the person). A task that someone finished only after a hint did not work alone.
 - **The headline separates two things: where something happened and how it was reached.** "Five of seven reached the form" says where; "two did it alone, three guided" says how. Never put the first without the second in a title or a slide.
+- **Say how much of it was seen.** In a session on a screen, a count of what people did also says how many of its rows were seen in the video and how many are `deduced` from the transcript (see `7b`). A deduced row can point to where to look; it does not carry a "worked" on its own.
 - An `induced` row never supports "this worked". It is a lead for the next round.
 - Count: how many of how many, not "some". With 2 people or fewer, say what each did; do not mark it as having worked.
 - Compare with the bets of the ideation: held, partly, did not.
@@ -64,11 +65,16 @@ created before its step starts.
 9. **[LATENT]** Every model check this step runs (does the quote support the finding, cuali-to-cuanti, the devil's advocate) follows "Every model checker" in `5a-debrief.md`: it runs first on a copy with planted errors and must catch them, it runs on a mid or strong model, and the log says "seeds caught: X of Y". Every quote or clip that supports a finding gets the ±6 lines of context (a clip against the finding it illustrates). A validation finding built on what a person said they would do, checked by a checker that missed its seeds, is not checked.
 10. **[DET]** Update `substeps:` if the project uses it, and run `python3 <method-root>/scripts/check_state.py` before closing.
 
+## Optional, on request: the minute and the clip
+
+When the sessions were on a screen and the findings will play moments of them, two scripts help. `scripts/locate_quotes.py` finds the minute of each quote in the video (the recorder's transcript can be off by minutes). `scripts/cut_clips.py` cuts the clip, burns the captions in, checks that it says the quote and makes a thumbnail. Neither is needed to close this step; both pay off most with a prototype shown on screen. Choose each clip against the title of the finding it illustrates, not by topic, and use only a clip whose check gave `ok: true`. Method, limits and privacy: `docs/quote-clips.md`.
+
 ## Quality criteria
 
 - Every request in "What the client asked for" (`brief.md`) is answered here or moved to the next round with one line.
 - Every count says how many reached it alone, guided and induced.
 - Every capture or clip used was checked at three frames and shows no sensitive data (see 7b).
+- In a session on a screen, every count says how many rows were seen in the video and how many are deduced.
 - Each change points at the finding that asks for it, and says how big it is.
 - Each finding has a count and an evidence ID.
 - Contradictions stay visible.

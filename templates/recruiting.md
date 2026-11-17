@@ -1,6 +1,6 @@
 # Recruitment
 
-Owns: how we reach the sample: criteria per profile, channels, messages, tracker and sample risks. Does not own: who the profiles are → `profiles.md`; the questions we ask → `3-guide/guide.md`.
+Owns: how we reach the sample: criteria per profile, channels, messages, tracker, sample risks, and who schedules and records. Does not own: who the profiles are → `profiles.md`; the questions we ask → `3-guide/guide.md`.
 
 This document defines how we'll source interviews without biasing the sample too much.
 
@@ -81,6 +81,13 @@ Hi [Name], I'm researching how [profile/industry] solves [topic]. I saw your exp
 
 It isn't a sales pitch. I'm looking to learn from real cases in a [45-60 min] interview. Would you be interested in taking part?
 ```
+
+## Scheduling and recording
+
+- Keeper of the material (who stores and processes it): Pending.
+- The calls and the scheduling link are created from the keeper's account, with the recording on. A recording lands in the storage of whoever starts or hosts the call; if that is someone else, the file may never reach the project.
+- After the first session, check that the recording arrived where the project can read it: Pending.
+- A session on a screen (prototype, wireframe, form) is always recorded. Without the video, "this", "here" and the clicks are lost.
 
 ## Consent record
 

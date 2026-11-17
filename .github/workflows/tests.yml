@@ -32,3 +32,7 @@ jobs:
         run: python3 tests/test_check_state.py
       - name: The share checker catches what already went out
         run: python3 tests/test_check_share.py
+      - name: The quote locator aligns by words and says when it cannot
+        run: python3 tests/test_locate_quotes.py
+      - name: The clip cutter plans, builds its commands and judges a clip
+        run: python3 tests/test_cut_clips.py

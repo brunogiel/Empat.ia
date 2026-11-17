@@ -8,7 +8,7 @@ Prepare a protocol for before, during, and after interviewing.
 
 - Ask for consent.
 - Protect privacy.
-- Use recording or an AI notetaker if you can.
+- Use recording or an AI notetaker if you can. Arm the recording from the account of whoever keeps the material (`2b`), and always record a session on a screen.
 - Never cut off what the interviewee is saying.
 - Everything the user says is evidence of their perspective; don't argue with it during the interview.
 

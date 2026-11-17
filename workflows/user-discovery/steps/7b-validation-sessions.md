@@ -12,6 +12,9 @@ session at a time, without synthesising yet.
 - Record what they did, in order, before what they said.
 - Mark moments where they stopped, went back, or asked for help.
 - For each task, mark **how far they got and how**: `alone` (nobody said anything that pointed the way), `guided` (the moderator answered a question or gave a hint first), or `induced` (the idea or the word came from the moderator and ended attributed to the person). Mark it while you watch; it is hard to rebuild later.
+- **A session on a screen (a prototype, a wireframe, a form) is processed with its video. The video is not an extra.** The transcript says what was said; the video says what was clicked, skipped or misread. Read the video in the same pass as the transcript, session by session.
+- **Sample the video so the clicks are seen.** One frame every 10 seconds misses a click that lasts a second. Take frames densely (one every 1 to 2 seconds) in the seconds around each moment of interaction: a task starting or ending, a prompt from the moderator, a phrase that points ("this", "here"), a long silence, a return to an earlier screen. Add a frame at every scene change (for example ffmpeg's `select='gt(scene,0.02)'` filter). Sparse frames are enough for the stretches between.
+- **What the video did not show is deduced.** Write each action of the person on the screen as `seen` (you watched it in the frames) or `deduced` (it comes from the words, or from a frame that did not catch the click). A `deduced` action stays in the note and the count says how many of its rows were seen.
 - **Test data, never the person's own.** In a session on a prototype or a form, the person types test data (a made-up name, a mailbox and a phone that belong to the project). Never ask them to enter their real data, and never share a screen that shows it. If a real one shows up anyway, the clip is cut or blurred before anyone else sees it.
 - **Check every capture before it is used.** Open each screenshot and each clip at no fewer than three frames (start, middle, end). Anything sensitive in any of them is blurred: emails, phone numbers, passwords, names, chats and notifications of the call itself. A clip with something sensitive that cannot be blurred is not used.
 - Don't cross sessions until each one is processed.
@@ -37,6 +40,7 @@ When the sessions were screen-shared and the participant points without naming (
 of the product's components. It is local, it needs the video, and it produces a sheet per session
 with a confidence and a capture per row. Method, limits and privacy rules: `docs/deictic-resolver.md`.
 Rows marked "review" are opened by a person before any of them is quoted in the findings.
+The strips cover the phrases that point. A click made without a word needs the dense sampling above.
 
 ## Documents to touch
 
@@ -59,7 +63,7 @@ Rows marked "review" are opened by a person before any of them is quoted in the 
 1. Ask the user to drop the material in `7-validation/_raw/`.
 2. Assign an ID and a base name per session: `VAL-001-name-surname`.
 3. Fill out `0-index.md` with metadata and status.
-4. Process each session with the `process-interview` skill: it handles `VAL-` too.
+4. Process each session with the `process-interview` skill: it handles `VAL-` too. For a session on a screen, read the video in the same pass (see the notes above).
 5. Extract atomic evidence into `_engine/evidence.md`, with IDs `VAL-00X-NN`.
 6. Update `validations` in `_engine/state.yaml`.
 7. Mark gaps before moving to the debrief.

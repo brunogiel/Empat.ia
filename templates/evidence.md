@@ -50,6 +50,15 @@ Two optional columns, `Voice` and `Induced`, sit at the end of the ledger. Leave
 - A quote with a value in `Induced` is never the only support of a finding. Mark the row, and say in the finding that the idea was induced. If the check of context shows that the quote says nothing the person did not get from the question, write `vetoed: <reason>` in **Use in synthesis** instead.
 - The marks come from the transcript, with the ±6 lines around the quote. They are a reading: label them as such.
 
+## Two clocks
+
+The transcript of the recording tool and the video do not share a clock: it can drift by seconds or by minutes. A minute taken from the transcript is not the minute in the video.
+
+- Two optional columns, `t_transcript` and `t_video`, sit at the end of the ledger. Leave them empty and nothing changes.
+- `t_transcript`: the minute as the recorder's transcript gives it. `Location` can keep saying the same.
+- `t_video`: the minute where the person says it in the video. It is the **canonical minute** of the quote, and the only one used to cut a clip or to point someone at a moment.
+- Find it by listening to the audio again with a local transcription (Whisper or equivalent) and aligning it, by words, against the text of the quote. `scripts/locate_quotes.py` does it on request and fills both clocks (`docs/quote-clips.md`). A quote whose coverage is under 0.8 gets no `t_video` until a person checks it.
+
 ## Internal, not for the report
 
 Some rows and notes are for the team only: a recruiter's remark, a hunch, a name that identifies someone. Mark them where they live. Add the tag `[not for the report]` to the line, or to any cell of a table row; for several lines, wrap them between `<!-- not for the report -->` and `<!-- end not for the report -->`.
@@ -72,9 +81,9 @@ Some rows and notes are for the team only: a recruiter's remark, a hunch, a name
 
 ## Ledger
 
-| Evidence ID | Interview | Profile | Type | Evidence | Location | Tags | Preliminary reading | Confidence | Use in synthesis | Voice | Induced |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review/vetoed: reason | person/trade | none/premise/hypothetical/moderator |
+| Evidence ID | Interview | Profile | Type | Evidence | Location | Tags | Preliminary reading | Confidence | Use in synthesis | Voice | Induced | t_transcript | t_video |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| INT-001-01 | INT-001 | Pending | quote/fact/observation/workaround/emotion/contradiction/material/open_question/copilot_reading | Pending | transcript minute/line or note section | Pending | Pending | low/medium/high | yes/no/review/vetoed: reason | person/trade | none/premise/hypothetical/moderator | optional m:ss | optional m:ss |
 
 ## Contradictions to preserve
 

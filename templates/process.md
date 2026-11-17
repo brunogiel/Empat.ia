@@ -14,6 +14,8 @@ This document keeps you from improvising interviews. Use it before, during and a
 - [ ] Corresponding guide ready.
 - [ ] Roles defined: who asks, who takes notes, who observes.
 - [ ] Recording or note-taking tool tested.
+- [ ] The recording is armed from the account of whoever will keep the material, not from a guest's or a colleague's: the file lands in the storage of whoever starts or hosts the call, and may never reach the project.
+- [ ] A session on a screen (prototype, wireframe, form) is recorded, always. Without the video, "this", "here" and the clicks are lost.
 - [ ] Plan B if the tech fails.
 
 ### Privacy and consent
@@ -73,6 +75,7 @@ debrief.
 ## After, within 24 hours
 
 - [ ] Save audio/video/notes with date, profile and anonymous name.
+- [ ] The recording is in the project folder (`_raw/`), not only in the call tool's storage. If it is not, ask whoever hosted the call to share it today.
 - [ ] Write down 5-10 strong verbatim quotes.
 - [ ] Write down interviewer observations, separated from what the user said.
 - [ ] Note moments of tension, surprise or emotion.
