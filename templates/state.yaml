@@ -194,7 +194,7 @@ steps:
   validation_guide:
     phase: 7
     status: not_started
-    file: 7-validation/tasks.md
+    file: 7-validation/tasks.md + 7-validation/exercise-menu.md
     gate: true
     on_demand: true
   validation_capture:
@@ -206,7 +206,7 @@ steps:
   validation_debrief:
     phase: 7
     status: not_started
-    file: 7-validation/findings.md
+    file: 7-validation/findings.md + 7-validation/usability-matrix.md + 7-validation/analysis-guide.md
     gate: true
     on_demand: true
   report:

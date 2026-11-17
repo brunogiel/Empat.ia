@@ -12,8 +12,10 @@ minimal version of ideation.
 - Three to five concepts. A concept is one way of answering a How Might We
   question, not a feature list.
 - Choose with criteria taken from the principles, not from taste.
-- If the ideation is done by another team, link their material and stop. The plan
-  marks the piece `external`.
+- If the ideation is done by another team or comes from an outside source, link
+  their material. The plan marks the piece `external`. One thing is still written
+  here: the **bets** the validation will test, in `6-ideation/concepts.md`
+  (see "The bets" below). Without them 7a has nothing to take tasks from.
 - Don't make things up: a concept that rests on something the evidence does not
   show is labelled as a bet.
 
@@ -47,12 +49,24 @@ the design: `6-ideation/` is born with this step.
 4. **[LATENT]** Score each concept with a word (`meets`, `partly`, `does not`), not
    a number.
 5. **[LATENT]** Choose one. Say why it won and what the others lost on.
-6. **[LATENT]** List what has to be true for it to work. Each one becomes a thing
-   to test in phase 7, or an assumption.
+6. **[LATENT]** Write the bets: what has to be true for it to work. This step runs
+   even when the ideation is external; then the bets come from their material, from
+   the objectives the client set for the round or from the principles, and the
+   column "Comes from" says which.
+7. **[LATENT]** Give each bet a result that confirms it and a result that drops it.
+   A bet that no result can drop is not a bet, it is a wish: rewrite it. Each bet
+   becomes a task in phase 7, or an assumption.
+
+## The bets
+
+The bets table of `concepts.md` is the hand-over to phase 7. It is the one part of
+this file an external ideation does not excuse. If the design of the validation
+changes later, `7a` rewrites the bets there (see its process).
 
 ## Quality criteria
 
 - Every criterion traces to a principle.
+- Every bet says what confirms it and what drops it.
 - The concepts differ in the bet they make, not in details.
 - The choice can be explained to someone who did not take part.
 

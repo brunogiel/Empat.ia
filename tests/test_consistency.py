@@ -32,7 +32,8 @@ ENGINE_EXEMPT = ("_engine/", "4-field/_prep/", "4-field/_raw/", "4-field/INT-",
 # Every template the user opens. Each one starts with an 'Owns:' line.
 OWNED_TEMPLATES = ["brief", "knowledge", "market", "profiles", "recruiting", "guide",
                    "process", "findings", "principles", "summary", "concepts", "tasks",
-                   "validation-findings", "expert-consult", "meeting-coverage"]
+                   "validation-findings", "expert-consult", "meeting-coverage",
+                   "exercise-menu", "usability-matrix"]
 
 
 def state_steps():
@@ -111,6 +112,77 @@ class TestStepsAndFiles(unittest.TestCase):
                 self.assertTrue(name.startswith(str(phase_of[step])),
                                 f"step '{step}' is in phase {phase_of[step]} "
                                 f"but its file is named '{name}'")
+
+
+class TestValidationRound(unittest.TestCase):
+    """Phases 6 and 7: bets that can conclude, a menu, logistics, moderator feedback, a matrix."""
+
+    def read(self, *parts):
+        return REPO.joinpath(*parts).read_text(encoding="utf-8")
+
+    def test_the_bets_say_what_confirms_and_what_drops_them(self):
+        concepts = self.read("templates", "concepts.md")
+        self.assertRegex(concepts, r"\| Bet \| Comes from \| Confirmed if \| Dropped if \|")
+        self.assertIn("whoever did the ideation", concepts)
+        ideation = self.read("workflows", "user-discovery", "steps", "6a-ideation.md")
+        self.assertIn("## The bets", ideation)
+        self.assertIn("external", ideation)
+        guide = self.read("workflows", "user-discovery", "steps", "7a-validation-guide.md")
+        self.assertIn("in the same change", guide)
+        self.assertIn("not tested", guide)
+
+    def test_7a_brings_the_goal_down_and_orders_the_tasks(self):
+        guide = self.read("workflows", "user-discovery", "steps", "7a-validation-guide.md")
+        for phrase in ["behaviour you can watch", "The real case comes first",
+                       "## Optional, 7a.0: the menu of exercises", "## Order and contamination",
+                       "build_menu.py", "exercise_menu", "go", "maybe"]:
+            self.assertIn(phrase, guide)
+        table = guide[guide.index("## Order and contamination"):guide.index("## Process")]
+        self.assertGreaterEqual(len(re.findall(r"^\| (?!If this|---)", table, re.M)), 5)
+        tasks = self.read("templates", "tasks.md")
+        self.assertIn("Order of the tasks, and why", tasks)
+
+    def test_7b_has_the_logistics_checklist_and_the_moderator_page(self):
+        step = self.read("workflows", "user-discovery", "steps", "7b-validation-sessions.md")
+        block = step[step.index("## Before each session"):step.index("## The moderator's feedback")]
+        for phrase in ["computer", "same message as the link", "Test data", "floating window",
+                       "Time per task"]:
+            self.assertIn(phrase, block)
+        self.assertIn("moderator-feedback.html", step)
+        self.assertNotIn("interview-feedback.html", step)
+
+    def test_the_moderator_page_has_no_discovery_scales_and_loads_nothing(self):
+        page = self.read("templates", "moderator-feedback.html")
+        self.assertNotIn("{{SCALES}}", page)
+        self.assertNotIn("<script", page)
+        self.assertIn("prefers-color-scheme: dark", page)
+        for word in ["alone", "guided", "induced", "person", "trade", "Task by task"]:
+            self.assertIn(word, page)
+        urls = set(re.findall(r'(?:src|href)="(https?://[^"]+)"', page))
+        self.assertTrue(all("fonts.g" in u for u in urls), urls)
+
+    def test_7c_separates_a_prototype_failure_from_a_finding(self):
+        step = self.read("workflows", "user-discovery", "steps", "7c-validation-debrief.md")
+        for phrase in ["`prototype`", "does not count toward", "validation_matrix",
+                       "validation_analysis_guide", "refuter", "provisional",
+                       "The devil's advocate is seeded too"]:
+            self.assertIn(phrase, step)
+        matrix = self.read("templates", "usability-matrix.md")
+        for word in ["alone", "guided", "induced", "failed", "prototype", "design",
+                     "undetermined", "Provisional"]:
+            self.assertIn(word, matrix)
+        self.assertIn("Cause", self.read("templates", "validation-findings.md"))
+
+    def test_the_new_files_are_declared_and_budgeted(self):
+        state = self.read("templates", "state.yaml")
+        budgets = self.read("templates", "budgets.yaml")
+        lazy, _ = lazy_map()
+        for step in ["exercise_menu", "validation_matrix", "validation_analysis_guide"]:
+            dest = lazy[step][1]
+            self.assertIn(dest, state, step)
+            self.assertIn(dest, budgets, step)
+        for name in ["exercise-menu.md", "usability-matrix.md", "moderator-feedback.html"]:
+            self.assertTrue((REPO / "templates" / name).exists(), name)
 
 
 class TestFilesAndBudgets(unittest.TestCase):

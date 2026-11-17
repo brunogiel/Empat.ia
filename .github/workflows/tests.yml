@@ -38,3 +38,5 @@ jobs:
         run: python3 tests/test_cut_clips.py
       - name: The guide export builds the client copy and the prep sheet from the master
         run: python3 tests/test_export_guide.py
+      - name: The exercise menu page adds up the minutes and writes the choices back
+        run: python3 tests/test_build_menu.py

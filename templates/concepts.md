@@ -1,19 +1,20 @@
 # Concepts
 
-Owns: the concepts, the criteria and the choice. Does not own: the questions they answer → `5-debrief/principles.md`; what to test with people → `7-validation/tasks.md`.
+Owns: the concepts, the criteria, the choice and the bets to validate. Does not own: the questions they answer → `5-debrief/principles.md`; what to test with people → `7-validation/tasks.md`.
 
 From the How Might We questions of the debrief to three to five concepts, chosen
 with criteria that trace back to the design principles, not to taste.
 
 This is the minimal version of ideation: enough to go from questions to
 something you can put in front of people. If the ideation is done by someone
-else, fill only the next section and link their material.
+else, fill the next section and the bets, and link their material.
 
 ## Who does this
 
 - Done by: Pending. *(this project, or another team)*
-- If another team did it: link to their material here and stop. Nothing below
-  needs to be filled; the validation works from what they chose.
+- If another team or an outside source did it: link to their material here and
+  stop, except for the bets (last section). The validation works from the bets, so
+  they are written here whoever did the ideation.
   Link: Pending.
 
 ## Where we start
@@ -59,12 +60,20 @@ Chosen to take to validation: Pending.
 
 Why it won, and what the others lost on: Pending.
 
-## What we are betting on
+## The bets
 
-What has to be true for the chosen concept to work. Each one becomes something
-to test in `7-validation/`, or an assumption in `_engine/assumptions.md`.
+What has to be true for the chosen concept to work, written so the validation can
+conclude. Each bet says what result confirms it and what result drops it. A bet with
+no result that drops it cannot be tested. Each one becomes a task in `7-validation/`
+or an assumption in `_engine/assumptions.md`.
 
-- Pending.
+| Bet | Comes from | Confirmed if | Dropped if |
+|---|---|---|---|
+| B-1: Pending | a concept / the client / an outside source | Pending | Pending |
+
+If the design of the validation changes (a comparison is removed, a task is cut, a
+profile is left out), rewrite the affected bets here, in the same change, and say
+what changed: `7a` does it.
 
 ## Open questions
 

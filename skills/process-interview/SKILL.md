@@ -23,7 +23,7 @@ The same flow processes a session where a person used a prototype, with these di
 
 - The ID is `VAL-00X`, and the files live in `discovery/7-validation/`: the note
   `7-validation/<base>.md`, the prep sheet in `_prep/`, the recording or transcript in `_raw/`,
-  the feedback in `feedback/`. Create them with `--add validation-note|validation-prep|validation-feedback --name <base>`.
+  the feedback in `feedback/`. Create them with `--add validation-note|validation-prep|validation-feedback|validation-feedback-html --name <base>`.
   The script refuses `INT-` for these and `VAL-` for interviews.
 - Evidence rows are `VAL-00X-NN`, numbered within the session. Record what the person **did**
   (where they stopped, went back, asked for help) before what they said.

@@ -31,9 +31,13 @@ What the concept made clear without help, and in whose words.
 The tasks where people stopped, went the wrong way, or needed help. A task
 nobody got stuck on is also a finding: say so.
 
-| Task | What happened | Evidence | How many of how many | Alone / guided / induced |
-|---|---|---|---|---|
-| Pending | Pending | VAL-001-02 | Pending | Pending |
+| Task | What happened | Cause | Evidence | How many of how many | Alone / guided / induced |
+|---|---|---|---|---|---|
+| Pending | Pending | design | VAL-001-02 | Pending | Pending |
+
+Cause is `prototype` (it broke: a bug, a broken link), `design` (it worked and the person could
+not understand or find it) or `undetermined`. A `prototype` failure is not a finding about the
+person and does not count toward "how many of how many": list it in `usability-matrix.md` as a fix.
 
 ## What to change
 

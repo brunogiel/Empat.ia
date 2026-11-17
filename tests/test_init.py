@@ -1043,6 +1043,45 @@ class FeedbackHtmlTemplate(TempProject):
         self.assertIsNone(re.search(r"\bA-\d{3}\b|\bINT-\d{3}-\d{2}\b", text))
 
 
+class ValidationAids(TempProject):
+    """7a.0 menu, 7c matrix and analysis guide, and the moderator's page."""
+
+    def test_the_moderator_page_is_not_the_interview_page(self):
+        self.init()
+        result = self.init("--add", "validation-feedback-html", "--name", "VAL-001-ana-lopez")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        page = (self.discovery / "7-validation" / "feedback" /
+                "VAL-001-ana-lopez-feedback.html").read_text(encoding="utf-8")
+        self.assertIn("Moderator feedback", page)
+        self.assertNotIn("{{SCALES}}", page)
+        self.assertIsNone(re.search(r"\bA-\d{3}\b|\bVAL-\d{3}-\d{2}\b", page))
+
+    def test_the_interview_page_is_unchanged_for_interviews(self):
+        self.init()
+        self.init("--add", "interview-feedback-html", "--name", "INT-001-ana-lopez")
+        page = (self.discovery / "4-field" / "feedback" /
+                "INT-001-ana-lopez-feedback.html").read_text(encoding="utf-8")
+        self.assertIn("{{SCALES}}", page)
+
+    def test_each_optional_piece_lands_in_phase_7(self):
+        expected = {
+            "exercise_menu": "7-validation/exercise-menu.md",
+            "validation_matrix": "7-validation/usability-matrix.md",
+            "validation_analysis_guide": "7-validation/analysis-guide.md",
+        }
+        self.init()
+        for step, dest in expected.items():
+            with self.subTest(step=step):
+                result = self.init("--add", step)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertTrue((self.discovery / dest).exists(), dest)
+        self.assertTrue((self.discovery / "7-validation" / "0-README.md").exists())
+
+    def test_a_clean_install_is_still_eleven_files(self):
+        self.init("--lang", "es")
+        self.assertEqual(files_in(self.discovery), INSTALLED)
+
+
 class VerbosityAndStart(unittest.TestCase):
     """The talk share only means something next to how much the other person
     talks, and recordings can open with chatter that is not the interview."""

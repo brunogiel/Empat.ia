@@ -103,8 +103,13 @@ LAZY = {
     "verification_log": ("verification-log.md", "5-debrief/verification-log.md"),
     "ideation": ("concepts.md", "6-ideation/concepts.md"),
     "validation_guide": ("tasks.md", "7-validation/tasks.md"),
+    # Optional, step 7a.0: the long menu of possible exercises, chosen before the script is written.
+    "exercise_menu": ("exercise-menu.md", "7-validation/exercise-menu.md"),
     "validation_index": ("validation-index.md", "7-validation/0-index.md"),
     "validation_debrief": ("validation-findings.md", "7-validation/findings.md"),
+    # Optional, step 7c: the grid the client usually opens first, and the guide written before the analysis.
+    "validation_matrix": ("usability-matrix.md", "7-validation/usability-matrix.md"),
+    "validation_analysis_guide": ("analysis-guide.md", "7-validation/analysis-guide.md"),
     "report": ("summary.md", "8-report/summary.md"),
 }
 
@@ -120,8 +125,9 @@ PER_ITEM = {
     "validation-prep": "interview-prep.md",
     "validation-feedback": "interview-feedback.md",
     # The HTML page the feedback is delivered as; the markdown file is internal.
+    # A validation session gets its own page: the discovery scales do not fit a session on a screen.
     "interview-feedback-html": "interview-feedback.html",
-    "validation-feedback-html": "interview-feedback.html",
+    "validation-feedback-html": "moderator-feedback.html",
     "notes": "notes.md",
 }
 

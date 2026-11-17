@@ -107,11 +107,23 @@ budgets:
   7-validation/tasks.md:
     lines: 100
     hard: true
+  # Optional. The long list of possible exercises (step 7a.0); one row each, so it runs long.
+  7-validation/exercise-menu.md:
+    lines: 150
+    hard: false
   7-validation/0-index.md:
     lines: 80
     hard: false
   7-validation/findings.md:
     lines: 120
+    hard: false
+  # Optional. The grid of tasks or components against people (step 7c).
+  7-validation/usability-matrix.md:
+    lines: 80
+    hard: false
+  # Optional. Written before the analysis of the sessions, so it stays short.
+  7-validation/analysis-guide.md:
+    lines: 80
     hard: false
 
   # The final write-up of the whole project: the field rounds and the validation.

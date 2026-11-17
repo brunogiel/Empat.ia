@@ -122,7 +122,7 @@ saying so plainly is part of the job.
 `<base>` is the interview, observation or validation ID: `INT-004-ana-lopez-acme`,
 `OBS-002-store-floor`, `VAL-001-ben-ito`. The prefix has to match the type: `interview-*` takes
 `INT-`, `observation-*` takes `OBS-`, `validation-*` (`validation-note`, `validation-prep`,
-`validation-feedback`) takes `VAL-`. The script refuses a mismatch.
+`validation-feedback`, `validation-feedback-html`) takes `VAL-`. The script refuses a mismatch.
 
 ```bash
 python3 {skill-root}/scripts/init_project.py --project-root {project-root} \
@@ -147,7 +147,7 @@ discovery/
                              INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
   5-debrief/                 findings.md  principles.md
   6-ideation/                concepts.md                     (on demand, born with its first --add)
-  7-validation/              tasks.md  0-index.md  findings.md
+  7-validation/              tasks.md  0-index.md  findings.md  exercise-menu.md  usability-matrix.md (optional)
                              VAL-001-name-surname.md  _prep/  _raw/  feedback/   (on demand)
   8-report/                  summary.md                      (born with its first --add)
   _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md
@@ -164,7 +164,9 @@ discovery/
   `INT-00X-name-surname-feedback.md`, plus a `0-README.md` explaining how to
   read them. No longer a single accumulating log.
 - **`7-validation/`** holds sessions with a prototype: `VAL-00X-name-surname.md`, a prep sheet in
-  `_prep/`, the recording in `_raw/`, and feedback in `feedback/`. Their evidence is `VAL-00X-NN`.
+  `_prep/`, the recording in `_raw/`, and feedback in `feedback/` (the page for the moderator,
+  `--add validation-feedback-html --name <base>`, not the interview one). Their evidence is `VAL-00X-NN`.
+  Optional: `exercise-menu.md` (step 7a.0, with `scripts/build_menu.py`) and `usability-matrix.md` (7c).
 - **`8-report/summary.md`** is the final one-page report of the whole project. Before this piece
   existed it lived in `5-debrief/output/`; `--migrate` moves it.
 - **`_engine/skills/`** holds project-level wrapper skills, when the project
