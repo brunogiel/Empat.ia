@@ -30,7 +30,7 @@ Run `locate_quotes.py` first and pass its output: it carries the video minute an
 
 - It means the words of the quote are in the clip. It does not mean the clip says what the slide or the finding says. That is the context check of `5a-debrief.md` (±6 lines, the clip against the title it illustrates), done by a mid or strong model after a seeded run. Choose each clip against the title of the slide or finding it illustrates, not by topic; `illustrates` in the input is carried to the output so the check has both.
 - A quote cut short fails the coverage on purpose. Coverage does not catch a clip that starts a sentence late and flips its meaning: the context check does.
-- Nothing is blurred. Open each clip at three frames (start, middle, end) and blur emails, phones, passwords, names and the chats of the call (see `7b` and `8a`). Consent comes first: the person's row in the consent record must allow a clip.
+- Nothing is blurred. Check each clip by the rule of `7b-validation-sessions.md` (three frames, what is blurred). Consent comes first: the person's row in the consent record must allow a clip.
 
 ## Install and exit codes
 
@@ -38,4 +38,4 @@ Run `locate_quotes.py` first and pass its output: it carries the video minute an
 
 ## Privacy
 
-Recordings, the cached words and the clips are personal data. Keep them in a folder outside the project, run everything locally and delete them when the piece is done. A clip goes into `share/` or `8-report/` only after it was checked at three frames.
+Recordings, the cached words and the clips are personal data. Keep them in a folder outside the project, run everything locally and delete them when the piece is done. A clip goes into `share/` or `8-report/` only after it passed that check.

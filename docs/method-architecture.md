@@ -102,7 +102,7 @@ Every check done by a model, in any phase, follows two rules. The full text live
 
 ## Sub-stages And Owners
 
-A step that runs in sub-stages (today the debrief, 5a.0 to 5a.4) keeps one mark per sub-stage under `substeps:` in `state.yaml`. Nothing in a sub-stage starts until the one before it is `done` or `skipped`. A piece worked by two threads has one owner of its structure, and the structure closes before anyone fills it. Two consecutive sub-stages may share one checkpoint (compressed mode) when it is declared in `_engine/decisions.md` first. The checkpoint can be a page: `templates/checkpoint.html`.
+A step that runs in sub-stages (today the debrief, 5a.0 to 5a.4) keeps one mark per sub-stage under `substeps:` in `state.yaml`. Nothing in a sub-stage starts until the one before it is `done` (or `skipped`). A piece worked by two threads has one owner of its structure, and the structure closes before anyone fills it. Two consecutive sub-stages may share one checkpoint (compressed mode) when it is declared in `_engine/decisions.md` first. The checkpoint can be a page: `templates/checkpoint.html`.
 
 ## Presentation, Pieces Built By Script And Rewrites
 

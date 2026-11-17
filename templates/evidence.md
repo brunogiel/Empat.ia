@@ -46,7 +46,7 @@ Two optional columns, `Voice` and `Induced`, sit at the end of the ledger. Leave
 - **Induced.** How much of the quote the interviewer put there:
   - `premise`: the answer takes for granted something the question asserted.
   - `hypothetical`: the answer is to "what would you do if...", not to something that happened.
-  - `moderator`: the idea came from the moderator, in the call or in a session, and ended attributed to the person.
+  - `moderator`: the idea came from the moderator, in the call or in a session, and ended attributed to the person. A validation task marked `induced` (`alone` / `guided` / `induced`, see `7b-validation-sessions.md`) is the same thing, one level up: its quotes carry `moderator` here.
 - A quote with a value in `Induced` is never the only support of a finding. Mark the row, and say in the finding that the idea was induced. If the check of context shows that the quote says nothing the person did not get from the question, write `vetoed: <reason>` in **Use in synthesis** instead.
 - The marks come from the transcript, with the ±6 lines around the quote. They are a reading: label them as such.
 

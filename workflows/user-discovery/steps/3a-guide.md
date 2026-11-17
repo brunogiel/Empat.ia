@@ -213,7 +213,8 @@ Typical agents: `qualitative-researcher`, `uxer`, `sociologist`, `philosopher`. 
 When a council reviews the guide, close it with the application ledger: a council can return
 thirteen recommendations, twelve get applied, and the one left out is usually the structural one.
 The council runs in review mode (`agents/council.md`) and receives the closed decisions of
-`_engine/decisions.md`.
+`_engine/decisions.md`. The review of the guide is **blind**: each reviewer reads it alone and
+never sees another reviewer's opinion before writing their own ("The blind panel" in `agents/council.md`).
 
 If a model checks the guide for leading questions, it is a model checker like any other: plant a few
 leading questions in a copy first, and if it misses one, its "no leading questions" counts for

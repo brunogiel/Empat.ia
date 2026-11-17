@@ -36,8 +36,9 @@ are not read as support. The prefix PAT can be changed with --pattern-prefix.
   |--------|---------------------|--------------------------|----------------------|
   | PAT-01 | Compares before buying | INT-001-03, INT-002-01, INT-004-02 | INT-003 |
 
-In the insights file, a pattern "hangs from" an insight when its ID is written
-anywhere in it. A pattern with no insight is explained by one line that holds its
+In the insights ("Prioritized insights" in findings.md, or a file you name with
+--insights), a pattern "hangs from" an insight when its ID is written anywhere in
+that section. A pattern with no insight is explained by one line that holds its
 ID and the words "no insight" or "sin insight":
 `PAT-07: no insight, because it only describes the setting.`
 
@@ -54,11 +55,11 @@ Exit code 1 if there is any MISMATCH, BAD_FRACTION, UNKNOWN_ID, SMALL_N or ORPHA
 UNIVERSAL and UNLINKED are for a person; --strict makes them fail the run too.
 Exit code 2 when an input file is missing.
 
-Usage:
-  python3 scripts/check_counts.py 5-debrief/insights.md 5-debrief/principles.md
-  python3 scripts/check_counts.py share/report.html --patterns 5-debrief/findings.md
-  python3 scripts/check_counts.py --orphans
-  python3 scripts/check_counts.py insights.md --raw path/to/_raw --person-label "Speaker 2"
+Usage (run from inside the project's discovery/ folder, or pass --root):
+  python3 <method-root>/scripts/check_counts.py 5-debrief/findings.md 5-debrief/principles.md
+  python3 <method-root>/scripts/check_counts.py share/report.html --patterns 5-debrief/findings.md
+  python3 <method-root>/scripts/check_counts.py --orphans
+  python3 <method-root>/scripts/check_counts.py notes.md --raw path/to/_raw --person-label "Speaker 2"
 """
 
 from __future__ import annotations
@@ -281,8 +282,33 @@ def _candidates(sentence: str, universal: str, transcripts: dict, negative: bool
     return search_transcripts(keys, transcripts, negative) + [("keys", ", ".join(keys))]
 
 
-def orphans(patterns: dict, insights: Path, minimum: int):
-    text = insights.read_text(encoding="utf-8")
+def insights_section(text: str, whole_if_missing: bool = True) -> str:
+    """The insights part of a file.
+
+    The insights live in findings.md under a heading that names them ("Prioritized
+    insights"), next to the support table. Only that section counts: the table itself
+    names every pattern, so reading the whole file would hide every orphan. A file
+    with no such heading is read whole when it is a separate insights file, and as
+    empty when it is the support table (no insights written yet: every strong pattern
+    is then an orphan).
+    """
+    lines = text.splitlines()
+    for n, line in enumerate(lines):
+        head = re.match(r"^(#{1,6})\s+(.*)$", line)
+        if head and re.search(r"insights?", head.group(2), re.I):
+            level = len(head.group(1))
+            end = len(lines)
+            for m in range(n + 1, len(lines)):
+                nxt = re.match(r"^(#{1,6})\s", lines[m])
+                if nxt and len(nxt.group(1)) <= level:
+                    end = m
+                    break
+            return "\n".join(lines[n:end])
+    return text if whole_if_missing else ""
+
+
+def orphans(patterns: dict, insights: Path, minimum: int, whole_if_missing: bool = True):
+    text = insights_section(insights.read_text(encoding="utf-8"), whole_if_missing)
     out = []
     for pid, people in sorted(patterns.items()):
         if len(people) < minimum:
@@ -308,7 +334,7 @@ def main(argv=None) -> int:
                     help="speaker label of the interviewer (prefix match)")
     ap.add_argument("--orphans", action="store_true",
                     help="list strong patterns with no insight and no explanation")
-    ap.add_argument("--insights", help="insights file (default: <root>/5-debrief/insights.md)")
+    ap.add_argument("--insights", help="file with the insights (default: the insights section of the support table, <root>/5-debrief/findings.md)")
     ap.add_argument("--min-people", type=int, default=3, help="a strong pattern (default 3)")
     ap.add_argument("--strict", action="store_true", help="UNIVERSAL and UNLINKED fail the run too")
     ap.add_argument("--only-problems", action="store_true", help="hide the summary of what passed")
@@ -357,11 +383,11 @@ def main(argv=None) -> int:
                 elif keys:
                     print(f"{'':36}no transcript line matches: the claim survives this search")
     if a.orphans:
-        insights = Path(a.insights) if a.insights else root / "5-debrief" / "insights.md"
+        insights = Path(a.insights) if a.insights else table
         if not insights.is_file():
             print(f"No insights file at {insights}", file=sys.stderr)
             return 2
-        for pid, n in orphans(patterns, insights, a.min_people):
+        for pid, n in orphans(patterns, insights, a.min_people, whole_if_missing=bool(a.insights)):
             counts["ORPHAN"] = counts.get("ORPHAN", 0) + 1
             print(f"{'ORPHAN':13} {pid:22} held by {n} people, no insight and no line saying why not")
 

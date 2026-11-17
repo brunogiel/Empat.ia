@@ -148,7 +148,7 @@ Before analysing, the researcher writes down, in `templates/analysis-guide.md`: 
 1. **One author** writes the insights, as readings, not summaries.
 2. **Laterals with other voices** read the insights, not the evidence, and push back.
 3. **Adversarial:** a reviewer builds the strongest case against each insight from quotes.
-4. **No strong pattern without an insight.** Every pattern held by 3 or more people hangs from an insight (the insight cites its `PAT-` ID), or carries one line saying why it does not: `PAT-07: no insight, because it only describes the setting.` **[DET]** `python3 <method-root>/scripts/check_counts.py --orphans` lists the patterns that have neither. A strong pattern nobody read is the kind of gap a reader finds and the checker of a single insight never does.
+4. **No strong pattern without an insight.** Every pattern held by 3 or more people hangs from an insight (the insight cites its `PAT-` ID), or carries one line saying why it does not: `PAT-07: no insight, because it only describes the setting.` The insights live in the "Prioritized insights" section of `5-debrief/findings.md`, and the one-line reasons go there too. **[DET]** `python3 <method-root>/scripts/check_counts.py --orphans`, run from `discovery/`, reads that section and lists the patterns that have neither. A strong pattern nobody read is the kind of gap a reader finds and the checker of a single insight never does.
 5. Run the full checker (steps 1 to 5) on everything that will leave the team.
 
 - **Researcher sees:** the insights, the lateral and adversarial readings, the orphan patterns, the checker's table.

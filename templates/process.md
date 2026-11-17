@@ -27,7 +27,7 @@ This document keeps you from improvising interviews. Use it before, during and a
 - [ ] Clarify whether real names or anonymous names will be used.
 - [ ] Record what the person allows (record, quote, name, clip) in the consent record of `2-profiling/recruiting.md`.
 - [ ] In a session on a prototype or a form, the person types test data, never their own. No real mailbox, phone or password on a shared screen.
-- [ ] Before a screenshot or clip is used, open it at three frames (start, middle, end) and blur emails, phones, passwords, names and the chats of the call.
+- [ ] Before a screenshot or clip is used, check it by the rule of `7b-validation-sessions.md` (three frames, what is blurred).
 
 ### Context
 

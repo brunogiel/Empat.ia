@@ -15,7 +15,7 @@ A council runs in one of two modes. Never mix them in the same session.
 | Used for | Opening ideas: readings, questions, analogies | Judging a piece that exists: a guide, insights, a report |
 | Who sits | Lateral voices: artist, cab driver, philosopher, small-shop owner | Experts of the trade, and the simulated validator |
 | What they do | **Generate.** They never review. | **Review.** They never invent new content. |
-| Input | Sheets or patterns only | The piece, plus the closed decisions of the project |
+| Input | By use: 5a.2 sheets or patterns; 5a.3 the insights only; 3a the project's knowledge and the braindump | The piece, plus the closed decisions of the project |
 | Section | "Variant: lateral guests" | "Review mode" |
 
 A lateral voice that is asked to review gives a taste, not a check. An expert that is asked to generate repeats the field's habits. Keep each in its mode.
@@ -38,11 +38,11 @@ A lateral voice that is asked to review gives a taste, not a check. An expert th
 
 ## Variant: lateral guests (generative mode)
 
-A council variant for the debrief (5a.2 patterns, 5a.3 insights). The guests are lateral figures (a cab driver, a small-shop owner, a recruiter at a small firm) who see the material from outside the field. They **generate; they do not judge.**
+A council variant for the debrief (5a.2 patterns, 5a.3 insights). The guests are lateral figures (a cab driver, a small-shop owner, a pharmacist) who see the material from outside the field. They **generate; they do not judge.**
 
 Rules:
 
-- **Restricted input.** Each guest sees only case sheets or patterns, never raw transcripts or the Guide's reasoning.
+- **Restricted input, set by use.** In 5a.2 each guest sees only case sheets or patterns; in 5a.3 only the insights; in 3a (the guide) only what the project knows and the researcher's braindump. Never raw transcripts or the Guide's reasoning.
 - **Isolated.** No guest sees another guest. If the platform allows subagents, run them in parallel; otherwise run them in series, each with a clean context.
 - **A role with a restriction and a quota.** Give each guest one constraint on how they read (for example: only what a newcomer would notice) and a fixed number of outputs (for example: 3 readings, no more).
 - **They produce readings and questions.** They never rank, approve or reject the researcher's findings.
@@ -87,7 +87,7 @@ For the report (8a), run seven readings, each by one reviewer alone:
 
 ### The blind panel
 
-When the panel reviews a script or a page before the field or the client (7a, 8a), it runs **blind**: no reviewer sees another reviewer's opinion, and none sees the Guide's reasoning. The orchestrator does the crossing. What several roles flag independently is the signal; what only one says is a lead to check.
+When the panel reviews a script or a page before the field or the client (3a, 7a, 8a), it runs **blind**: no reviewer sees another reviewer's opinion, and none sees the Guide's reasoning. The orchestrator does the crossing. What several roles flag independently is the signal; what only one says is a lead to check.
 
 ### The synthesis
 

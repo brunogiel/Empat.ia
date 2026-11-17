@@ -28,9 +28,14 @@ The same flow processes a session where a person used a prototype, with these di
 - Evidence rows are `VAL-00X-NN`, numbered within the session. Record what the person **did**
   (where they stopped, went back, asked for help) before what they said.
 - The guide to compare against is `7-validation/tasks.md`; its task blocks (`### 3. Task 1: …`)
-  are the topics: build a separate pair of packs from it (`feedback_packs.py --guide
-  7-validation/tasks.md --out _engine/feedback/validation`) and keep the `VAL-` files there, so
-  the scales compare sessions with sessions, never with interviews.
+  are the topics the moderator's feedback follows.
+- **A `VAL-` session gets the moderator's feedback, not the scales.** Skip step 7 (packs,
+  segments, scales, hand count): how much a person tells, monologue and getting to the point
+  do not compare a session on a screen, where the person talks less and acts more
+  (`7b-validation-sessions.md`, "The moderator's feedback"). In step 8 create only
+  `--add validation-feedback-html --name <base>` (`templates/moderator-feedback.html`: one row
+  per task with how far the person got and how, and what the moderator did that helped or
+  led) and, if the team keeps a worksheet, `--add validation-feedback`.
 - The counter is `validations: {target, done, unprocessed}` in `_engine/state.yaml`, apart from
   `interviews`. If the block is missing, add it. The index is `7-validation/0-index.md`.
 - The retro proposes edits to `tasks.md`, never applies them, same as the master guide.
@@ -70,7 +75,7 @@ The same flow processes a session where a person used a prototype, with these di
    - **Concrete edits to the master guide** for the next interview (add / reword / reorder / drop a question; a technique that worked, like a closing recap). Be specific and quote the guide line.
    - **Part 2?** Default **no**: you learn more from new interviews than from re-interviewing. Only recommend a part 2 if a genuinely important theme was missed.
    If the user reflected out loud during or after the call (their own debrief), capture that verbatim into this section, it's often the sharpest input.
-7. **[DET] Measure how the person tells and what came out.** Machine files go to
+7. **[DET] Measure how the person tells and what came out** (interviews only; a `VAL-` session skips this step, see above). Machine files go to
    `discovery/_engine/feedback/`; `4-field/feedback/0-README.md` has the whole recipe. The scripts
    are in `{method-root}/scripts/`; run them from inside `discovery/`.
    - Once per project, after the guide is closed: `feedback_packs.py --guide 3-guide/guide.md
@@ -89,7 +94,7 @@ The same flow processes a session where a person used a prototype, with these di
    **No transcript, or no speaker labels: skip this and say so. Never estimate a number.**
    `count_interview.py` stays as an internal diagnostic; its keyword counts do not go into the
    feedback.
-8. **[DET] Create the feedback files** with
+8. **[DET] Create the feedback files** (an interview's; a `VAL-` session takes the moderator's page, see above) with
    `python3 {method-root}/scripts/init_project.py --project-root . --add interview-feedback --name <base>`
    (the internal worksheet) and `--add interview-feedback-html --name <base>` (the page the
    interviewer receives). Create `4-field/feedback/0-README.md` first if this is the first one

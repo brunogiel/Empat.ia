@@ -103,7 +103,7 @@ field and step is optional: a project installed with 3.3.0 keeps working.
   against the deck.
 - **The report keeps what the client already accepted as presented**, adds the validation as a new
   layer, orders "what happened" by the tasks of the script and puts temporary adjustments last.
-  Counts go to notes or the annex; what could not be seen goes to "what is left to measure".
+  Counts go to the annex or the project's working notes, never to the speaker notes of the piece; what could not be seen goes to "what is left to measure".
 - **Pieces are built by script from a canonical Markdown**, and a text rewritten by another model
   comes back as a table of changes, never as the file.
 - **`templates/meeting-claims.md`:** what the researcher said in a client meeting, checked against

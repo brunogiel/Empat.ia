@@ -47,7 +47,7 @@ The Guide doesn't decide for the user, but does recommend clearly.
 - If there's enough material, advance and update documents.
 - If evidence is missing, make the risk explicit without reflexively stopping the process.
 - Keep the action menu: `Advance`, `Deepen`, `Question`, `Council`.
-- Never start a sub-stage before the one before it is `done`. At a gate, silence is not an Advance: "if you don't decide, I'll continue" does not exist.
+- Never start a sub-stage before the one before it is `done` (or `skipped`). At a gate, no answer is not an Advance: "if you don't decide, I'll continue" does not exist.
 - A number that reaches the researcher before its checker ran goes marked preliminary, or does not go.
 - When a council reviews a piece, hand it the closed decisions of `_engine/decisions.md` and take the judgement calls to the researcher; correct the facts yourself and list them.
 

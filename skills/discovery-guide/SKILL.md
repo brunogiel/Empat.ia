@@ -70,6 +70,13 @@ If you're working from the source repo, `method-root` can be `repo/`. `--project
 name the user gave the project in the initial conversation; without it, `state.yaml` falls back to
 the project root's folder name, which is rarely the same thing.
 
+**Where each script runs.** `init_project.py` runs from the **project root** (the folder that holds
+`discovery/`), with `--project-root .`. The checkers (`check_state.py`, `check_counts.py`,
+`verify_quotes.py`, `check_share.py`) take the current directory as their root and expect it to
+be **inside `discovery/`**, where `5-debrief/`, `4-field/` and `_engine/` are: `cd discovery`
+first, or pass `--root <project-root>/discovery`. Every path in the steps (`5-debrief/findings.md`,
+`7-validation/findings.md`, `share/`) is relative to that folder.
+
 **Ask the working language before you run this, and pass it.** `--lang es` does not only change
 the conversation: the whole scaffolding is written in that language. A project worked in Spanish
 with English templates ends up half and half, and the files nobody touched stay in English forever.
@@ -143,15 +150,20 @@ discovery/
   1-desk-research/           brief.md  market.md  knowledge.md  sources/
   2-profiling/               profiles.md  recruiting.md
   3-guide/                   guide.md  process.md  expert-consult.md (optional)
-  4-field/                   0-index.md  0-observation-plan.md  feedback/
+  4-field/                   0-index.md  0-observation-plan.md  card-sort.md (optional)  feedback/
                              INT-001-name-surname.md  OBS-001-place.md  _prep/  _raw/
-  5-debrief/                 findings.md  principles.md  presentation.md (5b)  meeting-claims.md (optional)
+  5-debrief/                 findings.md  principles.md  analysis-guide.md  cases/  coverage-matrix.md
+                             verification-log.md  presentation.md (5b)  meeting-claims.md (optional)
   6-ideation/                concepts.md                     (on demand, born with its first --add)
   7-validation/              tasks.md  0-index.md  findings.md  exercise-menu.md  usability-matrix.md (optional)
+                             analysis-guide.md (optional, 7c)
                              VAL-001-name-surname.md  _prep/  _raw/  feedback/   (on demand)
   8-report/                  summary.md                      (born with its first --add)
-  _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md
-                             evidence.md  synthesis-log.md  meeting-coverage.md  sources/  skills/
+  share/                     what leaves the team: pieces built by script, checked by check_share.py
+  _engine/                   state.yaml  budgets.yaml  assumptions.md  decisions.md  share-allow.txt (optional)
+                             evidence.md  synthesis-log.md  meeting-coverage.md  feedback/  skills/
+                             sources/   the assistant's own material: councils/  data-reviews/
+                                        guide-versions/  checkpoints/  presentation/  guide-braindump.md
   {phase}/notes.md           the drawer, born on demand (4-field/notes.md is born at install).
                              The editor empties it at each gate
 ```
@@ -178,7 +190,7 @@ The folder can be called `discovery-<project>/` instead, when one place holds mo
 discovery. The script finds a single renamed folder on its own and takes `--folder` otherwise.
 Wherever this file says `discovery/`, read the project's folder.
 
-Five rules hold the whole thing up:
+Seven rules hold the whole thing up:
 
 - **The plan sets the order, not the folder numbers.** The brief closes with a `## Plan` section,
   and `state.yaml` mirrors it under `plan:`: an ordered list of `{piece, status, owner, note}`.
@@ -190,7 +202,7 @@ Five rules hold the whole thing up:
   *entered* its step, not because they finished it. Never read existence as "done", and never
   build a progress checklist in `0-README.md` that has to be kept in sync by hand.
 - **After a meeting with the client, map before you edit.** Step `1f` lists what was said, which file absorbs each point and its status, and waits for the researcher's OK before any file changes. The brief stays an index; the client's data goes to `knowledge.md`.
-- **Show a sample before the deck.** Step `5b` builds one slide of each type with real content and waits for the researcher's OK before the rest. A draft that carries real data is called a draft, and what is pending is listed as finishing work. A count is not a slide: it goes to the notes. Pieces are built by script from a Markdown, and a text rewritten by another model comes back as a table of changes, never as a file.
+- **Show a sample before the deck.** Step `5b` builds one slide of each type with real content and waits for the researcher's OK before the rest. A draft that carries real data is called a draft, and what is pending is listed as finishing work. A count is not a slide: it goes to the annex or the project's working notes, never to the speaker notes of the final piece. Pieces are built by script from a Markdown, and a text rewritten by another model comes back as a table of changes, never as a file.
 - **Files the user opens have line budgets** in `_engine/budgets.yaml`. Over budget means the
   content belongs somewhere else, not that it should be deleted. `3-guide/guide.md` is a hard
   cap: two printed pages, questions only.
@@ -206,7 +218,7 @@ Five rules hold the whole thing up:
   evidence log, the notes, the assumptions), where they trace things.
 - **One file, one job.** Every template opens with a line `Owns: … / Does not own: … → file`. If what you are about to write is not that file's job, write it in the file that owns it, or in the phase's `notes.md` if no file owns it yet. Never write the same thing in two places: the other file links, it does not copy. The `editor` routes by that line.
 - **The recorder's automatic summary is not evidence.** It credits the person with premises the interviewer put in the question and can name sessions wrongly. Work from the whole transcript.
-- **Test data and checked captures.** Sessions on a prototype or a form use test data, never the person's own. Every screenshot or clip is opened at three frames (start, middle, end) before use, and emails, phones, passwords, names and the chats of the call are blurred.
+- **Test data and checked captures.** Sessions on a prototype or a form use test data, never the person's own. Every screenshot or clip is checked before use, by the rule of `7b-validation-sessions.md`.
 - Do not skip stages without showing state and recommendation.
 - Do not talk about "canvas": use discovery documents.
 - In early stages, preserve content even if it's redundant.
@@ -341,7 +353,7 @@ Don't present it as A/B/C. Use clear names.
 
 **Human checkpoint is mandatory.** At every gate, and at each debrief sub-stage (5a.0 to 5a.4), the checker filters and the researcher decides. Show what the researcher needs to see, then wait for their pick among the four. Never advance on the checker's verdict alone.
 
-**One sub-stage at a time.** In a step that has sub-stages (the debrief), nothing starts until the one before it is `done` in `substeps:` of `state.yaml`. A number that reaches the researcher before its checker has run goes marked "preliminary", or does not go. If two threads or agents work on one piece, its structure has one owner and closes before anyone fills it. At a gate, "if you don't decide, I'll continue" does not exist: silence is not an Advance. **Compressed mode** is optional and declared: two consecutive sub-stages may share one checkpoint, logged first in `_engine/decisions.md` as a course change; every checker still runs on both.
+**One sub-stage at a time.** In a step that has sub-stages (the debrief), nothing starts until the one before it is `done` (or `skipped`) in `substeps:` of `state.yaml`. A number that reaches the researcher before its checker has run goes marked "preliminary", or does not go. If two threads or agents work on one piece, its structure has one owner and closes before anyone fills it. At a gate, "if you don't decide, I'll continue" does not exist: no answer is not an Advance. **Compressed mode** is optional and declared: two consecutive sub-stages may share one checkpoint, logged first in `_engine/decisions.md` as a course change; every checker still runs on both.
 
 **The checkpoint can be a page.** Build `templates/checkpoint.html` into `_engine/sources/checkpoints/` (internal, never in `share/`): one card per item to decide with its slide number or section ID and the four buttons, a section "Already corrected" to accept or revert, and a button that copies the decisions as text. The second round brings only what is new. See "The checkpoint page" in `5a-debrief.md`.
 
@@ -402,7 +414,7 @@ In all three you **offer and never block**. This follows the pattern the kit alr
 field signal in `state.yaml` says that when `done` is zero past `stale_after_days`, the Guide
 raises it before anything else. Same shape, second condition.
 
-Two rules on the feedback itself:
+Seven rules on the feedback itself:
 
 - **Separate measured from read.** Counts come from scripts over the transcript (and from jev with
   fixed thresholds, when there is a key) and are reproducible; judgement is judgement and the user
@@ -501,7 +513,7 @@ Criteria for proposing:
 
 **Lateral guests and contrarian.** During the debrief (patterns and insights), offer lateral guests (the "lateral guests" variant in `agents/council.md`): restricted to sheets or patterns, isolated, they generate and never judge, and only what traces to evidence survives. Offer a devil's advocate before anything is shared. Propose both; the user decides.
 
-**Two modes.** A council either generates (lateral voices, who never review) or reviews (experts of the trade plus the simulated client validator, who never invent), as `agents/council.md` spells out. In review mode, hand every reviewer the closed decisions from `_engine/decisions.md`: they may flag a cost, never reopen one. Report "N reviewers said this", correct the facts yourself and take the judgement calls to the researcher. The final report gets the standard seven-reading panel; a script before the field (7a) gets a blind panel. A simulated role gives hypotheses, never evidence.
+**Two modes.** A council either generates (lateral voices, who never review) or reviews (experts of the trade plus the simulated client validator, who never invent), as `agents/council.md` spells out. In review mode, hand every reviewer the closed decisions from `_engine/decisions.md`: they may flag a cost, never reopen one. Report "N reviewers said this", correct the facts yourself and take the judgement calls to the researcher. The final report gets the standard seven-reading panel; the guide (3a) and a script before the field (7a) get a blind panel: no reviewer sees another's opinion before writing their own. A simulated role gives hypotheses, never evidence.
 
 Suggested mix for a good council: combine a technical-analytical profile (economist, growth, technologist), a human-qualitative profile (qualitative-researcher, sociologist, uxer), a divergent or critical profile (artist, philosopher), and optionally a non-expert lateral perspective (cab-driver). That forces useful disagreement.
 

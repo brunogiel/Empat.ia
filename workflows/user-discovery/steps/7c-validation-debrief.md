@@ -55,7 +55,7 @@ created before its step starts.
 6. Check each bet of the ideation against the evidence, using the confirms / drops results written in `concepts.md`.
 7. List what you still do not know, such as a profile that was not tested.
 8. **[DET]** Before the findings leave the team, run the two scripts:
-   `python3 <method-root>/scripts/verify_quotes.py --cases` (or `--file` on the HTML) reads `VAL-`
+   `python3 <method-root>/scripts/verify_quotes.py --evidence` (or `--file <page.html>` on the HTML) reads `VAL-`
    quotes against `7-validation/_raw`, and
    `python3 <method-root>/scripts/check_counts.py 7-validation/findings.md` lists every universal
    ("nobody", "everyone", "most") with the transcript lines that could break it, every "X of N"

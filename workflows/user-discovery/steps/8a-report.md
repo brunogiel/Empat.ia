@@ -20,7 +20,7 @@ none of it. Every plan closes with it, whatever pieces it used.
 
 - **Names depend on the audience.** `participant_names` in `_engine/state.yaml` says, for each audience (internal team, client, public), whether the piece shows names, only profiles or nothing, who authorized it and when. Read it before writing any piece. If an audience is empty or the block is missing, show profiles and ask before a name goes in. A quote, a name and a clip live in separate fields of the page, so each is checked on its own.
 - **Consent and contract come before names and clips.** A name or a clip goes in only if the person's row in the "Consent record" (`2-profiling/recruiting.md`) allows that exact use, the audience allows it, and the contract with the client allows it. The narrowest of the three wins.
-- **Captures and clips are checked before they are used.** Each one is opened at no fewer than three frames (start, middle, end). Emails, phone numbers, passwords, names and the chats of the call are blurred. Prototype sessions used test data; if a real person's data shows in a frame, the capture is cut or not used.
+- **Captures and clips are checked before they are used.** They follow the rule of `7b-validation-sessions.md` (frames to open, what is blurred, when a capture is dropped).
 - **A clip is chosen against the title it illustrates, not by topic.** Read the title of the slide or the finding, then the words the clip says: they have to support that title. A clip chosen for its image or its tone can say another thing. Only a clip whose check gave `ok: true` is embedded; one that gave `false` is fixed (a new cut) or left out, never explained away.
 - **Answer the client's requests, and report the sample as it was.** Every row of "What the client asked for" in `brief.md` is answered in the page or moved to the next round with one line. If a profile had a focus (for example, people who do not know the brand) and the sample did not meet it, the page says so.
 - **Nothing internal, no speaker notes.** Whatever a canonical file marks `[not for the report]` stays out of the page. A deck built from the report leaves without speaker notes unless the researcher asks for them.
@@ -29,7 +29,7 @@ none of it. Every plan closes with it, whatever pieces it used.
 - **The lasting and the temporary are separate.** Findings and what worked stay. The adjustments that belong to this prototype or this round expire when the designer fixes them: they go **last**, in the form of a method note (how it was tested, what happened, what to adjust, what is left to measure).
 - **"What happened" follows the tasks of the script.** Order the validation by the tasks or situations of `7-validation/tasks.md`, the way the round was run, not by the objective declared in the plan. An objective that cuts across tasks is a heading inside the task where it showed up.
 - **The cover names the design challenge.** The challenge, as the brief states it, in large type on the first page. It is what stays when the details of the round are forgotten.
-- **No count as a figure, no table of verdicts at the top.** A count ("3 of 5") is not a chart, circles or a headline; it goes to the annex or the notes, where the support table can be read. The report does not open with a table of verdicts per principle. What worked goes in the body, in words. What the sample could not show goes in a section **what is left to measure**. This is the same rule as in `5b-presentation.md`.
+- **No count as a figure, no table of verdicts at the top.** A count ("3 of 5") is not a chart, circles or a headline; it goes to the annex or to the project's working notes (the support table in `5-debrief/findings.md`), never to the speaker notes of the final piece. The report does not open with a table of verdicts per principle. What worked goes in the body, in words. What the sample could not show goes in a section **what is left to measure**. This is the same rule as in `5b-presentation.md`.
 - **A draft is called a draft.** A page that already carries real data is a draft, not a mock-up. Say what is pending as finishing work (clips, the priority, the annex, the checks), so the researcher knows what is missing.
 - **Before it is shared or sent on, it passes the two scripts (quotes and counts) and two checks:** cuali-to-cuanti (generalisations such as "most", rankings shown as measured, counts that do not match the sheets, the researcher's opinion presented as a finding) and the devil's advocate (the strongest case against the conclusion, from quotes only). Log both in `5-debrief/verification-log.md`. Write the text in a source `.md` and build the HTML from it; run the quote check on the final HTML.
 
@@ -43,10 +43,10 @@ If another model rewrites a text of the report to improve the prose, it returns 
 
 Two scripts make clips when the report is shown to someone and the person's own words say more than a paraphrase. They help most with a prototype shown on screen. They are not needed to close this step.
 
-1. **[DET]** `python3 <method-root>/scripts/locate_quotes.py` finds the minute of each quote in the video's clock (the recorder's transcript can be off by minutes) and gives the coverage per word.
-2. **[DET]** `python3 <method-root>/scripts/cut_clips.py` cuts each located quote with a margin, burns the captions into the picture (not as a text track, so every viewer shows them), listens to the finished file again and marks `ok: true` or `false` by the coverage of the quote, and makes a thumbnail (a still frame) for a piece in PDF.
+1. **[DET]** `python3 <method-root>/scripts/locate_quotes.py --evidence _engine/evidence.md --media-dir <recordings-folder> --out <work-folder>/located.json` finds the minute of each quote in the video's clock (the recorder's transcript can be off by minutes) and gives the coverage per word.
+2. **[DET]** `python3 <method-root>/scripts/cut_clips.py <work-folder>/located.json --media-dir <recordings-folder> --out-dir <work-folder>/clips` cuts each located quote with a margin, burns the captions into the picture (not as a text track, so every viewer shows them), listens to the finished file again and marks `ok: true` or `false` by the coverage of the quote, and makes a thumbnail (a still frame) for a piece in PDF.
 
-`ok: true` says the words of the quote are in the clip. It does not say the clip supports the title: that is the context check in the process below. Open each clip at three frames and blur before it goes in. They need ffmpeg and a local speech-to-text, and exit with code 2 and a message when either is missing. Details, limits and privacy: `docs/quote-clips.md`.
+What `ok: true` does and does not prove is in `docs/quote-clips.md`; the context check is in the process below, and the frames-and-blur rule is in `7b-validation-sessions.md`. They need ffmpeg and a local speech-to-text, and exit with code 2 and a message when either is missing. Details, limits and privacy: `docs/quote-clips.md`.
 
 ## First, the file of this step
 
@@ -91,8 +91,8 @@ already there.
    for every "X of N", every universal and every success tick on 2 people or fewer.
    Nothing leaves with an open MISMATCH, FAIL or VETOED.
    The final page holds no IDs, so its counts have no pattern to link to and `check_counts.py` says UNLINKED. **Also run** `python3 <method-root>/scripts/check_share.py --source <source.md>` on the Markdown the page is built from: the source does carry the IDs, so the count check has its full force there. Run both, on the piece and on the source. Add `--titles-from 5-debrief/findings.md` so a title that differs from the canonical one (TITLE_DRIFT) is caught.
-   Then run `python3 <method-root>/scripts/check_share.py` on the whole folder (`share/` and
-   `8-report/`; use `--source` for a Markdown source that holds codes on purpose). It runs the same two
+   Then run `python3 <method-root>/scripts/check_share.py --share share` on the whole folder (use `--share 8-report` for the report folder, repeat the flag for both, or leave it out to check `share/` and
+   `8-report/` together; use `--source` for a Markdown source that holds codes on purpose). It runs the same two
    checks on **everything that already went out**, and adds two brakes: anything marked
    `[not for the report]` in a canonical file, and any internal code or working label in capitals.
    It fails if one is found. A correction made for the report that touches an earlier piece marks that

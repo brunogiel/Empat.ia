@@ -199,8 +199,14 @@ class TestUniversals(Fixture):
 
 
 class TestOrphans(Fixture):
+    def insights(self, text, heading="## Prioritized insights"):
+        """The insights live in findings.md, under their own heading."""
+        path = self.root / "5-debrief" / "findings.md"
+        path.write_text(FINDINGS + f"\n{heading}\n\n{text}\n\n## Evidence gaps\n\nnone\n",
+                        encoding="utf-8")
+
     def test_a_strong_pattern_with_no_insight_is_listed(self):
-        self.write("5-debrief/insights.md", "I1 (PAT-01): people compare first.\n")
+        self.insights("I1 (PAT-01): people compare first.")
         result = self.run_cli("--orphans")
         self.assertEqual(result.returncode, 1, result.stdout)
         self.assertIn("ORPHAN", result.stdout)
@@ -209,19 +215,37 @@ class TestOrphans(Fixture):
         self.assertNotIn("PAT-01  ", result.stdout)
         self.assertNotIn("PAT-02", result.stdout)  # held by 2: not strong
 
+    def test_the_support_table_itself_does_not_count_as_an_insight(self):
+        # Every pattern is named in its own table row. Only the insights section counts.
+        self.insights("Pending.")
+        result = self.run_cli("--orphans")
+        self.assertEqual(result.returncode, 1, result.stdout)
+        for pid in ("PAT-01", "PAT-03", "PAT-04"):
+            self.assertIn(pid, result.stdout)
+
     def test_a_line_that_says_why_there_is_no_insight_answers_it(self):
-        self.write("5-debrief/insights.md",
-                   "I1 (PAT-01, PAT-03): a relative decides.\n"
-                   "PAT-04: no insight, because it only describes the form.\n")
+        self.insights("I1 (PAT-01, PAT-03): a relative decides.\n"
+                      "PAT-04: no insight, because it only describes the form.")
         result = self.run_cli("--orphans")
         self.assertEqual(result.returncode, 0, result.stdout)
 
     def test_the_threshold_can_move(self):
-        self.write("5-debrief/insights.md", "I1 (PAT-01, PAT-03, PAT-04).\n")
+        self.insights("I1 (PAT-01, PAT-03, PAT-04).")
         self.assertEqual(self.run_cli("--orphans").returncode, 0)
         self.assertEqual(self.run_cli("--orphans", "--min-people", "2").returncode, 1)  # PAT-02
 
-    def test_missing_insights_file_is_a_usage_error(self):
+    def test_a_separate_insights_file_is_read_whole(self):
+        self.write("my-insights.md", "I1 (PAT-01, PAT-03, PAT-04).\n")
+        result = self.run_cli("--orphans", "--insights", str(self.root / "my-insights.md"))
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_a_support_table_with_no_insights_section_lists_every_strong_pattern(self):
+        result = self.run_cli("--orphans")  # fixture findings.md has the table and nothing else
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("PAT-01", result.stdout)
+
+    def test_missing_support_table_is_a_usage_error(self):
+        (self.root / "5-debrief" / "findings.md").unlink()
         self.assertEqual(self.run_cli("--orphans").returncode, 2)
 
 
